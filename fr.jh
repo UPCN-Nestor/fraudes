@@ -1,0 +1,65 @@
+
+entity Inspeccion {
+	id Long
+    orden Long
+    fecha LocalDate
+    observaciones String
+    deshabitada Boolean    
+}
+
+entity Anomalia {
+	id Long
+    descripcion String
+}
+
+entity Inmueble {
+	id Long
+	direccion String
+}
+
+entity Estado {
+	id Long
+    descripcion String
+}
+
+entity TipoInmueble {
+	id Long
+    descripcion String
+}
+
+entity Trabajo {
+	id Long
+    descripcion String
+    costo Float
+}
+
+entity Etapa {
+	id Long
+    numero Long
+    descripcionCorta String
+    descripcionLarga String
+}
+
+entity Material {
+	id Long
+    descripcion String
+}
+
+relationship ManyToMany {
+	Inspeccion{anomaliaMedidor(descripcion)} to Anomalia{inspeccion},
+    Inspeccion{trabajo(descripcion)} to Trabajo{inspeccion},
+    Trabajo{material(descripcion)} to Material{trabajo}
+}
+
+relationship OneToMany {
+	Inmueble{inspeccion} to Inspeccion{inmueble(direccion)},
+    Etapa{inspeccion} to Inspeccion{etapa(numero)},
+    Estado to Inspeccion{estado(descripcion)},
+    TipoInmueble{inspeccion} to Inspeccion{tipoInmueble(descripcion)}     
+}
+
+
+paginate Inspeccion with pagination
+filter Inspeccion
+
+angularSuffix * with mySuffix

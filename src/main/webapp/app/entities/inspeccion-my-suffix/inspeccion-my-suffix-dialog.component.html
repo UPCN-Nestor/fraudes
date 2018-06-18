@@ -1,0 +1,90 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myInspeccionLabel" jhiTranslate="frApp.inspeccion.home.createOrEditLabel">Create or edit a Inspeccion</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!inspeccion.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="inspeccion.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.orden" for="field_orden">Orden</label>
+            <input type="number" class="form-control" name="orden" id="field_orden"
+                [(ngModel)]="inspeccion.orden" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.fecha" for="field_fecha">Fecha</label>
+            <div class="input-group">
+                <input id="field_fecha" type="text" class="form-control" name="fecha" ngbDatepicker  #fechaDp="ngbDatepicker" [(ngModel)]="inspeccion.fecha"
+                />
+                <span class="input-group-append">
+                    <button type="button" class="btn btn-secondary" (click)="fechaDp.toggle()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.observaciones" for="field_observaciones">Observaciones</label>
+            <input type="text" class="form-control" name="observaciones" id="field_observaciones"
+                [(ngModel)]="inspeccion.observaciones" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.deshabitada" for="field_deshabitada">Deshabitada</label>
+            <input type="checkbox" class="form-control" name="deshabitada" id="field_deshabitada"
+                [(ngModel)]="inspeccion.deshabitada" />
+        </div>
+
+        <div class="form-group">
+            <label jhiTranslate="frApp.inspeccion.anomaliaMedidor" for="field_anomaliaMedidor">Anomalia Medidor</label>
+            <select class="form-control" id="field_anomaliaMedidor" multiple name="anomaliaMedidor" [(ngModel)]="inspeccion.anomaliaMedidors">
+                <option [ngValue]="getSelected(inspeccion.anomaliaMedidors, anomaliaOption)" *ngFor="let anomaliaOption of anomalias; trackBy: trackAnomaliaById">{{anomaliaOption.descripcion}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label jhiTranslate="frApp.inspeccion.trabajo" for="field_trabajo">Trabajo</label>
+            <select class="form-control" id="field_trabajo" multiple name="trabajo" [(ngModel)]="inspeccion.trabajos">
+                <option [ngValue]="getSelected(inspeccion.trabajos, trabajoOption)" *ngFor="let trabajoOption of trabajos; trackBy: trackTrabajoById">{{trabajoOption.descripcion}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.inmueble" for="field_inmueble">Inmueble</label>
+            <select class="form-control" id="field_inmueble" name="inmueble" [(ngModel)]="inspeccion.inmueble" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="inmuebleOption.id === inspeccion.inmueble?.id ? inspeccion.inmueble : inmuebleOption" *ngFor="let inmuebleOption of inmuebles; trackBy: trackInmuebleById">{{inmuebleOption.direccion}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.etapa" for="field_etapa">Etapa</label>
+            <select class="form-control" id="field_etapa" name="etapa" [(ngModel)]="inspeccion.etapa" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="etapaOption.id === inspeccion.etapa?.id ? inspeccion.etapa : etapaOption" *ngFor="let etapaOption of etapas; trackBy: trackEtapaById">{{etapaOption.numero}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.estado" for="field_estado">Estado</label>
+            <select class="form-control" id="field_estado" name="estado" [(ngModel)]="inspeccion.estado" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="estadoOption.id === inspeccion.estado?.id ? inspeccion.estado : estadoOption" *ngFor="let estadoOption of estados; trackBy: trackEstadoById">{{estadoOption.descripcion}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.tipoInmueble" for="field_tipoInmueble">Tipo Inmueble</label>
+            <select class="form-control" id="field_tipoInmueble" name="tipoInmueble" [(ngModel)]="inspeccion.tipoInmueble" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="tipoInmuebleOption.id === inspeccion.tipoInmueble?.id ? inspeccion.tipoInmueble : tipoInmuebleOption" *ngFor="let tipoInmuebleOption of tipoinmuebles; trackBy: trackTipoInmuebleById">{{tipoInmuebleOption.descripcion}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

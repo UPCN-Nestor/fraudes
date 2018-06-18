@@ -1,0 +1,36 @@
+
+<div *ngIf="trabajo">
+    <h2><span jhiTranslate="frApp.trabajo.detail.title">Trabajo</span> {{trabajo.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="frApp.trabajo.descripcion">Descripcion</span></dt>
+        <dd>
+            <span>{{trabajo.descripcion}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.trabajo.costo">Costo</span></dt>
+        <dd>
+            <span>{{trabajo.costo}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.trabajo.material">Material</span></dt>
+        <dd>
+            <span *ngFor="let material of trabajo.materials; let last = last">
+                <a [routerLink]="['/material-my-suffix', material?.id ]">{{material.descripcion}}</a>{{last ? '' : ', '}}
+            </span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'trabajo-my-suffix/'+ trabajo.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

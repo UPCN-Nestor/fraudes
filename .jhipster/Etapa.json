@@ -1,0 +1,32 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "inspeccion",
+            "otherEntityName": "inspeccion",
+            "otherEntityRelationshipName": "etapa"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "numero",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "descripcionCorta",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "descripcionLarga",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180618141327",
+    "entityTableName": "etapa",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "mySuffix"
+}

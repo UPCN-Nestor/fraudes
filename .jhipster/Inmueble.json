@@ -1,0 +1,24 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "inspeccion",
+            "otherEntityName": "inspeccion",
+            "otherEntityRelationshipName": "inmueble"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "direccion",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180618122740",
+    "entityTableName": "inmueble",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "mySuffix"
+}

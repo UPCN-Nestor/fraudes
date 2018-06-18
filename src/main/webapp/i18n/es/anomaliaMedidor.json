@@ -1,0 +1,23 @@
+
+{
+    "frApp": {
+        "anomaliaMedidor" : {
+            "home": {
+                "title": "Anomalia Medidors",
+                "createLabel": "Crear nuevo Anomalia Medidor",
+                "createOrEditLabel": "Crear o editar Anomalia Medidor"
+            },
+            "created": "Un nuevo Anomalia Medidor ha sido creado con el identificador {{ param }}",
+            "updated": "Un Anomalia Medidor ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Anomalia Medidor ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Anomalia Medidor {{ id }}?"
+            },
+            "detail": {
+                "title": "Anomalia Medidor"
+            },
+            "descripcion": "Descripcion",
+            "inspeccion": "Inspeccion"
+        }
+    }
+}

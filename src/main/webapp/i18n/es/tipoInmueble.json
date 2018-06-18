@@ -1,0 +1,23 @@
+
+{
+    "frApp": {
+        "tipoInmueble" : {
+            "home": {
+                "title": "Tipo Inmuebles",
+                "createLabel": "Crear nuevo Tipo Inmueble",
+                "createOrEditLabel": "Crear o editar Tipo Inmueble"
+            },
+            "created": "Un nuevo Tipo Inmueble ha sido creado con el identificador {{ param }}",
+            "updated": "Un Tipo Inmueble ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Tipo Inmueble ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Tipo Inmueble {{ id }}?"
+            },
+            "detail": {
+                "title": "Tipo Inmueble"
+            },
+            "descripcion": "Descripcion",
+            "inspeccion": "Inspeccion"
+        }
+    }
+}

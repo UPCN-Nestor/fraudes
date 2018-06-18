@@ -1,0 +1,31 @@
+
+{
+    "frApp": {
+        "inspeccion" : {
+            "home": {
+                "title": "Inspeccions",
+                "createLabel": "Crear nuevo Inspeccion",
+                "createOrEditLabel": "Crear o editar Inspeccion"
+            },
+            "created": "Un nuevo Inspeccion ha sido creado con el identificador {{ param }}",
+            "updated": "Un Inspeccion ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Inspeccion ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Inspeccion {{ id }}?"
+            },
+            "detail": {
+                "title": "Inspeccion"
+            },
+            "orden": "Orden",
+            "fecha": "Fecha",
+            "observaciones": "Observaciones",
+            "deshabitada": "Deshabitada",
+            "anomaliaMedidor": "Anomalia Medidor",
+            "trabajo": "Trabajo",
+            "inmueble": "Inmueble",
+            "etapa": "Etapa",
+            "estado": "Estado",
+            "tipoInmueble": "Tipo Inmueble"
+        }
+    }
+}

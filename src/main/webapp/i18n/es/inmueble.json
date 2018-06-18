@@ -1,0 +1,23 @@
+
+{
+    "frApp": {
+        "inmueble" : {
+            "home": {
+                "title": "Inmuebles",
+                "createLabel": "Crear nuevo Inmueble",
+                "createOrEditLabel": "Crear o editar Inmueble"
+            },
+            "created": "Un nuevo Inmueble ha sido creado con el identificador {{ param }}",
+            "updated": "Un Inmueble ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Inmueble ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Inmueble {{ id }}?"
+            },
+            "detail": {
+                "title": "Inmueble"
+            },
+            "direccion": "Direccion",
+            "inspeccion": "Inspeccion"
+        }
+    }
+}

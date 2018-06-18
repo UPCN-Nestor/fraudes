@@ -1,0 +1,37 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "trabajo",
+            "relationshipName": "material",
+            "otherEntityName": "material",
+            "otherEntityField": "descripcion",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "relationshipName": "inspeccion",
+            "otherEntityName": "inspeccion",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "trabajo"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "descripcion",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "costo",
+            "fieldType": "Float"
+        }
+    ],
+    "changelogDate": "20180618141326",
+    "entityTableName": "trabajo",
+    "dto": "no",
+    "pagination": "no",
+    "service": "no",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "mySuffix"
+}

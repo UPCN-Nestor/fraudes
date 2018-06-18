@@ -1,0 +1,25 @@
+
+{
+    "frApp": {
+        "etapa" : {
+            "home": {
+                "title": "Etapas",
+                "createLabel": "Crear nuevo Etapa",
+                "createOrEditLabel": "Crear o editar Etapa"
+            },
+            "created": "Un nuevo Etapa ha sido creado con el identificador {{ param }}",
+            "updated": "Un Etapa ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Etapa ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Etapa {{ id }}?"
+            },
+            "detail": {
+                "title": "Etapa"
+            },
+            "numero": "Numero",
+            "descripcionCorta": "Descripcion Corta",
+            "descripcionLarga": "Descripcion Larga",
+            "inspeccion": "Inspeccion"
+        }
+    }
+}

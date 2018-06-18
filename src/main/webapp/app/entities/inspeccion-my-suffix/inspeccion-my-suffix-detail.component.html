@@ -1,0 +1,74 @@
+
+<div *ngIf="inspeccion">
+    <h2><span jhiTranslate="frApp.inspeccion.detail.title">Inspeccion</span> {{inspeccion.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="frApp.inspeccion.orden">Orden</span></dt>
+        <dd>
+            <span>{{inspeccion.orden}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.fecha">Fecha</span></dt>
+        <dd>
+            <span>{{inspeccion.fecha | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.observaciones">Observaciones</span></dt>
+        <dd>
+            <span>{{inspeccion.observaciones}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.deshabitada">Deshabitada</span></dt>
+        <dd>
+            <span>{{inspeccion.deshabitada}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.anomaliaMedidor">Anomalia Medidor</span></dt>
+        <dd>
+            <span *ngFor="let anomaliaMedidor of inspeccion.anomaliaMedidors; let last = last">
+                <a [routerLink]="['/anomalia-my-suffix', anomaliaMedidor?.id ]">{{anomaliaMedidor.descripcion}}</a>{{last ? '' : ', '}}
+            </span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.trabajo">Trabajo</span></dt>
+        <dd>
+            <span *ngFor="let trabajo of inspeccion.trabajos; let last = last">
+                <a [routerLink]="['/trabajo-my-suffix', trabajo?.id ]">{{trabajo.descripcion}}</a>{{last ? '' : ', '}}
+            </span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.inmueble">Inmueble</span></dt>
+        <dd>
+            <div *ngIf="inspeccion.inmueble">
+                <a [routerLink]="['/inmueble-my-suffix', inspeccion.inmueble?.id]">{{inspeccion.inmueble?.direccion}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.etapa">Etapa</span></dt>
+        <dd>
+            <div *ngIf="inspeccion.etapa">
+                <a [routerLink]="['/etapa-my-suffix', inspeccion.etapa?.id]">{{inspeccion.etapa?.numero}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.estado">Estado</span></dt>
+        <dd>
+            <div *ngIf="inspeccion.estado">
+                <a [routerLink]="['/estado-my-suffix', inspeccion.estado?.id]">{{inspeccion.estado?.descripcion}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.tipoInmueble">Tipo Inmueble</span></dt>
+        <dd>
+            <div *ngIf="inspeccion.tipoInmueble">
+                <a [routerLink]="['/tipo-inmueble-my-suffix', inspeccion.tipoInmueble?.id]">{{inspeccion.tipoInmueble?.descripcion}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'inspeccion-my-suffix/'+ inspeccion.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

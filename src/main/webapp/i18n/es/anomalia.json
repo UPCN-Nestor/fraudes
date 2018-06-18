@@ -1,0 +1,23 @@
+
+{
+    "frApp": {
+        "anomalia" : {
+            "home": {
+                "title": "Anomalias",
+                "createLabel": "Crear nuevo Anomalia",
+                "createOrEditLabel": "Crear o editar Anomalia"
+            },
+            "created": "Un nuevo Anomalia ha sido creado con el identificador {{ param }}",
+            "updated": "Un Anomalia ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Anomalia ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar Anomalia {{ id }}?"
+            },
+            "detail": {
+                "title": "Anomalia"
+            },
+            "descripcion": "Descripcion",
+            "inspeccion": "Inspeccion"
+        }
+    }
+}

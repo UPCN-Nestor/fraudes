@@ -1,0 +1,66 @@
+<div>
+    <h2>
+        <span jhiTranslate="frApp.trabajo.home.title">Trabajos</span>
+        <button class="btn btn-primary float-right jh-create-entity create-trabajo-my-suffix" [routerLink]="['/', { outlets: { popup: ['trabajo-my-suffix-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  jhiTranslate="frApp.trabajo.home.createLabel">
+            Create new Trabajo
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="trabajos">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="frApp.trabajo.descripcion">Descripcion</span></th>
+            <th><span jhiTranslate="frApp.trabajo.costo">Costo</span></th>
+            <th><span jhiTranslate="frApp.trabajo.material">Material</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let trabajo of trabajos ;trackBy: trackId">
+                <td><a [routerLink]="['../trabajo-my-suffix', trabajo.id ]">{{trabajo.id}}</a></td>
+                <td>{{trabajo.descripcion}}</td>
+                <td>{{trabajo.costo}}</td>
+                <td>
+                    <span *ngFor="let material of trabajo.materials; let last = last">
+                            <a class="form-control-static" [routerLink]="['../material-my-suffix', material?.id ]">{{material.descripcion}}</a>{{last ? '' : ', '}}
+                        </span>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../trabajo-my-suffix', trabajo.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'trabajo-my-suffix/'+ trabajo.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'trabajo-my-suffix/'+ trabajo.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

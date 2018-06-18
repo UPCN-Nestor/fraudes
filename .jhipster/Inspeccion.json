@@ -1,0 +1,70 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "inspeccion",
+            "relationshipName": "anomaliaMedidor",
+            "otherEntityName": "anomalia",
+            "otherEntityField": "descripcion",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "inspeccion",
+            "relationshipName": "trabajo",
+            "otherEntityName": "trabajo",
+            "otherEntityField": "descripcion",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "inmueble",
+            "otherEntityName": "inmueble",
+            "otherEntityField": "direccion"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "etapa",
+            "otherEntityName": "etapa",
+            "otherEntityField": "numero"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "estado",
+            "otherEntityName": "estado",
+            "otherEntityField": "descripcion"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "tipoInmueble",
+            "otherEntityName": "tipoInmueble",
+            "otherEntityField": "descripcion"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "orden",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "fecha",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "observaciones",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "deshabitada",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20180618120049",
+    "entityTableName": "inspeccion",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "angularJSSuffix": "mySuffix"
+}
