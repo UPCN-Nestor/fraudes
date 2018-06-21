@@ -3,8 +3,12 @@ package com.upcn.web.rest;
 import com.upcn.FrApp;
 
 import com.upcn.domain.TipoInmueble;
+import com.upcn.domain.Inspeccion;
 import com.upcn.repository.TipoInmuebleRepository;
+import com.upcn.service.TipoInmuebleService;
 import com.upcn.web.rest.errors.ExceptionTranslator;
+import com.upcn.service.dto.TipoInmuebleCriteria;
+import com.upcn.service.TipoInmuebleQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +49,12 @@ public class TipoInmuebleResourceIntTest {
     private TipoInmuebleRepository tipoInmuebleRepository;
 
     @Autowired
+    private TipoInmuebleService tipoInmuebleService;
+
+    @Autowired
+    private TipoInmuebleQueryService tipoInmuebleQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -63,7 +73,7 @@ public class TipoInmuebleResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TipoInmuebleResource tipoInmuebleResource = new TipoInmuebleResource(tipoInmuebleRepository);
+        final TipoInmuebleResource tipoInmuebleResource = new TipoInmuebleResource(tipoInmuebleService, tipoInmuebleQueryService);
         this.restTipoInmuebleMockMvc = MockMvcBuilders.standaloneSetup(tipoInmuebleResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -155,6 +165,86 @@ public class TipoInmuebleResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllTipoInmueblesByDescripcionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        tipoInmuebleRepository.saveAndFlush(tipoInmueble);
+
+        // Get all the tipoInmuebleList where descripcion equals to DEFAULT_DESCRIPCION
+        defaultTipoInmuebleShouldBeFound("descripcion.equals=" + DEFAULT_DESCRIPCION);
+
+        // Get all the tipoInmuebleList where descripcion equals to UPDATED_DESCRIPCION
+        defaultTipoInmuebleShouldNotBeFound("descripcion.equals=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTipoInmueblesByDescripcionIsInShouldWork() throws Exception {
+        // Initialize the database
+        tipoInmuebleRepository.saveAndFlush(tipoInmueble);
+
+        // Get all the tipoInmuebleList where descripcion in DEFAULT_DESCRIPCION or UPDATED_DESCRIPCION
+        defaultTipoInmuebleShouldBeFound("descripcion.in=" + DEFAULT_DESCRIPCION + "," + UPDATED_DESCRIPCION);
+
+        // Get all the tipoInmuebleList where descripcion equals to UPDATED_DESCRIPCION
+        defaultTipoInmuebleShouldNotBeFound("descripcion.in=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTipoInmueblesByDescripcionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        tipoInmuebleRepository.saveAndFlush(tipoInmueble);
+
+        // Get all the tipoInmuebleList where descripcion is not null
+        defaultTipoInmuebleShouldBeFound("descripcion.specified=true");
+
+        // Get all the tipoInmuebleList where descripcion is null
+        defaultTipoInmuebleShouldNotBeFound("descripcion.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTipoInmueblesByInspeccionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Inspeccion inspeccion = InspeccionResourceIntTest.createEntity(em);
+        em.persist(inspeccion);
+        em.flush();
+        tipoInmueble.addInspeccion(inspeccion);
+        tipoInmuebleRepository.saveAndFlush(tipoInmueble);
+        Long inspeccionId = inspeccion.getId();
+
+        // Get all the tipoInmuebleList where inspeccion equals to inspeccionId
+        defaultTipoInmuebleShouldBeFound("inspeccionId.equals=" + inspeccionId);
+
+        // Get all the tipoInmuebleList where inspeccion equals to inspeccionId + 1
+        defaultTipoInmuebleShouldNotBeFound("inspeccionId.equals=" + (inspeccionId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultTipoInmuebleShouldBeFound(String filter) throws Exception {
+        restTipoInmuebleMockMvc.perform(get("/api/tipo-inmuebles?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(tipoInmueble.getId().intValue())))
+            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultTipoInmuebleShouldNotBeFound(String filter) throws Exception {
+        restTipoInmuebleMockMvc.perform(get("/api/tipo-inmuebles?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
+
+    @Test
+    @Transactional
     public void getNonExistingTipoInmueble() throws Exception {
         // Get the tipoInmueble
         restTipoInmuebleMockMvc.perform(get("/api/tipo-inmuebles/{id}", Long.MAX_VALUE))
@@ -165,7 +255,8 @@ public class TipoInmuebleResourceIntTest {
     @Transactional
     public void updateTipoInmueble() throws Exception {
         // Initialize the database
-        tipoInmuebleRepository.saveAndFlush(tipoInmueble);
+        tipoInmuebleService.save(tipoInmueble);
+
         int databaseSizeBeforeUpdate = tipoInmuebleRepository.findAll().size();
 
         // Update the tipoInmueble
@@ -209,7 +300,8 @@ public class TipoInmuebleResourceIntTest {
     @Transactional
     public void deleteTipoInmueble() throws Exception {
         // Initialize the database
-        tipoInmuebleRepository.saveAndFlush(tipoInmueble);
+        tipoInmuebleService.save(tipoInmueble);
+
         int databaseSizeBeforeDelete = tipoInmuebleRepository.findAll().size();
 
         // Get the tipoInmueble

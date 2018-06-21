@@ -20,6 +20,7 @@
             "fecha": "Fecha",
             "observaciones": "Observaciones",
             "deshabitada": "Deshabitada",
+            "usuario": "Usuario",
             "anomaliaMedidor": "Anomalia Medidor",
             "trabajo": "Trabajo",
             "inmueble": "Inmueble",

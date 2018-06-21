@@ -20,6 +20,10 @@
         <dd>
             <span>{{inspeccion.deshabitada}}</span>
         </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.usuario">Usuario</span></dt>
+        <dd>
+            <span>{{inspeccion.usuario}}</span>
+        </dd>
         <dt><span jhiTranslate="frApp.inspeccion.anomaliaMedidor">Anomalia Medidor</span></dt>
         <dd>
             <span *ngFor="let anomaliaMedidor of inspeccion.anomaliaMedidors; let last = last">
@@ -35,7 +39,7 @@
         <dt><span jhiTranslate="frApp.inspeccion.inmueble">Inmueble</span></dt>
         <dd>
             <div *ngIf="inspeccion.inmueble">
-                <a [routerLink]="['/inmueble-my-suffix', inspeccion.inmueble?.id]">{{inspeccion.inmueble?.direccion}}</a>
+                <a [routerLink]="['/inmueble-my-suffix', inspeccion.inmueble?.id]">{{inspeccion.inmueble?.id}}</a>
             </div>
         </dd>
         <dt><span jhiTranslate="frApp.inspeccion.etapa">Etapa</span></dt>

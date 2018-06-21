@@ -25,8 +25,20 @@ public class Inmueble implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "direccion")
-    private String direccion;
+    @Column(name = "calle")
+    private String calle;
+
+    @Column(name = "altura")
+    private String altura;
+
+    @Column(name = "piso")
+    private String piso;
+
+    @Column(name = "depto")
+    private String depto;
+
+    @Column(name = "anexo")
+    private String anexo;
 
     @OneToMany(mappedBy = "inmueble")
     @JsonIgnore
@@ -42,17 +54,69 @@ public class Inmueble implements Serializable {
         this.id = id;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getCalle() {
+        return calle;
     }
 
-    public Inmueble direccion(String direccion) {
-        this.direccion = direccion;
+    public Inmueble calle(String calle) {
+        this.calle = calle;
         return this;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    public String getAltura() {
+        return altura;
+    }
+
+    public Inmueble altura(String altura) {
+        this.altura = altura;
+        return this;
+    }
+
+    public void setAltura(String altura) {
+        this.altura = altura;
+    }
+
+    public String getPiso() {
+        return piso;
+    }
+
+    public Inmueble piso(String piso) {
+        this.piso = piso;
+        return this;
+    }
+
+    public void setPiso(String piso) {
+        this.piso = piso;
+    }
+
+    public String getDepto() {
+        return depto;
+    }
+
+    public Inmueble depto(String depto) {
+        this.depto = depto;
+        return this;
+    }
+
+    public void setDepto(String depto) {
+        this.depto = depto;
+    }
+
+    public String getAnexo() {
+        return anexo;
+    }
+
+    public Inmueble anexo(String anexo) {
+        this.anexo = anexo;
+        return this;
+    }
+
+    public void setAnexo(String anexo) {
+        this.anexo = anexo;
     }
 
     public Set<Inspeccion> getInspeccions() {
@@ -105,7 +169,11 @@ public class Inmueble implements Serializable {
     public String toString() {
         return "Inmueble{" +
             "id=" + getId() +
-            ", direccion='" + getDireccion() + "'" +
+            ", calle='" + getCalle() + "'" +
+            ", altura='" + getAltura() + "'" +
+            ", piso='" + getPiso() + "'" +
+            ", depto='" + getDepto() + "'" +
+            ", anexo='" + getAnexo() + "'" +
             "}";
     }
 }

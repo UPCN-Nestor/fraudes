@@ -11,6 +11,6 @@ import org.springframework.data.jpa.repository.*;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface EtapaRepository extends JpaRepository<Etapa, Long> {
+public interface EtapaRepository extends JpaRepository<Etapa, Long>, JpaSpecificationExecutor<Etapa> {
 
 }

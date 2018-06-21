@@ -36,6 +36,8 @@ public class InspeccionCriteria implements Serializable {
 
     private BooleanFilter deshabitada;
 
+    private StringFilter usuario;
+
     private LongFilter anomaliaMedidorId;
 
     private LongFilter trabajoId;
@@ -89,6 +91,14 @@ public class InspeccionCriteria implements Serializable {
 
     public void setDeshabitada(BooleanFilter deshabitada) {
         this.deshabitada = deshabitada;
+    }
+
+    public StringFilter getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(StringFilter usuario) {
+        this.usuario = usuario;
     }
 
     public LongFilter getAnomaliaMedidorId() {
@@ -147,6 +157,7 @@ public class InspeccionCriteria implements Serializable {
                 (fecha != null ? "fecha=" + fecha + ", " : "") +
                 (observaciones != null ? "observaciones=" + observaciones + ", " : "") +
                 (deshabitada != null ? "deshabitada=" + deshabitada + ", " : "") +
+                (usuario != null ? "usuario=" + usuario + ", " : "") +
                 (anomaliaMedidorId != null ? "anomaliaMedidorId=" + anomaliaMedidorId + ", " : "") +
                 (trabajoId != null ? "trabajoId=" + trabajoId + ", " : "") +
                 (inmuebleId != null ? "inmuebleId=" + inmuebleId + ", " : "") +

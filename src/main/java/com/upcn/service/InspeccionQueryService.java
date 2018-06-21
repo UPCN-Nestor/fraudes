@@ -84,6 +84,9 @@ public class InspeccionQueryService extends QueryService<Inspeccion> {
             if (criteria.getDeshabitada() != null) {
                 specification = specification.and(buildSpecification(criteria.getDeshabitada(), Inspeccion_.deshabitada));
             }
+            if (criteria.getUsuario() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getUsuario(), Inspeccion_.usuario));
+            }
             if (criteria.getAnomaliaMedidorId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getAnomaliaMedidorId(), Inspeccion_.anomaliaMedidors, Anomalia_.id));
             }

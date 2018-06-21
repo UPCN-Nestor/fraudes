@@ -3,8 +3,12 @@ package com.upcn.web.rest;
 import com.upcn.FrApp;
 
 import com.upcn.domain.Anomalia;
+import com.upcn.domain.Inspeccion;
 import com.upcn.repository.AnomaliaRepository;
+import com.upcn.service.AnomaliaService;
 import com.upcn.web.rest.errors.ExceptionTranslator;
+import com.upcn.service.dto.AnomaliaCriteria;
+import com.upcn.service.AnomaliaQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +49,12 @@ public class AnomaliaResourceIntTest {
     private AnomaliaRepository anomaliaRepository;
 
     @Autowired
+    private AnomaliaService anomaliaService;
+
+    @Autowired
+    private AnomaliaQueryService anomaliaQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -63,7 +73,7 @@ public class AnomaliaResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AnomaliaResource anomaliaResource = new AnomaliaResource(anomaliaRepository);
+        final AnomaliaResource anomaliaResource = new AnomaliaResource(anomaliaService, anomaliaQueryService);
         this.restAnomaliaMockMvc = MockMvcBuilders.standaloneSetup(anomaliaResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -155,6 +165,86 @@ public class AnomaliaResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllAnomaliasByDescripcionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        anomaliaRepository.saveAndFlush(anomalia);
+
+        // Get all the anomaliaList where descripcion equals to DEFAULT_DESCRIPCION
+        defaultAnomaliaShouldBeFound("descripcion.equals=" + DEFAULT_DESCRIPCION);
+
+        // Get all the anomaliaList where descripcion equals to UPDATED_DESCRIPCION
+        defaultAnomaliaShouldNotBeFound("descripcion.equals=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAnomaliasByDescripcionIsInShouldWork() throws Exception {
+        // Initialize the database
+        anomaliaRepository.saveAndFlush(anomalia);
+
+        // Get all the anomaliaList where descripcion in DEFAULT_DESCRIPCION or UPDATED_DESCRIPCION
+        defaultAnomaliaShouldBeFound("descripcion.in=" + DEFAULT_DESCRIPCION + "," + UPDATED_DESCRIPCION);
+
+        // Get all the anomaliaList where descripcion equals to UPDATED_DESCRIPCION
+        defaultAnomaliaShouldNotBeFound("descripcion.in=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAnomaliasByDescripcionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        anomaliaRepository.saveAndFlush(anomalia);
+
+        // Get all the anomaliaList where descripcion is not null
+        defaultAnomaliaShouldBeFound("descripcion.specified=true");
+
+        // Get all the anomaliaList where descripcion is null
+        defaultAnomaliaShouldNotBeFound("descripcion.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllAnomaliasByInspeccionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Inspeccion inspeccion = InspeccionResourceIntTest.createEntity(em);
+        em.persist(inspeccion);
+        em.flush();
+        anomalia.addInspeccion(inspeccion);
+        anomaliaRepository.saveAndFlush(anomalia);
+        Long inspeccionId = inspeccion.getId();
+
+        // Get all the anomaliaList where inspeccion equals to inspeccionId
+        defaultAnomaliaShouldBeFound("inspeccionId.equals=" + inspeccionId);
+
+        // Get all the anomaliaList where inspeccion equals to inspeccionId + 1
+        defaultAnomaliaShouldNotBeFound("inspeccionId.equals=" + (inspeccionId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultAnomaliaShouldBeFound(String filter) throws Exception {
+        restAnomaliaMockMvc.perform(get("/api/anomalias?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(anomalia.getId().intValue())))
+            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultAnomaliaShouldNotBeFound(String filter) throws Exception {
+        restAnomaliaMockMvc.perform(get("/api/anomalias?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
+
+    @Test
+    @Transactional
     public void getNonExistingAnomalia() throws Exception {
         // Get the anomalia
         restAnomaliaMockMvc.perform(get("/api/anomalias/{id}", Long.MAX_VALUE))
@@ -165,7 +255,8 @@ public class AnomaliaResourceIntTest {
     @Transactional
     public void updateAnomalia() throws Exception {
         // Initialize the database
-        anomaliaRepository.saveAndFlush(anomalia);
+        anomaliaService.save(anomalia);
+
         int databaseSizeBeforeUpdate = anomaliaRepository.findAll().size();
 
         // Update the anomalia
@@ -209,7 +300,8 @@ public class AnomaliaResourceIntTest {
     @Transactional
     public void deleteAnomalia() throws Exception {
         // Initialize the database
-        anomaliaRepository.saveAndFlush(anomalia);
+        anomaliaService.save(anomalia);
+
         int databaseSizeBeforeDelete = anomaliaRepository.findAll().size();
 
         // Get the anomalia

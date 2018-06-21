@@ -3,8 +3,12 @@ package com.upcn.web.rest;
 import com.upcn.FrApp;
 
 import com.upcn.domain.Material;
+import com.upcn.domain.Trabajo;
 import com.upcn.repository.MaterialRepository;
+import com.upcn.service.MaterialService;
 import com.upcn.web.rest.errors.ExceptionTranslator;
+import com.upcn.service.dto.MaterialCriteria;
+import com.upcn.service.MaterialQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +49,12 @@ public class MaterialResourceIntTest {
     private MaterialRepository materialRepository;
 
     @Autowired
+    private MaterialService materialService;
+
+    @Autowired
+    private MaterialQueryService materialQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -63,7 +73,7 @@ public class MaterialResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MaterialResource materialResource = new MaterialResource(materialRepository);
+        final MaterialResource materialResource = new MaterialResource(materialService, materialQueryService);
         this.restMaterialMockMvc = MockMvcBuilders.standaloneSetup(materialResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -155,6 +165,86 @@ public class MaterialResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllMaterialsByDescripcionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where descripcion equals to DEFAULT_DESCRIPCION
+        defaultMaterialShouldBeFound("descripcion.equals=" + DEFAULT_DESCRIPCION);
+
+        // Get all the materialList where descripcion equals to UPDATED_DESCRIPCION
+        defaultMaterialShouldNotBeFound("descripcion.equals=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByDescripcionIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where descripcion in DEFAULT_DESCRIPCION or UPDATED_DESCRIPCION
+        defaultMaterialShouldBeFound("descripcion.in=" + DEFAULT_DESCRIPCION + "," + UPDATED_DESCRIPCION);
+
+        // Get all the materialList where descripcion equals to UPDATED_DESCRIPCION
+        defaultMaterialShouldNotBeFound("descripcion.in=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByDescripcionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where descripcion is not null
+        defaultMaterialShouldBeFound("descripcion.specified=true");
+
+        // Get all the materialList where descripcion is null
+        defaultMaterialShouldNotBeFound("descripcion.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByTrabajoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Trabajo trabajo = TrabajoResourceIntTest.createEntity(em);
+        em.persist(trabajo);
+        em.flush();
+        material.addTrabajo(trabajo);
+        materialRepository.saveAndFlush(material);
+        Long trabajoId = trabajo.getId();
+
+        // Get all the materialList where trabajo equals to trabajoId
+        defaultMaterialShouldBeFound("trabajoId.equals=" + trabajoId);
+
+        // Get all the materialList where trabajo equals to trabajoId + 1
+        defaultMaterialShouldNotBeFound("trabajoId.equals=" + (trabajoId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultMaterialShouldBeFound(String filter) throws Exception {
+        restMaterialMockMvc.perform(get("/api/materials?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(material.getId().intValue())))
+            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultMaterialShouldNotBeFound(String filter) throws Exception {
+        restMaterialMockMvc.perform(get("/api/materials?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
+
+    @Test
+    @Transactional
     public void getNonExistingMaterial() throws Exception {
         // Get the material
         restMaterialMockMvc.perform(get("/api/materials/{id}", Long.MAX_VALUE))
@@ -165,7 +255,8 @@ public class MaterialResourceIntTest {
     @Transactional
     public void updateMaterial() throws Exception {
         // Initialize the database
-        materialRepository.saveAndFlush(material);
+        materialService.save(material);
+
         int databaseSizeBeforeUpdate = materialRepository.findAll().size();
 
         // Update the material
@@ -209,7 +300,8 @@ public class MaterialResourceIntTest {
     @Transactional
     public void deleteMaterial() throws Exception {
         // Initialize the database
-        materialRepository.saveAndFlush(material);
+        materialService.save(material);
+
         int databaseSizeBeforeDelete = materialRepository.findAll().size();
 
         // Get the material

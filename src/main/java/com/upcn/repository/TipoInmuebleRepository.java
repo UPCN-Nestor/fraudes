@@ -11,6 +11,6 @@ import org.springframework.data.jpa.repository.*;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface TipoInmuebleRepository extends JpaRepository<TipoInmueble, Long> {
+public interface TipoInmuebleRepository extends JpaRepository<TipoInmueble, Long>, JpaSpecificationExecutor<TipoInmueble> {
 
 }

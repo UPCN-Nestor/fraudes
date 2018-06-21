@@ -3,8 +3,12 @@ package com.upcn.web.rest;
 import com.upcn.FrApp;
 
 import com.upcn.domain.Inmueble;
+import com.upcn.domain.Inspeccion;
 import com.upcn.repository.InmuebleRepository;
+import com.upcn.service.InmuebleService;
 import com.upcn.web.rest.errors.ExceptionTranslator;
+import com.upcn.service.dto.InmuebleCriteria;
+import com.upcn.service.InmuebleQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,11 +42,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = FrApp.class)
 public class InmuebleResourceIntTest {
 
-    private static final String DEFAULT_DIRECCION = "AAAAAAAAAA";
-    private static final String UPDATED_DIRECCION = "BBBBBBBBBB";
+    private static final String DEFAULT_CALLE = "AAAAAAAAAA";
+    private static final String UPDATED_CALLE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ALTURA = "AAAAAAAAAA";
+    private static final String UPDATED_ALTURA = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PISO = "AAAAAAAAAA";
+    private static final String UPDATED_PISO = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DEPTO = "AAAAAAAAAA";
+    private static final String UPDATED_DEPTO = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ANEXO = "AAAAAAAAAA";
+    private static final String UPDATED_ANEXO = "BBBBBBBBBB";
 
     @Autowired
     private InmuebleRepository inmuebleRepository;
+
+    @Autowired
+    private InmuebleService inmuebleService;
+
+    @Autowired
+    private InmuebleQueryService inmuebleQueryService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -63,7 +85,7 @@ public class InmuebleResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final InmuebleResource inmuebleResource = new InmuebleResource(inmuebleRepository);
+        final InmuebleResource inmuebleResource = new InmuebleResource(inmuebleService, inmuebleQueryService);
         this.restInmuebleMockMvc = MockMvcBuilders.standaloneSetup(inmuebleResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -79,7 +101,11 @@ public class InmuebleResourceIntTest {
      */
     public static Inmueble createEntity(EntityManager em) {
         Inmueble inmueble = new Inmueble()
-            .direccion(DEFAULT_DIRECCION);
+            .calle(DEFAULT_CALLE)
+            .altura(DEFAULT_ALTURA)
+            .piso(DEFAULT_PISO)
+            .depto(DEFAULT_DEPTO)
+            .anexo(DEFAULT_ANEXO);
         return inmueble;
     }
 
@@ -103,7 +129,11 @@ public class InmuebleResourceIntTest {
         List<Inmueble> inmuebleList = inmuebleRepository.findAll();
         assertThat(inmuebleList).hasSize(databaseSizeBeforeCreate + 1);
         Inmueble testInmueble = inmuebleList.get(inmuebleList.size() - 1);
-        assertThat(testInmueble.getDireccion()).isEqualTo(DEFAULT_DIRECCION);
+        assertThat(testInmueble.getCalle()).isEqualTo(DEFAULT_CALLE);
+        assertThat(testInmueble.getAltura()).isEqualTo(DEFAULT_ALTURA);
+        assertThat(testInmueble.getPiso()).isEqualTo(DEFAULT_PISO);
+        assertThat(testInmueble.getDepto()).isEqualTo(DEFAULT_DEPTO);
+        assertThat(testInmueble.getAnexo()).isEqualTo(DEFAULT_ANEXO);
     }
 
     @Test
@@ -136,7 +166,11 @@ public class InmuebleResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(inmueble.getId().intValue())))
-            .andExpect(jsonPath("$.[*].direccion").value(hasItem(DEFAULT_DIRECCION.toString())));
+            .andExpect(jsonPath("$.[*].calle").value(hasItem(DEFAULT_CALLE.toString())))
+            .andExpect(jsonPath("$.[*].altura").value(hasItem(DEFAULT_ALTURA.toString())))
+            .andExpect(jsonPath("$.[*].piso").value(hasItem(DEFAULT_PISO.toString())))
+            .andExpect(jsonPath("$.[*].depto").value(hasItem(DEFAULT_DEPTO.toString())))
+            .andExpect(jsonPath("$.[*].anexo").value(hasItem(DEFAULT_ANEXO.toString())));
     }
 
     @Test
@@ -150,8 +184,252 @@ public class InmuebleResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(inmueble.getId().intValue()))
-            .andExpect(jsonPath("$.direccion").value(DEFAULT_DIRECCION.toString()));
+            .andExpect(jsonPath("$.calle").value(DEFAULT_CALLE.toString()))
+            .andExpect(jsonPath("$.altura").value(DEFAULT_ALTURA.toString()))
+            .andExpect(jsonPath("$.piso").value(DEFAULT_PISO.toString()))
+            .andExpect(jsonPath("$.depto").value(DEFAULT_DEPTO.toString()))
+            .andExpect(jsonPath("$.anexo").value(DEFAULT_ANEXO.toString()));
     }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByCalleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where calle equals to DEFAULT_CALLE
+        defaultInmuebleShouldBeFound("calle.equals=" + DEFAULT_CALLE);
+
+        // Get all the inmuebleList where calle equals to UPDATED_CALLE
+        defaultInmuebleShouldNotBeFound("calle.equals=" + UPDATED_CALLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByCalleIsInShouldWork() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where calle in DEFAULT_CALLE or UPDATED_CALLE
+        defaultInmuebleShouldBeFound("calle.in=" + DEFAULT_CALLE + "," + UPDATED_CALLE);
+
+        // Get all the inmuebleList where calle equals to UPDATED_CALLE
+        defaultInmuebleShouldNotBeFound("calle.in=" + UPDATED_CALLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByCalleIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where calle is not null
+        defaultInmuebleShouldBeFound("calle.specified=true");
+
+        // Get all the inmuebleList where calle is null
+        defaultInmuebleShouldNotBeFound("calle.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByAlturaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where altura equals to DEFAULT_ALTURA
+        defaultInmuebleShouldBeFound("altura.equals=" + DEFAULT_ALTURA);
+
+        // Get all the inmuebleList where altura equals to UPDATED_ALTURA
+        defaultInmuebleShouldNotBeFound("altura.equals=" + UPDATED_ALTURA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByAlturaIsInShouldWork() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where altura in DEFAULT_ALTURA or UPDATED_ALTURA
+        defaultInmuebleShouldBeFound("altura.in=" + DEFAULT_ALTURA + "," + UPDATED_ALTURA);
+
+        // Get all the inmuebleList where altura equals to UPDATED_ALTURA
+        defaultInmuebleShouldNotBeFound("altura.in=" + UPDATED_ALTURA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByAlturaIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where altura is not null
+        defaultInmuebleShouldBeFound("altura.specified=true");
+
+        // Get all the inmuebleList where altura is null
+        defaultInmuebleShouldNotBeFound("altura.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByPisoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where piso equals to DEFAULT_PISO
+        defaultInmuebleShouldBeFound("piso.equals=" + DEFAULT_PISO);
+
+        // Get all the inmuebleList where piso equals to UPDATED_PISO
+        defaultInmuebleShouldNotBeFound("piso.equals=" + UPDATED_PISO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByPisoIsInShouldWork() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where piso in DEFAULT_PISO or UPDATED_PISO
+        defaultInmuebleShouldBeFound("piso.in=" + DEFAULT_PISO + "," + UPDATED_PISO);
+
+        // Get all the inmuebleList where piso equals to UPDATED_PISO
+        defaultInmuebleShouldNotBeFound("piso.in=" + UPDATED_PISO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByPisoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where piso is not null
+        defaultInmuebleShouldBeFound("piso.specified=true");
+
+        // Get all the inmuebleList where piso is null
+        defaultInmuebleShouldNotBeFound("piso.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByDeptoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where depto equals to DEFAULT_DEPTO
+        defaultInmuebleShouldBeFound("depto.equals=" + DEFAULT_DEPTO);
+
+        // Get all the inmuebleList where depto equals to UPDATED_DEPTO
+        defaultInmuebleShouldNotBeFound("depto.equals=" + UPDATED_DEPTO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByDeptoIsInShouldWork() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where depto in DEFAULT_DEPTO or UPDATED_DEPTO
+        defaultInmuebleShouldBeFound("depto.in=" + DEFAULT_DEPTO + "," + UPDATED_DEPTO);
+
+        // Get all the inmuebleList where depto equals to UPDATED_DEPTO
+        defaultInmuebleShouldNotBeFound("depto.in=" + UPDATED_DEPTO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByDeptoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where depto is not null
+        defaultInmuebleShouldBeFound("depto.specified=true");
+
+        // Get all the inmuebleList where depto is null
+        defaultInmuebleShouldNotBeFound("depto.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByAnexoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where anexo equals to DEFAULT_ANEXO
+        defaultInmuebleShouldBeFound("anexo.equals=" + DEFAULT_ANEXO);
+
+        // Get all the inmuebleList where anexo equals to UPDATED_ANEXO
+        defaultInmuebleShouldNotBeFound("anexo.equals=" + UPDATED_ANEXO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByAnexoIsInShouldWork() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where anexo in DEFAULT_ANEXO or UPDATED_ANEXO
+        defaultInmuebleShouldBeFound("anexo.in=" + DEFAULT_ANEXO + "," + UPDATED_ANEXO);
+
+        // Get all the inmuebleList where anexo equals to UPDATED_ANEXO
+        defaultInmuebleShouldNotBeFound("anexo.in=" + UPDATED_ANEXO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByAnexoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where anexo is not null
+        defaultInmuebleShouldBeFound("anexo.specified=true");
+
+        // Get all the inmuebleList where anexo is null
+        defaultInmuebleShouldNotBeFound("anexo.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesByInspeccionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Inspeccion inspeccion = InspeccionResourceIntTest.createEntity(em);
+        em.persist(inspeccion);
+        em.flush();
+        inmueble.addInspeccion(inspeccion);
+        inmuebleRepository.saveAndFlush(inmueble);
+        Long inspeccionId = inspeccion.getId();
+
+        // Get all the inmuebleList where inspeccion equals to inspeccionId
+        defaultInmuebleShouldBeFound("inspeccionId.equals=" + inspeccionId);
+
+        // Get all the inmuebleList where inspeccion equals to inspeccionId + 1
+        defaultInmuebleShouldNotBeFound("inspeccionId.equals=" + (inspeccionId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultInmuebleShouldBeFound(String filter) throws Exception {
+        restInmuebleMockMvc.perform(get("/api/inmuebles?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(inmueble.getId().intValue())))
+            .andExpect(jsonPath("$.[*].calle").value(hasItem(DEFAULT_CALLE.toString())))
+            .andExpect(jsonPath("$.[*].altura").value(hasItem(DEFAULT_ALTURA.toString())))
+            .andExpect(jsonPath("$.[*].piso").value(hasItem(DEFAULT_PISO.toString())))
+            .andExpect(jsonPath("$.[*].depto").value(hasItem(DEFAULT_DEPTO.toString())))
+            .andExpect(jsonPath("$.[*].anexo").value(hasItem(DEFAULT_ANEXO.toString())));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultInmuebleShouldNotBeFound(String filter) throws Exception {
+        restInmuebleMockMvc.perform(get("/api/inmuebles?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
 
     @Test
     @Transactional
@@ -165,7 +443,8 @@ public class InmuebleResourceIntTest {
     @Transactional
     public void updateInmueble() throws Exception {
         // Initialize the database
-        inmuebleRepository.saveAndFlush(inmueble);
+        inmuebleService.save(inmueble);
+
         int databaseSizeBeforeUpdate = inmuebleRepository.findAll().size();
 
         // Update the inmueble
@@ -173,7 +452,11 @@ public class InmuebleResourceIntTest {
         // Disconnect from session so that the updates on updatedInmueble are not directly saved in db
         em.detach(updatedInmueble);
         updatedInmueble
-            .direccion(UPDATED_DIRECCION);
+            .calle(UPDATED_CALLE)
+            .altura(UPDATED_ALTURA)
+            .piso(UPDATED_PISO)
+            .depto(UPDATED_DEPTO)
+            .anexo(UPDATED_ANEXO);
 
         restInmuebleMockMvc.perform(put("/api/inmuebles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -184,7 +467,11 @@ public class InmuebleResourceIntTest {
         List<Inmueble> inmuebleList = inmuebleRepository.findAll();
         assertThat(inmuebleList).hasSize(databaseSizeBeforeUpdate);
         Inmueble testInmueble = inmuebleList.get(inmuebleList.size() - 1);
-        assertThat(testInmueble.getDireccion()).isEqualTo(UPDATED_DIRECCION);
+        assertThat(testInmueble.getCalle()).isEqualTo(UPDATED_CALLE);
+        assertThat(testInmueble.getAltura()).isEqualTo(UPDATED_ALTURA);
+        assertThat(testInmueble.getPiso()).isEqualTo(UPDATED_PISO);
+        assertThat(testInmueble.getDepto()).isEqualTo(UPDATED_DEPTO);
+        assertThat(testInmueble.getAnexo()).isEqualTo(UPDATED_ANEXO);
     }
 
     @Test
@@ -209,7 +496,8 @@ public class InmuebleResourceIntTest {
     @Transactional
     public void deleteInmueble() throws Exception {
         // Initialize the database
-        inmuebleRepository.saveAndFlush(inmueble);
+        inmuebleService.save(inmueble);
+
         int databaseSizeBeforeDelete = inmuebleRepository.findAll().size();
 
         // Get the inmueble

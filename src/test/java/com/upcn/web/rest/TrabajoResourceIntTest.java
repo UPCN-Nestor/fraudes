@@ -3,8 +3,13 @@ package com.upcn.web.rest;
 import com.upcn.FrApp;
 
 import com.upcn.domain.Trabajo;
+import com.upcn.domain.Material;
+import com.upcn.domain.Inspeccion;
 import com.upcn.repository.TrabajoRepository;
+import com.upcn.service.TrabajoService;
 import com.upcn.web.rest.errors.ExceptionTranslator;
+import com.upcn.service.dto.TrabajoCriteria;
+import com.upcn.service.TrabajoQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -48,6 +53,12 @@ public class TrabajoResourceIntTest {
     private TrabajoRepository trabajoRepository;
 
     @Autowired
+    private TrabajoService trabajoService;
+
+    @Autowired
+    private TrabajoQueryService trabajoQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -66,7 +77,7 @@ public class TrabajoResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TrabajoResource trabajoResource = new TrabajoResource(trabajoRepository);
+        final TrabajoResource trabajoResource = new TrabajoResource(trabajoService, trabajoQueryService);
         this.restTrabajoMockMvc = MockMvcBuilders.standaloneSetup(trabajoResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -162,6 +173,145 @@ public class TrabajoResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllTrabajosByDescripcionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where descripcion equals to DEFAULT_DESCRIPCION
+        defaultTrabajoShouldBeFound("descripcion.equals=" + DEFAULT_DESCRIPCION);
+
+        // Get all the trabajoList where descripcion equals to UPDATED_DESCRIPCION
+        defaultTrabajoShouldNotBeFound("descripcion.equals=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByDescripcionIsInShouldWork() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where descripcion in DEFAULT_DESCRIPCION or UPDATED_DESCRIPCION
+        defaultTrabajoShouldBeFound("descripcion.in=" + DEFAULT_DESCRIPCION + "," + UPDATED_DESCRIPCION);
+
+        // Get all the trabajoList where descripcion equals to UPDATED_DESCRIPCION
+        defaultTrabajoShouldNotBeFound("descripcion.in=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByDescripcionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where descripcion is not null
+        defaultTrabajoShouldBeFound("descripcion.specified=true");
+
+        // Get all the trabajoList where descripcion is null
+        defaultTrabajoShouldNotBeFound("descripcion.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByCostoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where costo equals to DEFAULT_COSTO
+        defaultTrabajoShouldBeFound("costo.equals=" + DEFAULT_COSTO);
+
+        // Get all the trabajoList where costo equals to UPDATED_COSTO
+        defaultTrabajoShouldNotBeFound("costo.equals=" + UPDATED_COSTO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByCostoIsInShouldWork() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where costo in DEFAULT_COSTO or UPDATED_COSTO
+        defaultTrabajoShouldBeFound("costo.in=" + DEFAULT_COSTO + "," + UPDATED_COSTO);
+
+        // Get all the trabajoList where costo equals to UPDATED_COSTO
+        defaultTrabajoShouldNotBeFound("costo.in=" + UPDATED_COSTO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByCostoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where costo is not null
+        defaultTrabajoShouldBeFound("costo.specified=true");
+
+        // Get all the trabajoList where costo is null
+        defaultTrabajoShouldNotBeFound("costo.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByMaterialIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Material material = MaterialResourceIntTest.createEntity(em);
+        em.persist(material);
+        em.flush();
+        trabajo.addMaterial(material);
+        trabajoRepository.saveAndFlush(trabajo);
+        Long materialId = material.getId();
+
+        // Get all the trabajoList where material equals to materialId
+        defaultTrabajoShouldBeFound("materialId.equals=" + materialId);
+
+        // Get all the trabajoList where material equals to materialId + 1
+        defaultTrabajoShouldNotBeFound("materialId.equals=" + (materialId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByInspeccionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Inspeccion inspeccion = InspeccionResourceIntTest.createEntity(em);
+        em.persist(inspeccion);
+        em.flush();
+        trabajo.addInspeccion(inspeccion);
+        trabajoRepository.saveAndFlush(trabajo);
+        Long inspeccionId = inspeccion.getId();
+
+        // Get all the trabajoList where inspeccion equals to inspeccionId
+        defaultTrabajoShouldBeFound("inspeccionId.equals=" + inspeccionId);
+
+        // Get all the trabajoList where inspeccion equals to inspeccionId + 1
+        defaultTrabajoShouldNotBeFound("inspeccionId.equals=" + (inspeccionId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultTrabajoShouldBeFound(String filter) throws Exception {
+        restTrabajoMockMvc.perform(get("/api/trabajos?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(trabajo.getId().intValue())))
+            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())))
+            .andExpect(jsonPath("$.[*].costo").value(hasItem(DEFAULT_COSTO.doubleValue())));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultTrabajoShouldNotBeFound(String filter) throws Exception {
+        restTrabajoMockMvc.perform(get("/api/trabajos?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
+
+    @Test
+    @Transactional
     public void getNonExistingTrabajo() throws Exception {
         // Get the trabajo
         restTrabajoMockMvc.perform(get("/api/trabajos/{id}", Long.MAX_VALUE))
@@ -172,7 +322,8 @@ public class TrabajoResourceIntTest {
     @Transactional
     public void updateTrabajo() throws Exception {
         // Initialize the database
-        trabajoRepository.saveAndFlush(trabajo);
+        trabajoService.save(trabajo);
+
         int databaseSizeBeforeUpdate = trabajoRepository.findAll().size();
 
         // Update the trabajo
@@ -218,7 +369,8 @@ public class TrabajoResourceIntTest {
     @Transactional
     public void deleteTrabajo() throws Exception {
         // Initialize the database
-        trabajoRepository.saveAndFlush(trabajo);
+        trabajoService.save(trabajo);
+
         int databaseSizeBeforeDelete = trabajoRepository.findAll().size();
 
         // Get the trabajo

@@ -16,7 +16,11 @@
             "detail": {
                 "title": "Inmueble"
             },
-            "direccion": "Direccion",
+            "calle": "Calle",
+            "altura": "Altura",
+            "piso": "Piso",
+            "depto": "Depto",
+            "anexo": "Anexo",
             "inspeccion": "Inspeccion"
         }
     }

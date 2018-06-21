@@ -38,6 +38,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="usuario" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="inmueble_id" type="bigint">
                 <constraints nullable="true" />
             </column>

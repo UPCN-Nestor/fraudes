@@ -19,7 +19,7 @@
     "entityTableName": "anomalia",
     "dto": "no",
     "pagination": "no",
-    "service": "no",
-    "jpaMetamodelFiltering": false,
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
     "angularJSSuffix": "mySuffix"
 }

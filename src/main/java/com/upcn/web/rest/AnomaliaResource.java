@@ -2,10 +2,11 @@ package com.upcn.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.upcn.domain.Anomalia;
-
-import com.upcn.repository.AnomaliaRepository;
+import com.upcn.service.AnomaliaService;
 import com.upcn.web.rest.errors.BadRequestAlertException;
 import com.upcn.web.rest.util.HeaderUtil;
+import com.upcn.service.dto.AnomaliaCriteria;
+import com.upcn.service.AnomaliaQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,13 @@ public class AnomaliaResource {
 
     private static final String ENTITY_NAME = "anomalia";
 
-    private final AnomaliaRepository anomaliaRepository;
+    private final AnomaliaService anomaliaService;
 
-    public AnomaliaResource(AnomaliaRepository anomaliaRepository) {
-        this.anomaliaRepository = anomaliaRepository;
+    private final AnomaliaQueryService anomaliaQueryService;
+
+    public AnomaliaResource(AnomaliaService anomaliaService, AnomaliaQueryService anomaliaQueryService) {
+        this.anomaliaService = anomaliaService;
+        this.anomaliaQueryService = anomaliaQueryService;
     }
 
     /**
@@ -49,7 +53,7 @@ public class AnomaliaResource {
         if (anomalia.getId() != null) {
             throw new BadRequestAlertException("A new anomalia cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Anomalia result = anomaliaRepository.save(anomalia);
+        Anomalia result = anomaliaService.save(anomalia);
         return ResponseEntity.created(new URI("/api/anomalias/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,7 @@ public class AnomaliaResource {
         if (anomalia.getId() == null) {
             return createAnomalia(anomalia);
         }
-        Anomalia result = anomaliaRepository.save(anomalia);
+        Anomalia result = anomaliaService.save(anomalia);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, anomalia.getId().toString()))
             .body(result);
@@ -80,14 +84,16 @@ public class AnomaliaResource {
     /**
      * GET  /anomalias : get all the anomalias.
      *
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of anomalias in body
      */
     @GetMapping("/anomalias")
     @Timed
-    public List<Anomalia> getAllAnomalias() {
-        log.debug("REST request to get all Anomalias");
-        return anomaliaRepository.findAll();
-        }
+    public ResponseEntity<List<Anomalia>> getAllAnomalias(AnomaliaCriteria criteria) {
+        log.debug("REST request to get Anomalias by criteria: {}", criteria);
+        List<Anomalia> entityList = anomaliaQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
 
     /**
      * GET  /anomalias/:id : get the "id" anomalia.
@@ -99,7 +105,7 @@ public class AnomaliaResource {
     @Timed
     public ResponseEntity<Anomalia> getAnomalia(@PathVariable Long id) {
         log.debug("REST request to get Anomalia : {}", id);
-        Anomalia anomalia = anomaliaRepository.findOne(id);
+        Anomalia anomalia = anomaliaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(anomalia));
     }
 
@@ -113,7 +119,7 @@ public class AnomaliaResource {
     @Timed
     public ResponseEntity<Void> deleteAnomalia(@PathVariable Long id) {
         log.debug("REST request to delete Anomalia : {}", id);
-        anomaliaRepository.delete(id);
+        anomaliaService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

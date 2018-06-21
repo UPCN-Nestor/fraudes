@@ -5,6 +5,7 @@ entity Inspeccion {
     fecha LocalDate
     observaciones String
     deshabitada Boolean    
+    usuario String
 }
 
 entity Anomalia {
@@ -14,7 +15,11 @@ entity Anomalia {
 
 entity Inmueble {
 	id Long
-	direccion String
+	calle String
+    altura String
+    piso String
+    depto String
+    anexo String
 }
 
 entity Estado {
@@ -52,7 +57,7 @@ relationship ManyToMany {
 }
 
 relationship OneToMany {
-	Inmueble{inspeccion} to Inspeccion{inmueble(direccion)},
+	Inmueble{inspeccion} to Inspeccion{inmueble},
     Etapa{inspeccion} to Inspeccion{etapa(numero)},
     Estado to Inspeccion{estado(descripcion)},
     TipoInmueble{inspeccion} to Inspeccion{tipoInmueble(descripcion)}     
@@ -60,6 +65,8 @@ relationship OneToMany {
 
 
 paginate Inspeccion with pagination
-filter Inspeccion
+filter *
+service * with serviceImpl
 
 angularSuffix * with mySuffix
+

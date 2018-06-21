@@ -2,10 +2,11 @@ package com.upcn.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.upcn.domain.Material;
-
-import com.upcn.repository.MaterialRepository;
+import com.upcn.service.MaterialService;
 import com.upcn.web.rest.errors.BadRequestAlertException;
 import com.upcn.web.rest.util.HeaderUtil;
+import com.upcn.service.dto.MaterialCriteria;
+import com.upcn.service.MaterialQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,13 @@ public class MaterialResource {
 
     private static final String ENTITY_NAME = "material";
 
-    private final MaterialRepository materialRepository;
+    private final MaterialService materialService;
 
-    public MaterialResource(MaterialRepository materialRepository) {
-        this.materialRepository = materialRepository;
+    private final MaterialQueryService materialQueryService;
+
+    public MaterialResource(MaterialService materialService, MaterialQueryService materialQueryService) {
+        this.materialService = materialService;
+        this.materialQueryService = materialQueryService;
     }
 
     /**
@@ -49,7 +53,7 @@ public class MaterialResource {
         if (material.getId() != null) {
             throw new BadRequestAlertException("A new material cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Material result = materialRepository.save(material);
+        Material result = materialService.save(material);
         return ResponseEntity.created(new URI("/api/materials/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,7 @@ public class MaterialResource {
         if (material.getId() == null) {
             return createMaterial(material);
         }
-        Material result = materialRepository.save(material);
+        Material result = materialService.save(material);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, material.getId().toString()))
             .body(result);
@@ -80,14 +84,16 @@ public class MaterialResource {
     /**
      * GET  /materials : get all the materials.
      *
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of materials in body
      */
     @GetMapping("/materials")
     @Timed
-    public List<Material> getAllMaterials() {
-        log.debug("REST request to get all Materials");
-        return materialRepository.findAll();
-        }
+    public ResponseEntity<List<Material>> getAllMaterials(MaterialCriteria criteria) {
+        log.debug("REST request to get Materials by criteria: {}", criteria);
+        List<Material> entityList = materialQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
 
     /**
      * GET  /materials/:id : get the "id" material.
@@ -99,7 +105,7 @@ public class MaterialResource {
     @Timed
     public ResponseEntity<Material> getMaterial(@PathVariable Long id) {
         log.debug("REST request to get Material : {}", id);
-        Material material = materialRepository.findOne(id);
+        Material material = materialService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(material));
     }
 
@@ -113,7 +119,7 @@ public class MaterialResource {
     @Timed
     public ResponseEntity<Void> deleteMaterial(@PathVariable Long id) {
         log.debug("REST request to delete Material : {}", id);
-        materialRepository.delete(id);
+        materialService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

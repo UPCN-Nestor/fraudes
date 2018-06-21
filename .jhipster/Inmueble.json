@@ -10,7 +10,23 @@
     ],
     "fields": [
         {
-            "fieldName": "direccion",
+            "fieldName": "calle",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "altura",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "piso",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "depto",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "anexo",
             "fieldType": "String"
         }
     ],
@@ -18,7 +34,7 @@
     "entityTableName": "inmueble",
     "dto": "no",
     "pagination": "no",
-    "service": "no",
-    "jpaMetamodelFiltering": false,
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
     "angularJSSuffix": "mySuffix"
 }

@@ -61,6 +61,9 @@ public class InspeccionResourceIntTest {
     private static final Boolean DEFAULT_DESHABITADA = false;
     private static final Boolean UPDATED_DESHABITADA = true;
 
+    private static final String DEFAULT_USUARIO = "AAAAAAAAAA";
+    private static final String UPDATED_USUARIO = "BBBBBBBBBB";
+
     @Autowired
     private InspeccionRepository inspeccionRepository;
 
@@ -108,7 +111,8 @@ public class InspeccionResourceIntTest {
             .orden(DEFAULT_ORDEN)
             .fecha(DEFAULT_FECHA)
             .observaciones(DEFAULT_OBSERVACIONES)
-            .deshabitada(DEFAULT_DESHABITADA);
+            .deshabitada(DEFAULT_DESHABITADA)
+            .usuario(DEFAULT_USUARIO);
         return inspeccion;
     }
 
@@ -136,6 +140,7 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getFecha()).isEqualTo(DEFAULT_FECHA);
         assertThat(testInspeccion.getObservaciones()).isEqualTo(DEFAULT_OBSERVACIONES);
         assertThat(testInspeccion.isDeshabitada()).isEqualTo(DEFAULT_DESHABITADA);
+        assertThat(testInspeccion.getUsuario()).isEqualTo(DEFAULT_USUARIO);
     }
 
     @Test
@@ -171,7 +176,8 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].orden").value(hasItem(DEFAULT_ORDEN.intValue())))
             .andExpect(jsonPath("$.[*].fecha").value(hasItem(DEFAULT_FECHA.toString())))
             .andExpect(jsonPath("$.[*].observaciones").value(hasItem(DEFAULT_OBSERVACIONES.toString())))
-            .andExpect(jsonPath("$.[*].deshabitada").value(hasItem(DEFAULT_DESHABITADA.booleanValue())));
+            .andExpect(jsonPath("$.[*].deshabitada").value(hasItem(DEFAULT_DESHABITADA.booleanValue())))
+            .andExpect(jsonPath("$.[*].usuario").value(hasItem(DEFAULT_USUARIO.toString())));
     }
 
     @Test
@@ -188,7 +194,8 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.orden").value(DEFAULT_ORDEN.intValue()))
             .andExpect(jsonPath("$.fecha").value(DEFAULT_FECHA.toString()))
             .andExpect(jsonPath("$.observaciones").value(DEFAULT_OBSERVACIONES.toString()))
-            .andExpect(jsonPath("$.deshabitada").value(DEFAULT_DESHABITADA.booleanValue()));
+            .andExpect(jsonPath("$.deshabitada").value(DEFAULT_DESHABITADA.booleanValue()))
+            .andExpect(jsonPath("$.usuario").value(DEFAULT_USUARIO.toString()));
     }
 
     @Test
@@ -403,6 +410,45 @@ public class InspeccionResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllInspeccionsByUsuarioIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where usuario equals to DEFAULT_USUARIO
+        defaultInspeccionShouldBeFound("usuario.equals=" + DEFAULT_USUARIO);
+
+        // Get all the inspeccionList where usuario equals to UPDATED_USUARIO
+        defaultInspeccionShouldNotBeFound("usuario.equals=" + UPDATED_USUARIO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByUsuarioIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where usuario in DEFAULT_USUARIO or UPDATED_USUARIO
+        defaultInspeccionShouldBeFound("usuario.in=" + DEFAULT_USUARIO + "," + UPDATED_USUARIO);
+
+        // Get all the inspeccionList where usuario equals to UPDATED_USUARIO
+        defaultInspeccionShouldNotBeFound("usuario.in=" + UPDATED_USUARIO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByUsuarioIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where usuario is not null
+        defaultInspeccionShouldBeFound("usuario.specified=true");
+
+        // Get all the inspeccionList where usuario is null
+        defaultInspeccionShouldNotBeFound("usuario.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllInspeccionsByAnomaliaMedidorIsEqualToSomething() throws Exception {
         // Initialize the database
         Anomalia anomaliaMedidor = AnomaliaResourceIntTest.createEntity(em);
@@ -525,7 +571,8 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].orden").value(hasItem(DEFAULT_ORDEN.intValue())))
             .andExpect(jsonPath("$.[*].fecha").value(hasItem(DEFAULT_FECHA.toString())))
             .andExpect(jsonPath("$.[*].observaciones").value(hasItem(DEFAULT_OBSERVACIONES.toString())))
-            .andExpect(jsonPath("$.[*].deshabitada").value(hasItem(DEFAULT_DESHABITADA.booleanValue())));
+            .andExpect(jsonPath("$.[*].deshabitada").value(hasItem(DEFAULT_DESHABITADA.booleanValue())))
+            .andExpect(jsonPath("$.[*].usuario").value(hasItem(DEFAULT_USUARIO.toString())));
     }
 
     /**
@@ -564,7 +611,8 @@ public class InspeccionResourceIntTest {
             .orden(UPDATED_ORDEN)
             .fecha(UPDATED_FECHA)
             .observaciones(UPDATED_OBSERVACIONES)
-            .deshabitada(UPDATED_DESHABITADA);
+            .deshabitada(UPDATED_DESHABITADA)
+            .usuario(UPDATED_USUARIO);
 
         restInspeccionMockMvc.perform(put("/api/inspeccions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -579,6 +627,7 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getFecha()).isEqualTo(UPDATED_FECHA);
         assertThat(testInspeccion.getObservaciones()).isEqualTo(UPDATED_OBSERVACIONES);
         assertThat(testInspeccion.isDeshabitada()).isEqualTo(UPDATED_DESHABITADA);
+        assertThat(testInspeccion.getUsuario()).isEqualTo(UPDATED_USUARIO);
     }
 
     @Test

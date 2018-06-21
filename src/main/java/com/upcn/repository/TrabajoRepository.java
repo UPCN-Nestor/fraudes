@@ -12,7 +12,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface TrabajoRepository extends JpaRepository<Trabajo, Long> {
+public interface TrabajoRepository extends JpaRepository<Trabajo, Long>, JpaSpecificationExecutor<Trabajo> {
     @Query("select distinct trabajo from Trabajo trabajo left join fetch trabajo.materials")
     List<Trabajo> findAllWithEagerRelationships();
 

@@ -2,10 +2,11 @@ package com.upcn.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.upcn.domain.Etapa;
-
-import com.upcn.repository.EtapaRepository;
+import com.upcn.service.EtapaService;
 import com.upcn.web.rest.errors.BadRequestAlertException;
 import com.upcn.web.rest.util.HeaderUtil;
+import com.upcn.service.dto.EtapaCriteria;
+import com.upcn.service.EtapaQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,13 @@ public class EtapaResource {
 
     private static final String ENTITY_NAME = "etapa";
 
-    private final EtapaRepository etapaRepository;
+    private final EtapaService etapaService;
 
-    public EtapaResource(EtapaRepository etapaRepository) {
-        this.etapaRepository = etapaRepository;
+    private final EtapaQueryService etapaQueryService;
+
+    public EtapaResource(EtapaService etapaService, EtapaQueryService etapaQueryService) {
+        this.etapaService = etapaService;
+        this.etapaQueryService = etapaQueryService;
     }
 
     /**
@@ -49,7 +53,7 @@ public class EtapaResource {
         if (etapa.getId() != null) {
             throw new BadRequestAlertException("A new etapa cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Etapa result = etapaRepository.save(etapa);
+        Etapa result = etapaService.save(etapa);
         return ResponseEntity.created(new URI("/api/etapas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,7 @@ public class EtapaResource {
         if (etapa.getId() == null) {
             return createEtapa(etapa);
         }
-        Etapa result = etapaRepository.save(etapa);
+        Etapa result = etapaService.save(etapa);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, etapa.getId().toString()))
             .body(result);
@@ -80,14 +84,16 @@ public class EtapaResource {
     /**
      * GET  /etapas : get all the etapas.
      *
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of etapas in body
      */
     @GetMapping("/etapas")
     @Timed
-    public List<Etapa> getAllEtapas() {
-        log.debug("REST request to get all Etapas");
-        return etapaRepository.findAll();
-        }
+    public ResponseEntity<List<Etapa>> getAllEtapas(EtapaCriteria criteria) {
+        log.debug("REST request to get Etapas by criteria: {}", criteria);
+        List<Etapa> entityList = etapaQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
 
     /**
      * GET  /etapas/:id : get the "id" etapa.
@@ -99,7 +105,7 @@ public class EtapaResource {
     @Timed
     public ResponseEntity<Etapa> getEtapa(@PathVariable Long id) {
         log.debug("REST request to get Etapa : {}", id);
-        Etapa etapa = etapaRepository.findOne(id);
+        Etapa etapa = etapaService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(etapa));
     }
 
@@ -113,7 +119,7 @@ public class EtapaResource {
     @Timed
     public ResponseEntity<Void> deleteEtapa(@PathVariable Long id) {
         log.debug("REST request to delete Etapa : {}", id);
-        etapaRepository.delete(id);
+        etapaService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

@@ -2,10 +2,11 @@ package com.upcn.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.upcn.domain.Estado;
-
-import com.upcn.repository.EstadoRepository;
+import com.upcn.service.EstadoService;
 import com.upcn.web.rest.errors.BadRequestAlertException;
 import com.upcn.web.rest.util.HeaderUtil;
+import com.upcn.service.dto.EstadoCriteria;
+import com.upcn.service.EstadoQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,13 @@ public class EstadoResource {
 
     private static final String ENTITY_NAME = "estado";
 
-    private final EstadoRepository estadoRepository;
+    private final EstadoService estadoService;
 
-    public EstadoResource(EstadoRepository estadoRepository) {
-        this.estadoRepository = estadoRepository;
+    private final EstadoQueryService estadoQueryService;
+
+    public EstadoResource(EstadoService estadoService, EstadoQueryService estadoQueryService) {
+        this.estadoService = estadoService;
+        this.estadoQueryService = estadoQueryService;
     }
 
     /**
@@ -49,7 +53,7 @@ public class EstadoResource {
         if (estado.getId() != null) {
             throw new BadRequestAlertException("A new estado cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Estado result = estadoRepository.save(estado);
+        Estado result = estadoService.save(estado);
         return ResponseEntity.created(new URI("/api/estados/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,7 @@ public class EstadoResource {
         if (estado.getId() == null) {
             return createEstado(estado);
         }
-        Estado result = estadoRepository.save(estado);
+        Estado result = estadoService.save(estado);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, estado.getId().toString()))
             .body(result);
@@ -80,14 +84,16 @@ public class EstadoResource {
     /**
      * GET  /estados : get all the estados.
      *
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of estados in body
      */
     @GetMapping("/estados")
     @Timed
-    public List<Estado> getAllEstados() {
-        log.debug("REST request to get all Estados");
-        return estadoRepository.findAll();
-        }
+    public ResponseEntity<List<Estado>> getAllEstados(EstadoCriteria criteria) {
+        log.debug("REST request to get Estados by criteria: {}", criteria);
+        List<Estado> entityList = estadoQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
 
     /**
      * GET  /estados/:id : get the "id" estado.
@@ -99,7 +105,7 @@ public class EstadoResource {
     @Timed
     public ResponseEntity<Estado> getEstado(@PathVariable Long id) {
         log.debug("REST request to get Estado : {}", id);
-        Estado estado = estadoRepository.findOne(id);
+        Estado estado = estadoService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(estado));
     }
 
@@ -113,7 +119,7 @@ public class EstadoResource {
     @Timed
     public ResponseEntity<Void> deleteEstado(@PathVariable Long id) {
         log.debug("REST request to delete Estado : {}", id);
-        estadoRepository.delete(id);
+        estadoService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

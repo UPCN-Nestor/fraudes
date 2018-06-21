@@ -1,0 +1,36 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="nechegoyen (generated)" id="1529592637270-1">
+        <addColumn tableName="inmueble">
+            <column name="altura" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1529592637270-2">
+        <addColumn tableName="inmueble">
+            <column name="anexo" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1529592637270-3">
+        <addColumn tableName="inmueble">
+            <column name="calle" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1529592637270-4">
+        <addColumn tableName="inmueble">
+            <column name="depto" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1529592637270-5">
+        <addColumn tableName="inmueble">
+            <column name="piso" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1529592637270-6">
+        <addColumn tableName="inspeccion">
+            <column name="usuario" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1529592637270-7">
+        <dropColumn columnName="direccion" tableName="inmueble"/>
+    </changeSet>
+</databaseChangeLog>

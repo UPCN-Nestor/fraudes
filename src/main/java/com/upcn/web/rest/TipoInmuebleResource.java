@@ -2,10 +2,11 @@ package com.upcn.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.upcn.domain.TipoInmueble;
-
-import com.upcn.repository.TipoInmuebleRepository;
+import com.upcn.service.TipoInmuebleService;
 import com.upcn.web.rest.errors.BadRequestAlertException;
 import com.upcn.web.rest.util.HeaderUtil;
+import com.upcn.service.dto.TipoInmuebleCriteria;
+import com.upcn.service.TipoInmuebleQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,13 @@ public class TipoInmuebleResource {
 
     private static final String ENTITY_NAME = "tipoInmueble";
 
-    private final TipoInmuebleRepository tipoInmuebleRepository;
+    private final TipoInmuebleService tipoInmuebleService;
 
-    public TipoInmuebleResource(TipoInmuebleRepository tipoInmuebleRepository) {
-        this.tipoInmuebleRepository = tipoInmuebleRepository;
+    private final TipoInmuebleQueryService tipoInmuebleQueryService;
+
+    public TipoInmuebleResource(TipoInmuebleService tipoInmuebleService, TipoInmuebleQueryService tipoInmuebleQueryService) {
+        this.tipoInmuebleService = tipoInmuebleService;
+        this.tipoInmuebleQueryService = tipoInmuebleQueryService;
     }
 
     /**
@@ -49,7 +53,7 @@ public class TipoInmuebleResource {
         if (tipoInmueble.getId() != null) {
             throw new BadRequestAlertException("A new tipoInmueble cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        TipoInmueble result = tipoInmuebleRepository.save(tipoInmueble);
+        TipoInmueble result = tipoInmuebleService.save(tipoInmueble);
         return ResponseEntity.created(new URI("/api/tipo-inmuebles/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,7 @@ public class TipoInmuebleResource {
         if (tipoInmueble.getId() == null) {
             return createTipoInmueble(tipoInmueble);
         }
-        TipoInmueble result = tipoInmuebleRepository.save(tipoInmueble);
+        TipoInmueble result = tipoInmuebleService.save(tipoInmueble);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, tipoInmueble.getId().toString()))
             .body(result);
@@ -80,14 +84,16 @@ public class TipoInmuebleResource {
     /**
      * GET  /tipo-inmuebles : get all the tipoInmuebles.
      *
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of tipoInmuebles in body
      */
     @GetMapping("/tipo-inmuebles")
     @Timed
-    public List<TipoInmueble> getAllTipoInmuebles() {
-        log.debug("REST request to get all TipoInmuebles");
-        return tipoInmuebleRepository.findAll();
-        }
+    public ResponseEntity<List<TipoInmueble>> getAllTipoInmuebles(TipoInmuebleCriteria criteria) {
+        log.debug("REST request to get TipoInmuebles by criteria: {}", criteria);
+        List<TipoInmueble> entityList = tipoInmuebleQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
 
     /**
      * GET  /tipo-inmuebles/:id : get the "id" tipoInmueble.
@@ -99,7 +105,7 @@ public class TipoInmuebleResource {
     @Timed
     public ResponseEntity<TipoInmueble> getTipoInmueble(@PathVariable Long id) {
         log.debug("REST request to get TipoInmueble : {}", id);
-        TipoInmueble tipoInmueble = tipoInmuebleRepository.findOne(id);
+        TipoInmueble tipoInmueble = tipoInmuebleService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(tipoInmueble));
     }
 
@@ -113,7 +119,7 @@ public class TipoInmuebleResource {
     @Timed
     public ResponseEntity<Void> deleteTipoInmueble(@PathVariable Long id) {
         log.debug("REST request to delete TipoInmueble : {}", id);
-        tipoInmuebleRepository.delete(id);
+        tipoInmuebleService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

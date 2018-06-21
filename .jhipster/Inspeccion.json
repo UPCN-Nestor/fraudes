@@ -21,7 +21,7 @@
             "relationshipType": "many-to-one",
             "relationshipName": "inmueble",
             "otherEntityName": "inmueble",
-            "otherEntityField": "direccion"
+            "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
@@ -58,13 +58,17 @@
         {
             "fieldName": "deshabitada",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "usuario",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20180618120049",
     "entityTableName": "inspeccion",
     "dto": "no",
     "pagination": "pagination",
-    "service": "serviceClass",
+    "service": "serviceImpl",
     "jpaMetamodelFiltering": true,
     "angularJSSuffix": "mySuffix"
 }

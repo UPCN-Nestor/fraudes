@@ -2,10 +2,11 @@ package com.upcn.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.upcn.domain.Trabajo;
-
-import com.upcn.repository.TrabajoRepository;
+import com.upcn.service.TrabajoService;
 import com.upcn.web.rest.errors.BadRequestAlertException;
 import com.upcn.web.rest.util.HeaderUtil;
+import com.upcn.service.dto.TrabajoCriteria;
+import com.upcn.service.TrabajoQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,13 @@ public class TrabajoResource {
 
     private static final String ENTITY_NAME = "trabajo";
 
-    private final TrabajoRepository trabajoRepository;
+    private final TrabajoService trabajoService;
 
-    public TrabajoResource(TrabajoRepository trabajoRepository) {
-        this.trabajoRepository = trabajoRepository;
+    private final TrabajoQueryService trabajoQueryService;
+
+    public TrabajoResource(TrabajoService trabajoService, TrabajoQueryService trabajoQueryService) {
+        this.trabajoService = trabajoService;
+        this.trabajoQueryService = trabajoQueryService;
     }
 
     /**
@@ -49,7 +53,7 @@ public class TrabajoResource {
         if (trabajo.getId() != null) {
             throw new BadRequestAlertException("A new trabajo cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Trabajo result = trabajoRepository.save(trabajo);
+        Trabajo result = trabajoService.save(trabajo);
         return ResponseEntity.created(new URI("/api/trabajos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,7 @@ public class TrabajoResource {
         if (trabajo.getId() == null) {
             return createTrabajo(trabajo);
         }
-        Trabajo result = trabajoRepository.save(trabajo);
+        Trabajo result = trabajoService.save(trabajo);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, trabajo.getId().toString()))
             .body(result);
@@ -80,14 +84,16 @@ public class TrabajoResource {
     /**
      * GET  /trabajos : get all the trabajos.
      *
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of trabajos in body
      */
     @GetMapping("/trabajos")
     @Timed
-    public List<Trabajo> getAllTrabajos() {
-        log.debug("REST request to get all Trabajos");
-        return trabajoRepository.findAllWithEagerRelationships();
-        }
+    public ResponseEntity<List<Trabajo>> getAllTrabajos(TrabajoCriteria criteria) {
+        log.debug("REST request to get Trabajos by criteria: {}", criteria);
+        List<Trabajo> entityList = trabajoQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
 
     /**
      * GET  /trabajos/:id : get the "id" trabajo.
@@ -99,7 +105,7 @@ public class TrabajoResource {
     @Timed
     public ResponseEntity<Trabajo> getTrabajo(@PathVariable Long id) {
         log.debug("REST request to get Trabajo : {}", id);
-        Trabajo trabajo = trabajoRepository.findOneWithEagerRelationships(id);
+        Trabajo trabajo = trabajoService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(trabajo));
     }
 
@@ -113,7 +119,7 @@ public class TrabajoResource {
     @Timed
     public ResponseEntity<Void> deleteTrabajo(@PathVariable Long id) {
         log.debug("REST request to delete Trabajo : {}", id);
-        trabajoRepository.delete(id);
+        trabajoService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

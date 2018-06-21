@@ -2,10 +2,11 @@ package com.upcn.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.upcn.domain.Inmueble;
-
-import com.upcn.repository.InmuebleRepository;
+import com.upcn.service.InmuebleService;
 import com.upcn.web.rest.errors.BadRequestAlertException;
 import com.upcn.web.rest.util.HeaderUtil;
+import com.upcn.service.dto.InmuebleCriteria;
+import com.upcn.service.InmuebleQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +30,13 @@ public class InmuebleResource {
 
     private static final String ENTITY_NAME = "inmueble";
 
-    private final InmuebleRepository inmuebleRepository;
+    private final InmuebleService inmuebleService;
 
-    public InmuebleResource(InmuebleRepository inmuebleRepository) {
-        this.inmuebleRepository = inmuebleRepository;
+    private final InmuebleQueryService inmuebleQueryService;
+
+    public InmuebleResource(InmuebleService inmuebleService, InmuebleQueryService inmuebleQueryService) {
+        this.inmuebleService = inmuebleService;
+        this.inmuebleQueryService = inmuebleQueryService;
     }
 
     /**
@@ -49,7 +53,7 @@ public class InmuebleResource {
         if (inmueble.getId() != null) {
             throw new BadRequestAlertException("A new inmueble cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Inmueble result = inmuebleRepository.save(inmueble);
+        Inmueble result = inmuebleService.save(inmueble);
         return ResponseEntity.created(new URI("/api/inmuebles/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,7 +75,7 @@ public class InmuebleResource {
         if (inmueble.getId() == null) {
             return createInmueble(inmueble);
         }
-        Inmueble result = inmuebleRepository.save(inmueble);
+        Inmueble result = inmuebleService.save(inmueble);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, inmueble.getId().toString()))
             .body(result);
@@ -80,14 +84,16 @@ public class InmuebleResource {
     /**
      * GET  /inmuebles : get all the inmuebles.
      *
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of inmuebles in body
      */
     @GetMapping("/inmuebles")
     @Timed
-    public List<Inmueble> getAllInmuebles() {
-        log.debug("REST request to get all Inmuebles");
-        return inmuebleRepository.findAll();
-        }
+    public ResponseEntity<List<Inmueble>> getAllInmuebles(InmuebleCriteria criteria) {
+        log.debug("REST request to get Inmuebles by criteria: {}", criteria);
+        List<Inmueble> entityList = inmuebleQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
 
     /**
      * GET  /inmuebles/:id : get the "id" inmueble.
@@ -99,7 +105,7 @@ public class InmuebleResource {
     @Timed
     public ResponseEntity<Inmueble> getInmueble(@PathVariable Long id) {
         log.debug("REST request to get Inmueble : {}", id);
-        Inmueble inmueble = inmuebleRepository.findOne(id);
+        Inmueble inmueble = inmuebleService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(inmueble));
     }
 
@@ -113,7 +119,7 @@ public class InmuebleResource {
     @Timed
     public ResponseEntity<Void> deleteInmueble(@PathVariable Long id) {
         log.debug("REST request to delete Inmueble : {}", id);
-        inmuebleRepository.delete(id);
+        inmuebleService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

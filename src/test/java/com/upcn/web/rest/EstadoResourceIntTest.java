@@ -3,8 +3,12 @@ package com.upcn.web.rest;
 import com.upcn.FrApp;
 
 import com.upcn.domain.Estado;
+import com.upcn.domain.Inspeccion;
 import com.upcn.repository.EstadoRepository;
+import com.upcn.service.EstadoService;
 import com.upcn.web.rest.errors.ExceptionTranslator;
+import com.upcn.service.dto.EstadoCriteria;
+import com.upcn.service.EstadoQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +49,12 @@ public class EstadoResourceIntTest {
     private EstadoRepository estadoRepository;
 
     @Autowired
+    private EstadoService estadoService;
+
+    @Autowired
+    private EstadoQueryService estadoQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -63,7 +73,7 @@ public class EstadoResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EstadoResource estadoResource = new EstadoResource(estadoRepository);
+        final EstadoResource estadoResource = new EstadoResource(estadoService, estadoQueryService);
         this.restEstadoMockMvc = MockMvcBuilders.standaloneSetup(estadoResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -155,6 +165,86 @@ public class EstadoResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllEstadosByDescripcionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        estadoRepository.saveAndFlush(estado);
+
+        // Get all the estadoList where descripcion equals to DEFAULT_DESCRIPCION
+        defaultEstadoShouldBeFound("descripcion.equals=" + DEFAULT_DESCRIPCION);
+
+        // Get all the estadoList where descripcion equals to UPDATED_DESCRIPCION
+        defaultEstadoShouldNotBeFound("descripcion.equals=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllEstadosByDescripcionIsInShouldWork() throws Exception {
+        // Initialize the database
+        estadoRepository.saveAndFlush(estado);
+
+        // Get all the estadoList where descripcion in DEFAULT_DESCRIPCION or UPDATED_DESCRIPCION
+        defaultEstadoShouldBeFound("descripcion.in=" + DEFAULT_DESCRIPCION + "," + UPDATED_DESCRIPCION);
+
+        // Get all the estadoList where descripcion equals to UPDATED_DESCRIPCION
+        defaultEstadoShouldNotBeFound("descripcion.in=" + UPDATED_DESCRIPCION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllEstadosByDescripcionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        estadoRepository.saveAndFlush(estado);
+
+        // Get all the estadoList where descripcion is not null
+        defaultEstadoShouldBeFound("descripcion.specified=true");
+
+        // Get all the estadoList where descripcion is null
+        defaultEstadoShouldNotBeFound("descripcion.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllEstadosByInspeccionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Inspeccion inspeccion = InspeccionResourceIntTest.createEntity(em);
+        em.persist(inspeccion);
+        em.flush();
+        estado.addInspeccion(inspeccion);
+        estadoRepository.saveAndFlush(estado);
+        Long inspeccionId = inspeccion.getId();
+
+        // Get all the estadoList where inspeccion equals to inspeccionId
+        defaultEstadoShouldBeFound("inspeccionId.equals=" + inspeccionId);
+
+        // Get all the estadoList where inspeccion equals to inspeccionId + 1
+        defaultEstadoShouldNotBeFound("inspeccionId.equals=" + (inspeccionId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultEstadoShouldBeFound(String filter) throws Exception {
+        restEstadoMockMvc.perform(get("/api/estados?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(estado.getId().intValue())))
+            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultEstadoShouldNotBeFound(String filter) throws Exception {
+        restEstadoMockMvc.perform(get("/api/estados?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
+
+    @Test
+    @Transactional
     public void getNonExistingEstado() throws Exception {
         // Get the estado
         restEstadoMockMvc.perform(get("/api/estados/{id}", Long.MAX_VALUE))
@@ -165,7 +255,8 @@ public class EstadoResourceIntTest {
     @Transactional
     public void updateEstado() throws Exception {
         // Initialize the database
-        estadoRepository.saveAndFlush(estado);
+        estadoService.save(estado);
+
         int databaseSizeBeforeUpdate = estadoRepository.findAll().size();
 
         // Update the estado
@@ -209,7 +300,8 @@ public class EstadoResourceIntTest {
     @Transactional
     public void deleteEstado() throws Exception {
         // Initialize the database
-        estadoRepository.saveAndFlush(estado);
+        estadoService.save(estado);
+
         int databaseSizeBeforeDelete = estadoRepository.findAll().size();
 
         // Get the estado

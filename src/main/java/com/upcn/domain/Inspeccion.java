@@ -37,6 +37,9 @@ public class Inspeccion implements Serializable {
     @Column(name = "deshabitada")
     private Boolean deshabitada;
 
+    @Column(name = "usuario")
+    private String usuario;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "inspeccion_anomalia_medidor",
@@ -122,6 +125,19 @@ public class Inspeccion implements Serializable {
 
     public void setDeshabitada(Boolean deshabitada) {
         this.deshabitada = deshabitada;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public Inspeccion usuario(String usuario) {
+        this.usuario = usuario;
+        return this;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public Set<Anomalia> getAnomaliaMedidors() {
@@ -255,6 +271,7 @@ public class Inspeccion implements Serializable {
             ", fecha='" + getFecha() + "'" +
             ", observaciones='" + getObservaciones() + "'" +
             ", deshabitada='" + isDeshabitada() + "'" +
+            ", usuario='" + getUsuario() + "'" +
             "}";
     }
 }

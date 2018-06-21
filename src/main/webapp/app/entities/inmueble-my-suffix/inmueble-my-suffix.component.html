@@ -17,14 +17,22 @@
             <thead>
             <tr>
             <th><span jhiTranslate="global.field.id">ID</span></th>
-            <th><span jhiTranslate="frApp.inmueble.direccion">Direccion</span></th>
+            <th><span jhiTranslate="frApp.inmueble.calle">Calle</span></th>
+            <th><span jhiTranslate="frApp.inmueble.altura">Altura</span></th>
+            <th><span jhiTranslate="frApp.inmueble.piso">Piso</span></th>
+            <th><span jhiTranslate="frApp.inmueble.depto">Depto</span></th>
+            <th><span jhiTranslate="frApp.inmueble.anexo">Anexo</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let inmueble of inmuebles ;trackBy: trackId">
                 <td><a [routerLink]="['../inmueble-my-suffix', inmueble.id ]">{{inmueble.id}}</a></td>
-                <td>{{inmueble.direccion}}</td>
+                <td>{{inmueble.calle}}</td>
+                <td>{{inmueble.altura}}</td>
+                <td>{{inmueble.piso}}</td>
+                <td>{{inmueble.depto}}</td>
+                <td>{{inmueble.anexo}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
