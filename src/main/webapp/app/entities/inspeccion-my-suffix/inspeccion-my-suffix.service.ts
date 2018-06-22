@@ -77,4 +77,9 @@ export class InspeccionMySuffixService {
             .convertLocalDateToServer(inspeccion.fecha);
         return copy;
     }
+
+    prueba(): Observable<EntityResponseType> {
+        return this.http.get<InspeccionMySuffix>(`${this.resourceUrl}/prueba/1`, { observe: 'response' })
+            .map((res: EntityResponseType) => this.convertResponse(res));
+    }
 }

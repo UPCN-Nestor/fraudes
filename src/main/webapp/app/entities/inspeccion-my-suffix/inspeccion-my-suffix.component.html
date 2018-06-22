@@ -9,6 +9,7 @@
         </button>
     </h2>
     <jhi-alert></jhi-alert>
+    <button (click)="prueba()">Prueba</button>
     <div class="row">
     </div>
     <br/>
@@ -16,35 +17,21 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="orden"><span jhiTranslate="frApp.inspeccion.orden">Orden</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="fecha"><span jhiTranslate="frApp.inspeccion.fecha">Fecha</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="observaciones"><span jhiTranslate="frApp.inspeccion.observaciones">Observaciones</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="deshabitada"><span jhiTranslate="frApp.inspeccion.deshabitada">Deshabitada</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="usuario"><span jhiTranslate="frApp.inspeccion.usuario">Usuario</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="inmueble.id"><span jhiTranslate="frApp.inspeccion.inmueble">Inmueble</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="etapa.numero"><span jhiTranslate="frApp.inspeccion.etapa">Etapa</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="estado.descripcion"><span jhiTranslate="frApp.inspeccion.estado">Estado</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="tipoInmueble.descripcion"><span jhiTranslate="frApp.inspeccion.tipoInmueble">Tipo Inmueble</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="fecha"><span jhiTranslate="frApp.inspeccion.fecha">Fecha</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let inspeccion of inspeccions ;trackBy: trackId">
-                <td><a [routerLink]="['../inspeccion-my-suffix', inspeccion.id ]">{{inspeccion.id}}</a></td>
                 <td>{{inspeccion.orden}}</td>
-                <td>{{inspeccion.fecha | date:'mediumDate'}}</td>
-                <td>{{inspeccion.observaciones}}</td>
-                <td>{{inspeccion.deshabitada}}</td>
-                <td>{{inspeccion.usuario}}</td>
                 <td>
                     <div *ngIf="inspeccion.inmueble">
-                        <a [routerLink]="['../inmueble-my-suffix', inspeccion.inmueble?.id ]" >{{inspeccion.inmueble?.id}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="inspeccion.etapa">
-                        <a [routerLink]="['../etapa-my-suffix', inspeccion.etapa?.id ]" >{{inspeccion.etapa?.numero}}</a>
+                        <a [routerLink]="['../inmueble-my-suffix', inspeccion.inmueble?.id ]" >{{inspeccion.inmueble?.calle}} {{inspeccion.inmueble?.altura}}
+                            {{inspeccion.inmueble?.piso}} {{inspeccion.inmueble?.depto}} {{inspeccion.inmueble?.anexo}}
+                        </a>
                     </div>
                 </td>
                 <td>
@@ -52,11 +39,8 @@
                         <a [routerLink]="['../estado-my-suffix', inspeccion.estado?.id ]" >{{inspeccion.estado?.descripcion}}</a>
                     </div>
                 </td>
-                <td>
-                    <div *ngIf="inspeccion.tipoInmueble">
-                        <a [routerLink]="['../tipo-inmueble-my-suffix', inspeccion.tipoInmueble?.id ]" >{{inspeccion.tipoInmueble?.descripcion}}</a>
-                    </div>
-                </td>
+                <td>{{inspeccion.fecha | date:'mediumDate'}}</td>
+                
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
@@ -72,14 +56,6 @@
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'inspeccion-my-suffix/'+ inspeccion.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>
                 </td>

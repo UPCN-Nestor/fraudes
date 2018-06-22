@@ -118,4 +118,11 @@ currentAccount: any;
     private onError(error) {
         this.jhiAlertService.error(error.message, null, null);
     }
+
+    prueba() {
+        this.inspeccionService.prueba().subscribe(
+            (res: HttpResponse<InspeccionMySuffix>) => alert(res.body.id),
+            (res: HttpErrorResponse) => alert(res.message)
+        );
+    }
 }
