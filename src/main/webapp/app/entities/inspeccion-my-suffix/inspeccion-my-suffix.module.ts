@@ -1,6 +1,9 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ButtonModule } from 'primeng/primeng'; 
+
 import { FrSharedModule } from '../../shared';
 import {
     InspeccionMySuffixService,
@@ -24,7 +27,8 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         FrSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
+        RouterModule.forChild(ENTITY_STATES),
+        ButtonModule
     ],
     declarations: [
         InspeccionMySuffixComponent,

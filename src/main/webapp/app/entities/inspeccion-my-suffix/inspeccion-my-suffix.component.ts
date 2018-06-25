@@ -8,6 +8,8 @@ import { InspeccionMySuffix } from './inspeccion-my-suffix.model';
 import { InspeccionMySuffixService } from './inspeccion-my-suffix.service';
 import { ITEMS_PER_PAGE, Principal } from '../../shared';
 
+declare var printJS: any;
+
 @Component({
     selector: 'jhi-inspeccion-my-suffix',
     templateUrl: './inspeccion-my-suffix.component.html'
@@ -45,6 +47,10 @@ currentAccount: any;
             this.reverse = data.pagingParams.ascending;
             this.predicate = data.pagingParams.predicate;
         });
+    }
+
+    print() {
+        printJS('printJS-form', 'html');
     }
 
     loadAll() {
