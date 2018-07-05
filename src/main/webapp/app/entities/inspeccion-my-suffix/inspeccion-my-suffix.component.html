@@ -1,6 +1,6 @@
 <div>
     <h2>
-        <span jhiTranslate="frApp.inspeccion.home.title">Inspeccions</span>
+        <span>Inspecciones</span>
         <button class="btn btn-primary float-right jh-create-entity create-inspeccion-my-suffix" [routerLink]="['/', { outlets: { popup: ['inspeccion-my-suffix-new'] } }]">
             <span class="fa fa-plus"></span>
             <span  jhiTranslate="frApp.inspeccion.home.createLabel">
@@ -9,8 +9,18 @@
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <button pButton type="button" label="Prueba2" (click)="prueba()"></button>
-    <button pButton type="button" label="Imprimir2" (click)="print()"></button>
+    <button pButton type="button" label="Prueba servicio" (click)="prueba()"></button>
+    <br/><br/>
+    <button pButton type="button" label="Prueba imprimir" (click)="print()"></button>
+    <br/><br/>
+    <table cellpadding="5"><tr><td>Etapa</td>
+        <td><p-dropdown [options]="etapas" [(ngModel)]="etapaSeleccionada" (onChange)="cambioEtapa()"></p-dropdown></td>
+    </tr>
+    <tr><td>Inspecciones finalizadas</td>
+        <td><p-inputSwitch [(ngModel)]="ocultarFinalizadas" onLabel="Ocultar" offLabel="Mostrar" ></p-inputSwitch></td>
+    </tr>
+    </table>
+
     <div class="row">
     </div>
     <br/>
@@ -26,7 +36,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let inspeccion of inspeccions ;trackBy: trackId">
+            <tr *ngFor="let inspeccion of getInspeccionesMostradas() ;trackBy: trackId">
                 <td>{{inspeccion.orden}}</td>
                 <td>
                     <div *ngIf="inspeccion.inmueble">
@@ -45,18 +55,12 @@
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../inspeccion-my-suffix', inspeccion.id ]"
-                                class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                        </button>
-                        <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'inspeccion-my-suffix/'+ inspeccion.id + '/edit'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                            <span class="d-none d-md-inline">Cargar inspección</span>
                         </button>
                     </div>
                 </td>

@@ -16,6 +16,12 @@ import { EtapaMySuffix, EtapaMySuffixService } from '../etapa-my-suffix';
 import { EstadoMySuffix, EstadoMySuffixService } from '../estado-my-suffix';
 import { TipoInmuebleMySuffix, TipoInmuebleMySuffixService } from '../tipo-inmueble-my-suffix';
 
+import { Principal } from '../../shared';
+
+import {MultiSelectModule} from 'primeng/multiselect';
+import { SelectItem } from 'primeng/api';
+import {SelectButtonModule} from 'primeng/selectbutton';
+
 @Component({
     selector: 'jhi-inspeccion-my-suffix-dialog',
     templateUrl: './inspeccion-my-suffix-dialog.component.html'
@@ -38,6 +44,11 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
     tipoinmuebles: TipoInmuebleMySuffix[];
     fechaDp: any;
 
+    //prueba: string [];
+    //pruebas: SelectItem[];
+
+    currentAccount: any;
+
     constructor(
         public activeModal: NgbActiveModal,
         private jhiAlertService: JhiAlertService,
@@ -48,16 +59,27 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         private etapaService: EtapaMySuffixService,
         private estadoService: EstadoMySuffixService,
         private tipoInmuebleService: TipoInmuebleMySuffixService,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private principal: Principal
     ) {
     }
 
     ngOnInit() {
+        this.principal.identity().then((account) => {
+            this.currentAccount = account;
+            this.inspeccion.usuario = this.currentAccount.login;
+        });
+
+        //this.pruebas = [{label:'x', value:'xx'}, {label:'y', value: 'yy'}];
+        //this.prueba = ['xx'];
+
         this.isSaving = false;
         this.anomaliaService.query()
             .subscribe((res: HttpResponse<AnomaliaMySuffix[]>) => { this.anomalias = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.trabajoService.query()
-            .subscribe((res: HttpResponse<TrabajoMySuffix[]>) => { this.trabajos = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+            .subscribe((res: HttpResponse<TrabajoMySuffix[]>) => { 
+                this.trabajos = res.body;
+            }, (res: HttpErrorResponse) => this.onError(res.message));
         this.inmuebleService.query()
             .subscribe((res: HttpResponse<InmuebleMySuffix[]>) => { this.inmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.etapaService.query()
@@ -66,6 +88,16 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
             .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { this.estados = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.tipoInmuebleService.query()
             .subscribe((res: HttpResponse<TipoInmuebleMySuffix[]>) => { this.tipoinmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+            
+        //this.inspeccion.trabajos = [];
+    }
+
+    getAnomalias() : SelectItem[] {
+        return this.anomalias ? this.anomalias.map(x=><SelectItem>{label:x.descripcion, value:x}) : [];
+    }
+
+    str(obj) {
+        return JSON.stringify(obj);
     }
 
     clear() {

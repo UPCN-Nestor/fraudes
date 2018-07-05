@@ -2,6 +2,7 @@ import './vendor.ts';
 
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Ng2Webstorage, LocalStorageService, SessionStorageService  } from 'ngx-webstorage';
 import { JhiEventManager } from 'ng-jhipster';
@@ -17,6 +18,8 @@ import { FrAdminModule } from './admin/admin.module';
 import { FrAccountModule } from './account/account.module';
 import { FrEntityModule } from './entities/entity.module';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
+
+
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import {
     JhiMainComponent,
@@ -37,7 +40,7 @@ import {
         FrHomeModule,
         FrAdminModule,
         FrAccountModule,
-        FrEntityModule,
+        FrEntityModule
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [
