@@ -38,6 +38,8 @@ public class InmuebleCriteria implements Serializable {
 
     private StringFilter anexo;
 
+    private IntegerFilter id_glm;
+
     private LongFilter inspeccionId;
 
     public InmuebleCriteria() {
@@ -91,6 +93,14 @@ public class InmuebleCriteria implements Serializable {
         this.anexo = anexo;
     }
 
+    public IntegerFilter getId_glm() {
+        return id_glm;
+    }
+
+    public void setId_glm(IntegerFilter id_glm) {
+        this.id_glm = id_glm;
+    }
+
     public LongFilter getInspeccionId() {
         return inspeccionId;
     }
@@ -108,6 +118,7 @@ public class InmuebleCriteria implements Serializable {
                 (piso != null ? "piso=" + piso + ", " : "") +
                 (depto != null ? "depto=" + depto + ", " : "") +
                 (anexo != null ? "anexo=" + anexo + ", " : "") +
+                (id_glm != null ? "id_glm=" + id_glm + ", " : "") +
                 (inspeccionId != null ? "inspeccionId=" + inspeccionId + ", " : "") +
             "}";
     }

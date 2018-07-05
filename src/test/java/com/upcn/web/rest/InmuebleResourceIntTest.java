@@ -57,6 +57,9 @@ public class InmuebleResourceIntTest {
     private static final String DEFAULT_ANEXO = "AAAAAAAAAA";
     private static final String UPDATED_ANEXO = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_ID_GLM = 1;
+    private static final Integer UPDATED_ID_GLM = 2;
+
     @Autowired
     private InmuebleRepository inmuebleRepository;
 
@@ -105,7 +108,8 @@ public class InmuebleResourceIntTest {
             .altura(DEFAULT_ALTURA)
             .piso(DEFAULT_PISO)
             .depto(DEFAULT_DEPTO)
-            .anexo(DEFAULT_ANEXO);
+            .anexo(DEFAULT_ANEXO)
+            .id_glm(DEFAULT_ID_GLM);
         return inmueble;
     }
 
@@ -134,6 +138,7 @@ public class InmuebleResourceIntTest {
         assertThat(testInmueble.getPiso()).isEqualTo(DEFAULT_PISO);
         assertThat(testInmueble.getDepto()).isEqualTo(DEFAULT_DEPTO);
         assertThat(testInmueble.getAnexo()).isEqualTo(DEFAULT_ANEXO);
+        assertThat(testInmueble.getId_glm()).isEqualTo(DEFAULT_ID_GLM);
     }
 
     @Test
@@ -170,7 +175,8 @@ public class InmuebleResourceIntTest {
             .andExpect(jsonPath("$.[*].altura").value(hasItem(DEFAULT_ALTURA.toString())))
             .andExpect(jsonPath("$.[*].piso").value(hasItem(DEFAULT_PISO.toString())))
             .andExpect(jsonPath("$.[*].depto").value(hasItem(DEFAULT_DEPTO.toString())))
-            .andExpect(jsonPath("$.[*].anexo").value(hasItem(DEFAULT_ANEXO.toString())));
+            .andExpect(jsonPath("$.[*].anexo").value(hasItem(DEFAULT_ANEXO.toString())))
+            .andExpect(jsonPath("$.[*].id_glm").value(hasItem(DEFAULT_ID_GLM)));
     }
 
     @Test
@@ -188,7 +194,8 @@ public class InmuebleResourceIntTest {
             .andExpect(jsonPath("$.altura").value(DEFAULT_ALTURA.toString()))
             .andExpect(jsonPath("$.piso").value(DEFAULT_PISO.toString()))
             .andExpect(jsonPath("$.depto").value(DEFAULT_DEPTO.toString()))
-            .andExpect(jsonPath("$.anexo").value(DEFAULT_ANEXO.toString()));
+            .andExpect(jsonPath("$.anexo").value(DEFAULT_ANEXO.toString()))
+            .andExpect(jsonPath("$.id_glm").value(DEFAULT_ID_GLM));
     }
 
     @Test
@@ -388,6 +395,72 @@ public class InmuebleResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllInmueblesById_glmIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where id_glm equals to DEFAULT_ID_GLM
+        defaultInmuebleShouldBeFound("id_glm.equals=" + DEFAULT_ID_GLM);
+
+        // Get all the inmuebleList where id_glm equals to UPDATED_ID_GLM
+        defaultInmuebleShouldNotBeFound("id_glm.equals=" + UPDATED_ID_GLM);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesById_glmIsInShouldWork() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where id_glm in DEFAULT_ID_GLM or UPDATED_ID_GLM
+        defaultInmuebleShouldBeFound("id_glm.in=" + DEFAULT_ID_GLM + "," + UPDATED_ID_GLM);
+
+        // Get all the inmuebleList where id_glm equals to UPDATED_ID_GLM
+        defaultInmuebleShouldNotBeFound("id_glm.in=" + UPDATED_ID_GLM);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesById_glmIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where id_glm is not null
+        defaultInmuebleShouldBeFound("id_glm.specified=true");
+
+        // Get all the inmuebleList where id_glm is null
+        defaultInmuebleShouldNotBeFound("id_glm.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesById_glmIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where id_glm greater than or equals to DEFAULT_ID_GLM
+        defaultInmuebleShouldBeFound("id_glm.greaterOrEqualThan=" + DEFAULT_ID_GLM);
+
+        // Get all the inmuebleList where id_glm greater than or equals to UPDATED_ID_GLM
+        defaultInmuebleShouldNotBeFound("id_glm.greaterOrEqualThan=" + UPDATED_ID_GLM);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInmueblesById_glmIsLessThanSomething() throws Exception {
+        // Initialize the database
+        inmuebleRepository.saveAndFlush(inmueble);
+
+        // Get all the inmuebleList where id_glm less than or equals to DEFAULT_ID_GLM
+        defaultInmuebleShouldNotBeFound("id_glm.lessThan=" + DEFAULT_ID_GLM);
+
+        // Get all the inmuebleList where id_glm less than or equals to UPDATED_ID_GLM
+        defaultInmuebleShouldBeFound("id_glm.lessThan=" + UPDATED_ID_GLM);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllInmueblesByInspeccionIsEqualToSomething() throws Exception {
         // Initialize the database
         Inspeccion inspeccion = InspeccionResourceIntTest.createEntity(em);
@@ -416,7 +489,8 @@ public class InmuebleResourceIntTest {
             .andExpect(jsonPath("$.[*].altura").value(hasItem(DEFAULT_ALTURA.toString())))
             .andExpect(jsonPath("$.[*].piso").value(hasItem(DEFAULT_PISO.toString())))
             .andExpect(jsonPath("$.[*].depto").value(hasItem(DEFAULT_DEPTO.toString())))
-            .andExpect(jsonPath("$.[*].anexo").value(hasItem(DEFAULT_ANEXO.toString())));
+            .andExpect(jsonPath("$.[*].anexo").value(hasItem(DEFAULT_ANEXO.toString())))
+            .andExpect(jsonPath("$.[*].id_glm").value(hasItem(DEFAULT_ID_GLM)));
     }
 
     /**
@@ -456,7 +530,8 @@ public class InmuebleResourceIntTest {
             .altura(UPDATED_ALTURA)
             .piso(UPDATED_PISO)
             .depto(UPDATED_DEPTO)
-            .anexo(UPDATED_ANEXO);
+            .anexo(UPDATED_ANEXO)
+            .id_glm(UPDATED_ID_GLM);
 
         restInmuebleMockMvc.perform(put("/api/inmuebles")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -472,6 +547,7 @@ public class InmuebleResourceIntTest {
         assertThat(testInmueble.getPiso()).isEqualTo(UPDATED_PISO);
         assertThat(testInmueble.getDepto()).isEqualTo(UPDATED_DEPTO);
         assertThat(testInmueble.getAnexo()).isEqualTo(UPDATED_ANEXO);
+        assertThat(testInmueble.getId_glm()).isEqualTo(UPDATED_ID_GLM);
     }
 
     @Test

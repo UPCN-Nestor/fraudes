@@ -28,13 +28,17 @@
         {
             "fieldName": "anexo",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "id_glm",
+            "fieldType": "Integer"
         }
     ],
     "changelogDate": "20180618122740",
-    "entityTableName": "inmueble",
     "dto": "no",
-    "pagination": "no",
     "service": "serviceImpl",
+    "entityTableName": "inmueble",
     "jpaMetamodelFiltering": true,
+    "pagination": "no",
     "angularJSSuffix": "mySuffix"
 }

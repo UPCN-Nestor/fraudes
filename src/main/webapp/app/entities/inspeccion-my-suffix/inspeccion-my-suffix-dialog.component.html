@@ -42,10 +42,15 @@
         </div>
         <div class="form-group" *ngIf="this.inspeccion.id">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.inmueble" for="field_inmueble">Inmueble</label>
+            <div style="font-weight: bold;">
+            {{inspeccion.inmueble.calle}} {{inspeccion.inmueble.altura}} {{inspeccion.inmueble.depto}} {{inspeccion.inmueble.piso}} {{inspeccion.inmueble.anexo}}
+            </div>
+            <!--
             <select class="form-control" id="field_inmueble" name="inmueble" [(ngModel)]="inspeccion.inmueble" readonly>
                 <option [ngValue]="null"></option>
                 <option [ngValue]="inmuebleOption.id === inspeccion.inmueble?.id ? inspeccion.inmueble : inmuebleOption" *ngFor="let inmuebleOption of inmuebles; trackBy: trackInmuebleById">{{inmuebleOption.calle}} {{inmuebleOption.altura}} {{inmuebleOption.depto}} {{inmuebleOption.piso}} {{inmuebleOption.anexo}}</option>
             </select>
+            -->
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.tipoInmueble" for="field_tipoInmueble">Tipo de Inmueble</label>
@@ -89,7 +94,7 @@
         -->
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.observaciones" for="field_observaciones">Observaciones</label>
-            <span *ngIf="!this.inspeccion.id" style="font-size:small; color:red;" >(Ingrese dirección y detalles de la observación)</div>
+            <span *ngIf="!this.inspeccion.id" style="font-size:small; color:red;" >(Ingrese dirección y detalles de la observación)</span>
             <input type="text" class="form-control" name="observaciones" id="field_observaciones"
                 [(ngModel)]="inspeccion.observaciones" />
         </div>

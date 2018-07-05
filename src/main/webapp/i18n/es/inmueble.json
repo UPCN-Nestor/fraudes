@@ -21,6 +21,7 @@
             "piso": "Piso",
             "depto": "Depto",
             "anexo": "Anexo",
+            "id_glm": "Id Glm",
             "inspeccion": "Inspeccion"
         }
     }

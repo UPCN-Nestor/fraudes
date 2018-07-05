@@ -87,6 +87,9 @@ public class InmuebleQueryService extends QueryService<Inmueble> {
             if (criteria.getAnexo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAnexo(), Inmueble_.anexo));
             }
+            if (criteria.getId_glm() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getId_glm(), Inmueble_.id_glm));
+            }
             if (criteria.getInspeccionId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getInspeccionId(), Inmueble_.inspeccions, Inspeccion_.id));
             }

@@ -8,6 +8,7 @@ export class InmuebleMySuffix implements BaseEntity {
         public piso?: string,
         public depto?: string,
         public anexo?: string,
+        public id_glm?: number,
         public inspeccions?: BaseEntity[],
     ) {
     }

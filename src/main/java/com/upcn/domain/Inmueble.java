@@ -40,6 +40,9 @@ public class Inmueble implements Serializable {
     @Column(name = "anexo")
     private String anexo;
 
+    @Column(name = "id_glm")
+    private Integer id_glm;
+
     @OneToMany(mappedBy = "inmueble")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -119,6 +122,19 @@ public class Inmueble implements Serializable {
         this.anexo = anexo;
     }
 
+    public Integer getId_glm() {
+        return id_glm;
+    }
+
+    public Inmueble id_glm(Integer id_glm) {
+        this.id_glm = id_glm;
+        return this;
+    }
+
+    public void setId_glm(Integer id_glm) {
+        this.id_glm = id_glm;
+    }
+
     public Set<Inspeccion> getInspeccions() {
         return inspeccions;
     }
@@ -174,6 +190,7 @@ public class Inmueble implements Serializable {
             ", piso='" + getPiso() + "'" +
             ", depto='" + getDepto() + "'" +
             ", anexo='" + getAnexo() + "'" +
+            ", id_glm=" + getId_glm() +
             "}";
     }
 }
