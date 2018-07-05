@@ -1,18 +1,20 @@
 <div>
+    <jhi-alert></jhi-alert>
+    
     <h2>
         <span>Inspecciones</span>
         <button class="btn btn-primary float-right jh-create-entity create-inspeccion-my-suffix" [routerLink]="['/', { outlets: { popup: ['inspeccion-my-suffix-new'] } }]">
             <span class="fa fa-plus"></span>
-            <span  jhiTranslate="frApp.inspeccion.home.createLabel">
-            Create new Inspeccion
+            <span>Inspección excepcional
             </span>
         </button>
     </h2>
-    <jhi-alert></jhi-alert>
+    <!--
     <button pButton type="button" label="Prueba servicio" (click)="prueba()"></button>
     <br/><br/>
     <button pButton type="button" label="Prueba imprimir" (click)="print()"></button>
     <br/><br/>
+    -->
     <table cellpadding="5"><tr><td>Etapa</td>
         <td><p-dropdown [options]="etapas" [(ngModel)]="etapaSeleccionada" (onChange)="cambioEtapa()"></p-dropdown></td>
     </tr>

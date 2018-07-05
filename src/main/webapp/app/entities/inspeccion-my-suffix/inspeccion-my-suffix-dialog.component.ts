@@ -83,13 +83,27 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         this.inmuebleService.query()
             .subscribe((res: HttpResponse<InmuebleMySuffix[]>) => { this.inmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.etapaService.query()
-            .subscribe((res: HttpResponse<EtapaMySuffix[]>) => { this.etapas = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+            .subscribe((res: HttpResponse<EtapaMySuffix[]>) => { 
+                this.etapas = res.body; 
+                if(!this.inspeccion.id) {
+
+                    this.inspeccion.etapa = <EtapaMySuffix>(this.etapas.filter(x=>x.numero==0)[0]);
+                    //alert(this.etapas.filter(x=>x.numero==0).numero);
+                }
+            }, (res: HttpErrorResponse) => this.onError(res.message));
         this.estadoService.query()
             .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { this.estados = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.tipoInmuebleService.query()
             .subscribe((res: HttpResponse<TipoInmuebleMySuffix[]>) => { this.tipoinmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
             
-        //this.inspeccion.trabajos = [];
+        var d = new Date();
+        this.inspeccion.fecha = {
+            year: d.getFullYear(),
+            month: d.getMonth() + 1,
+            day: d.getDate()
+        };
+
+        
     }
 
     getAnomalias() : SelectItem[] {

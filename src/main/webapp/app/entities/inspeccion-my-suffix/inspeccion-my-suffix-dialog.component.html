@@ -1,7 +1,7 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div class="modal-header">
-        <h4 class="modal-title" id="myInspeccionLabel">Inspección {{inspeccion.etapa.numero}}/{{inspeccion.orden}}</h4>
+        <h4 class="modal-title" id="myInspeccionLabel">Inspección {{inspeccion.id ? inspeccion.etapa.numero+"/"+inspeccion.orden : "excepcional"}}</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="clear()">&times;</button>
     </div>
@@ -22,6 +22,7 @@
                 </select>
         </div>
         -->
+
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.fecha" for="field_fecha">Fecha</label>
             <div class="input-group">
@@ -39,7 +40,7 @@
                 <option [ngValue]="estadoOption.id === inspeccion.estado?.id ? inspeccion.estado : estadoOption" *ngFor="let estadoOption of estados; trackBy: trackEstadoById">{{estadoOption.descripcion}}</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group" *ngIf="this.inspeccion.id">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.inmueble" for="field_inmueble">Inmueble</label>
             <select class="form-control" id="field_inmueble" name="inmueble" [(ngModel)]="inspeccion.inmueble" readonly>
                 <option [ngValue]="null"></option>
@@ -88,6 +89,7 @@
         -->
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.observaciones" for="field_observaciones">Observaciones</label>
+            <span *ngIf="!this.inspeccion.id" style="font-size:small; color:red;" >(Ingrese dirección y detalles de la observación)</div>
             <input type="text" class="form-control" name="observaciones" id="field_observaciones"
                 [(ngModel)]="inspeccion.observaciones" />
         </div>
