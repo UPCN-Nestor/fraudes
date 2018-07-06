@@ -24,6 +24,10 @@
         <dd>
             <span>{{inspeccion.usuario}}</span>
         </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.fechayhora">Fechayhora</span></dt>
+        <dd>
+            <span>{{inspeccion.fechayhora | date:'medium'}}</span>
+        </dd>
         <dt><span jhiTranslate="frApp.inspeccion.anomaliaMedidor">Anomalia Medidor</span></dt>
         <dd>
             <span *ngFor="let anomaliaMedidor of inspeccion.anomaliaMedidors; let last = last">

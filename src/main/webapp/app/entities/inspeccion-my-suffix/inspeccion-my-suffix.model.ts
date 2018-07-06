@@ -8,6 +8,7 @@ export class InspeccionMySuffix implements BaseEntity {
         public observaciones?: string,
         public deshabitada?: boolean,
         public usuario?: string,
+        public fechayhora?: any,
         public anomaliaMedidors?: BaseEntity[],
         public trabajos?: BaseEntity[],
         public inmueble?: BaseEntity,

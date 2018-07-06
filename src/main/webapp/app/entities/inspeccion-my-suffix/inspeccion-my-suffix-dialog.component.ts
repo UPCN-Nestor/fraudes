@@ -44,9 +44,6 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
     tipoinmuebles: TipoInmuebleMySuffix[];
     fechaDp: any;
 
-    //prueba: string [];
-    //pruebas: SelectItem[];
-
     currentAccount: any;
 
     constructor(
@@ -85,14 +82,14 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         this.etapaService.query()
             .subscribe((res: HttpResponse<EtapaMySuffix[]>) => { 
                 this.etapas = res.body; 
-                if(!this.inspeccion.id) 
+                if(!this.inspeccion.id) {
+
                     this.inspeccion.etapa = <EtapaMySuffix>(this.etapas.filter(x=>x.numero==0)[0]);
+                    //alert(this.etapas.filter(x=>x.numero==0).numero);
+                }
             }, (res: HttpErrorResponse) => this.onError(res.message));
         this.estadoService.query()
-            .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { 
-                this.estados = res.body; 
-                this.inspeccion.estado = <EstadoMySuffix>(this.estados.filter(x=>x.descripcion="Finalizado")[0]);
-            }, (res: HttpErrorResponse) => this.onError(res.message));
+            .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { this.estados = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.tipoInmuebleService.query()
             .subscribe((res: HttpResponse<TipoInmuebleMySuffix[]>) => { this.tipoinmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
             

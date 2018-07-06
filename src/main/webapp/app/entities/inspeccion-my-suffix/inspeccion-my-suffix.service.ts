@@ -65,6 +65,8 @@ export class InspeccionMySuffixService {
         const copy: InspeccionMySuffix = Object.assign({}, inspeccion);
         copy.fecha = this.dateUtils
             .convertLocalDateFromServer(inspeccion.fecha);
+        copy.fechayhora = this.dateUtils
+            .convertDateTimeFromServer(inspeccion.fechayhora);
         return copy;
     }
 
@@ -75,11 +77,8 @@ export class InspeccionMySuffixService {
         const copy: InspeccionMySuffix = Object.assign({}, inspeccion);
         copy.fecha = this.dateUtils
             .convertLocalDateToServer(inspeccion.fecha);
-        return copy;
-    }
 
-    prueba(): Observable<EntityResponseType> {
-        return this.http.get<InspeccionMySuffix>(`${this.resourceUrl}/prueba/1`, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        copy.fechayhora = this.dateUtils.toDate(inspeccion.fechayhora);
+        return copy;
     }
 }
