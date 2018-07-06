@@ -4,11 +4,10 @@ export class InspeccionMySuffix implements BaseEntity {
     constructor(
         public id?: number,
         public orden?: number,
-        public fecha?: any,
         public observaciones?: string,
         public deshabitada?: boolean,
         public usuario?: string,
-        public fechayhora?: any,
+        public fechahora?: any,
         public anomaliaMedidors?: BaseEntity[],
         public trabajos?: BaseEntity[],
         public inmueble?: BaseEntity,

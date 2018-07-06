@@ -31,15 +31,8 @@ export class InspeccionMySuffixPopupService {
                 this.inspeccionService.find(id)
                     .subscribe((inspeccionResponse: HttpResponse<InspeccionMySuffix>) => {
                         const inspeccion: InspeccionMySuffix = inspeccionResponse.body;
-                        if (inspeccion.fecha) {
-                            inspeccion.fecha = {
-                                year: inspeccion.fecha.getFullYear(),
-                                month: inspeccion.fecha.getMonth() + 1,
-                                day: inspeccion.fecha.getDate()
-                            };
-                        }
-                        inspeccion.fechayhora = this.datePipe
-                            .transform(inspeccion.fechayhora, 'yyyy-MM-ddTHH:mm:ss');
+                        inspeccion.fechahora = this.datePipe
+                            .transform(inspeccion.fechahora, 'yyyy-MM-ddTHH:mm:ss');
                         this.ngbModalRef = this.inspeccionModalRef(component, inspeccion);
                         resolve(this.ngbModalRef);
                     });

@@ -1,18 +1,20 @@
 <div>
+    <jhi-alert></jhi-alert>
+    
     <h2>
         <span>Inspecciones</span>
         <button class="btn btn-primary float-right jh-create-entity create-inspeccion-my-suffix" [routerLink]="['/', { outlets: { popup: ['inspeccion-my-suffix-new'] } }]">
             <span class="fa fa-plus"></span>
-            <span  jhiTranslate="frApp.inspeccion.home.createLabel">
-            Create new Inspeccion
+            <span>InspecciÃ³n excepcional
             </span>
         </button>
     </h2>
-    <jhi-alert></jhi-alert>
+    <!--
     <button pButton type="button" label="Prueba servicio" (click)="prueba()"></button>
     <br/><br/>
     <button pButton type="button" label="Prueba imprimir" (click)="print()"></button>
     <br/><br/>
+    -->
     <table cellpadding="5"><tr><td>Etapa</td>
         <td><p-dropdown [options]="etapas" [(ngModel)]="etapaSeleccionada" (onChange)="cambioEtapa()"></p-dropdown></td>
     </tr>
@@ -31,9 +33,9 @@
             <th jhiSortBy="orden"><span jhiTranslate="frApp.inspeccion.orden">Orden</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="inmueble.id"><span jhiTranslate="frApp.inspeccion.inmueble">Inmueble</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="estado.descripcion"><span jhiTranslate="frApp.inspeccion.estado">Estado</span> <span class="fa fa-sort"></span></th>
-			<th jhiSortBy="fechayhora"><span>Fecha</span> <span class="fa fa-sort"></span></th>
+			<th jhiSortBy="fechahora"><span>Fecha</span> <span class="fa fa-sort"></span></th>
         
-            <th></th>
+            <th></th> 
             </tr>
             </thead>
             <tbody>
@@ -51,7 +53,7 @@
                         <a [routerLink]="['../estado-my-suffix', inspeccion.estado?.id ]" >{{inspeccion.estado?.descripcion}}</a>
                     </div>
                 </td>
-                <td>{{inspeccion.fechayhora | date:'short'}}</td>
+                <td>{{inspeccion.fechahora | date:'short'}}</td>
                 
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
@@ -61,7 +63,7 @@
                                 queryParamsHandling="merge"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
-                            <span class="d-none d-md-inline">Cargar inspección</span>
+                            <span class="d-none d-md-inline">Cargar inspecciï¿½n</span>
                         </button>
                     </div>
                 </td>

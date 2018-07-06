@@ -1,7 +1,7 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div class="modal-header">
-        <h4 class="modal-title" id="myInspeccionLabel">Inspecci�n {{inspeccion.id ? inspeccion.etapa.numero+"/"+inspeccion.orden : "excepcional"}}</h4>
+        <h4 class="modal-title" id="myInspeccionLabel">Inspección {{inspeccion.id ? inspeccion.etapa.numero+"/"+inspeccion.orden : "excepcional"}}</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="clear()">&times;</button>
     </div>
@@ -22,17 +22,14 @@
                 </select>
         </div>
         -->
-
-        <div class="form-group">
-            <label class="form-control-label" for="field_fechayhora">Fecha</label>
-            <div class="input-group">
-                <input id="field_fechayhora" type="text" class="form-control" name="fechayhora" ngbDatetimepicker  #fechaDp="ngbDatetimepicker" [(ngModel)]="inspeccion.fechayhora"
+       <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.fechahora" for="field_fechahora">Fechahora</label>
+            <div class="d-flex">
+                <input id="field_fechahora" type="datetime-local" class="form-control" name="fechahora" [(ngModel)]="inspeccion.fechahora"
                 />
-                <span class="input-group-append">
-                    <button type="button" class="btn btn-secondary" (click)="fechaDp.toggle()"><i class="fa fa-calendar"></i></button>
-                </span>
             </div>
         </div>
+
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.estado" for="field_estado">Estado</label>
             <select class="form-control" id="field_estado" name="estado" [(ngModel)]="inspeccion.estado" >

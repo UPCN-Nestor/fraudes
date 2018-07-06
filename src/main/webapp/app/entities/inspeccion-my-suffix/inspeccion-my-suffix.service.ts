@@ -63,10 +63,8 @@ export class InspeccionMySuffixService {
      */
     private convertItemFromServer(inspeccion: InspeccionMySuffix): InspeccionMySuffix {
         const copy: InspeccionMySuffix = Object.assign({}, inspeccion);
-        copy.fecha = this.dateUtils
-            .convertLocalDateFromServer(inspeccion.fecha);
-        copy.fechayhora = this.dateUtils
-            .convertDateTimeFromServer(inspeccion.fechayhora);
+        copy.fechahora = this.dateUtils
+            .convertDateTimeFromServer(inspeccion.fechahora);
         return copy;
     }
 
@@ -75,10 +73,8 @@ export class InspeccionMySuffixService {
      */
     private convert(inspeccion: InspeccionMySuffix): InspeccionMySuffix {
         const copy: InspeccionMySuffix = Object.assign({}, inspeccion);
-        copy.fecha = this.dateUtils
-            .convertLocalDateToServer(inspeccion.fecha);
 
-        copy.fechayhora = this.dateUtils.toDate(inspeccion.fechayhora);
+        copy.fechahora = this.dateUtils.toDate(inspeccion.fechahora);
         return copy;
     }
 }

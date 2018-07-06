@@ -42,7 +42,6 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
     estados: EstadoMySuffix[];
 
     tipoinmuebles: TipoInmuebleMySuffix[];
-    fechaDp: any;
 
     currentAccount: any;
 
@@ -92,15 +91,6 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
             .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { this.estados = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.tipoInmuebleService.query()
             .subscribe((res: HttpResponse<TipoInmuebleMySuffix[]>) => { this.tipoinmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-            
-        var d = new Date();
-        this.inspeccion.fecha = {
-            year: d.getFullYear(),
-            month: d.getMonth() + 1,
-            day: d.getDate()
-        };
-
-        
     }
 
     getAnomalias() : SelectItem[] {
