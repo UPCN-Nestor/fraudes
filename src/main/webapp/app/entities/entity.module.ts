@@ -9,6 +9,7 @@ import { FrTrabajoMySuffixModule } from './trabajo-my-suffix/trabajo-my-suffix.m
 import { FrEtapaMySuffixModule } from './etapa-my-suffix/etapa-my-suffix.module';
 import { FrMaterialMySuffixModule } from './material-my-suffix/material-my-suffix.module';
 import { FrInsumoModule } from './insumo/insumo.module';
+import { FrMedidorModule } from './medidor/medidor.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -22,6 +23,7 @@ import { FrInsumoModule } from './insumo/insumo.module';
         FrEtapaMySuffixModule,
         FrMaterialMySuffixModule,
         FrInsumoModule,
+        FrMedidorModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

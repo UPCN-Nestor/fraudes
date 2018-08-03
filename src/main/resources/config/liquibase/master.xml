@@ -9,6 +9,7 @@
 
     <include file="config/liquibase/changelog/20180711163520_added_entity_Insumo.xml" relativeToChangelogFile="false"/>
 
+    <include file="config/liquibase/changelog/20180803135507_added_entity_Medidor.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
 
     <include file="config/liquibase/changelog/20180711163520_added_entity_constraints_Insumo.xml" relativeToChangelogFile="false"/>
@@ -17,5 +18,5 @@
     <include file="config/liquibase/changelog/20180621144930_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180705130056_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180706104532_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20180706150405_changelog.xml" relativeToChangelogFile="false"/>
+
 </databaseChangeLog>

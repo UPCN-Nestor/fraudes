@@ -94,9 +94,14 @@
         {{str(inspeccion.trabajos[0])}}
         {{str(inspeccion.trabajos[1])}}
         -->
+        <input type="file" accept="image/*" capture>
+    
+
         <div class="form-group">
+            <div>
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.observaciones" for="field_observaciones">Observaciones</label>
-            <span *ngIf="!this.inspeccion.id" style="font-size:small; color:red;" >(Ingrese dirección y detalles de la observación)</div>
+            <span *ngIf="!this.inspeccion.id" style="font-size:small; color:red;" >(Ingrese dirección y detalles de la observación)    
+            </div>    
             <input type="text" class="form-control" name="observaciones" id="field_observaciones"
                 [(ngModel)]="inspeccion.observaciones" />
         </div>
