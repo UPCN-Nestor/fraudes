@@ -49,6 +49,15 @@
             </select>
             -->
         </div>
+        <div style="text-align: left;">
+            <!--<label class="form-control-label" jhiTranslate="frApp.inspeccion.deshabitada" for="field_deshabitada">Deshabitada</label>-->
+            <p-inputSwitch  name="deshabitada" id="field_deshabitada" 
+                [(ngModel)]="inspeccion.deshabitada" onLabel="Deshabitada" offLabel="Habitada" ></p-inputSwitch>
+                <!--
+            <input type="checkbox" class="form-control" name="deshabitada" id="field_deshabitada"
+                [(ngModel)]="inspeccion.deshabitada" />
+                -->
+        </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.tipoInmueble" for="field_tipoInmueble">Tipo de Inmueble</label>
             <select class="form-control" id="field_tipoInmueble" name="tipoInmueble" [(ngModel)]="inspeccion.tipoInmueble" >
@@ -56,15 +65,7 @@
                 <option [ngValue]="tipoInmuebleOption.id === inspeccion.tipoInmueble?.id ? inspeccion.tipoInmueble : tipoInmuebleOption" *ngFor="let tipoInmuebleOption of tipoinmuebles; trackBy: trackTipoInmuebleById">{{tipoInmuebleOption.descripcion}}</option>
             </select>
         </div>
-        <div class="form-group" style="text-align: left;">
-            <!--<label class="form-control-label" jhiTranslate="frApp.inspeccion.deshabitada" for="field_deshabitada">Deshabitada</label>-->
-            <p-inputSwitch class="form-control" name="deshabitada" id="field_deshabitada" 
-                [(ngModel)]="inspeccion.deshabitada" onLabel="Deshabitada" offLabel="Habitada" ></p-inputSwitch>
-                <!--
-            <input type="checkbox" class="form-control" name="deshabitada" id="field_deshabitada"
-                [(ngModel)]="inspeccion.deshabitada" />
-                -->
-        </div>
+
 
         <!--
         <div class="form-group">
@@ -75,16 +76,20 @@
         -->
 
         <label jhiTranslate="frApp.inspeccion.anomaliaMedidor" for="field_anomaliaMedidor">Anomalia Medidor</label>
-        <p-multiSelect class="form-control" id="field_anomaliaMedidor" name="anomaliaMedidor" defaultLabel="(Seleccionar)" filter="false" showHeader="false"
-            [options]="getAnomalias()" [(ngModel)]="inspeccion.anomaliaMedidors"></p-multiSelect>
-            
+        
+        <div><p-multiSelect id="field_anomaliaMedidor" name="anomaliaMedidor" defaultLabel="(Seleccionar)" filter="false" showHeader="false"
+            [options]="getAnomalias()" [(ngModel)]="inspeccion.anomaliaMedidors"></p-multiSelect>    
+        </div>
+        
         <label jhiTranslate="frApp.inspeccion.trabajo" for="field_trabajo">Trabajo</label>
         <!--
         <p-selectButton multiple="multiple" class="form-control" id="field_trabajo" name="trabajo" dataKey="id"
             [options]="trabajos" optionLabel="descripcion" [(ngModel)]="inspeccion.trabajos"></p-selectButton>
          -->
-        <p-multiSelect class="form-control" id="field_trabajo" name="trabajo" defaultLabel="(Seleccionar)" filter="false" showHeader="false"
+        <div>
+        <p-multiSelect id="field_trabajo" name="trabajo" defaultLabel="(Seleccionar)" filter="false" showHeader="false"
             [options]="trabajos" optionLabel="descripcion" [(ngModel)]="inspeccion.trabajos"></p-multiSelect>
+        </div>
         <!--
         {{str(inspeccion.trabajos[0])}}
         {{str(inspeccion.trabajos[1])}}

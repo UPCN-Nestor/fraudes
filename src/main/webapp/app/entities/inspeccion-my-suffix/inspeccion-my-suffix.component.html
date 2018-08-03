@@ -18,7 +18,7 @@
     <table cellpadding="5"><tr><td>Etapa</td>
         <td><p-dropdown [options]="etapas" [(ngModel)]="etapaSeleccionada" (onChange)="cambioEtapa()"></p-dropdown></td>
     </tr>
-    <tr><td>Inspecciones finalizadas</td>
+    <tr><td>Finalizadas</td>
         <td><p-inputSwitch [(ngModel)]="ocultarFinalizadas" onLabel="Ocultar" offLabel="Mostrar" ></p-inputSwitch></td>
     </tr>
     </table>
@@ -34,12 +34,11 @@
             <th jhiSortBy="inmueble.id"><span jhiTranslate="frApp.inspeccion.inmueble">Inmueble</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="estado.descripcion"><span jhiTranslate="frApp.inspeccion.estado">Estado</span> <span class="fa fa-sort"></span></th>
 			<th jhiSortBy="fechahora"><span>Fecha</span> <span class="fa fa-sort"></span></th>
-        
-            <th></th> 
+                
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let inspeccion of getInspeccionesMostradas() ;trackBy: trackId">
+            <tr *ngFor="let inspeccion of getInspeccionesMostradas() ;trackBy: trackId" [routerLink]="['/', { outlets: { popup: 'inspeccion-my-suffix/'+ inspeccion.id + '/edit'} }]">
                 <td>{{inspeccion.orden}}</td>
                 <td>
                     <div *ngIf="inspeccion.inmueble">
@@ -54,7 +53,7 @@
                     </div>
                 </td>
                 <td>{{inspeccion.fechahora | date:'short'}}</td>
-                
+                <!--
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
@@ -67,6 +66,7 @@
                         </button>
                     </div>
                 </td>
+                -->
             </tr>
             </tbody>
         </table>
