@@ -16,6 +16,7 @@
                 "trabajoMySuffix": "Trabajo",
                 "etapaMySuffix": "Etapa",
                 "materialMySuffix": "Material",
+                "insumo": "Insumo",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

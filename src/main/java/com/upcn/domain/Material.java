@@ -1,14 +1,11 @@
 package com.upcn.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -27,11 +24,6 @@ public class Material implements Serializable {
 
     @Column(name = "descripcion")
     private String descripcion;
-
-    @ManyToMany(mappedBy = "materials")
-    @JsonIgnore
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Trabajo> trabajos = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -53,31 +45,6 @@ public class Material implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Set<Trabajo> getTrabajos() {
-        return trabajos;
-    }
-
-    public Material trabajos(Set<Trabajo> trabajos) {
-        this.trabajos = trabajos;
-        return this;
-    }
-
-    public Material addTrabajo(Trabajo trabajo) {
-        this.trabajos.add(trabajo);
-        trabajo.getMaterials().add(this);
-        return this;
-    }
-
-    public Material removeTrabajo(Trabajo trabajo) {
-        this.trabajos.remove(trabajo);
-        trabajo.getMaterials().remove(this);
-        return this;
-    }
-
-    public void setTrabajos(Set<Trabajo> trabajos) {
-        this.trabajos = trabajos;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

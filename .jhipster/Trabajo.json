@@ -3,14 +3,6 @@
     "relationships": [
         {
             "relationshipType": "many-to-many",
-            "otherEntityRelationshipName": "trabajo",
-            "relationshipName": "material",
-            "otherEntityName": "material",
-            "otherEntityField": "descripcion",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "many-to-many",
             "relationshipName": "inspeccion",
             "otherEntityName": "inspeccion",
             "ownerSide": false,
@@ -28,10 +20,10 @@
         }
     ],
     "changelogDate": "20180618141326",
-    "entityTableName": "trabajo",
     "dto": "no",
-    "pagination": "no",
     "service": "serviceImpl",
+    "entityTableName": "trabajo",
     "jpaMetamodelFiltering": true,
+    "pagination": "no",
     "angularJSSuffix": "mySuffix"
 }

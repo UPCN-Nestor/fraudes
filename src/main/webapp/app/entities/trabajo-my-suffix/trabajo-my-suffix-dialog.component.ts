@@ -9,7 +9,6 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { TrabajoMySuffix } from './trabajo-my-suffix.model';
 import { TrabajoMySuffixPopupService } from './trabajo-my-suffix-popup.service';
 import { TrabajoMySuffixService } from './trabajo-my-suffix.service';
-import { MaterialMySuffix, MaterialMySuffixService } from '../material-my-suffix';
 import { InspeccionMySuffix, InspeccionMySuffixService } from '../inspeccion-my-suffix';
 
 @Component({
@@ -21,15 +20,12 @@ export class TrabajoMySuffixDialogComponent implements OnInit {
     trabajo: TrabajoMySuffix;
     isSaving: boolean;
 
-    materials: MaterialMySuffix[];
-
     inspeccions: InspeccionMySuffix[];
 
     constructor(
         public activeModal: NgbActiveModal,
         private jhiAlertService: JhiAlertService,
         private trabajoService: TrabajoMySuffixService,
-        private materialService: MaterialMySuffixService,
         private inspeccionService: InspeccionMySuffixService,
         private eventManager: JhiEventManager
     ) {
@@ -37,8 +33,6 @@ export class TrabajoMySuffixDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.materialService.query()
-            .subscribe((res: HttpResponse<MaterialMySuffix[]>) => { this.materials = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.inspeccionService.query()
             .subscribe((res: HttpResponse<InspeccionMySuffix[]>) => { this.inspeccions = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
@@ -75,10 +69,6 @@ export class TrabajoMySuffixDialogComponent implements OnInit {
 
     private onError(error: any) {
         this.jhiAlertService.error(error.message, null, null);
-    }
-
-    trackMaterialById(index: number, item: MaterialMySuffix) {
-        return item.id;
     }
 
     trackInspeccionById(index: number, item: InspeccionMySuffix) {

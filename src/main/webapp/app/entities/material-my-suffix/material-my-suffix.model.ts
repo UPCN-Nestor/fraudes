@@ -4,7 +4,6 @@ export class MaterialMySuffix implements BaseEntity {
     constructor(
         public id?: number,
         public descripcion?: string,
-        public trabajos?: BaseEntity[],
     ) {
     }
 }

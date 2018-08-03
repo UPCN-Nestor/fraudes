@@ -48,10 +48,6 @@
             "fieldType": "Long"
         },
         {
-            "fieldName": "fecha",
-            "fieldType": "LocalDate"
-        },
-        {
             "fieldName": "observaciones",
             "fieldType": "String"
         },
@@ -62,13 +58,17 @@
         {
             "fieldName": "usuario",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "fechahora",
+            "fieldType": "Instant"
         }
     ],
     "changelogDate": "20180618120049",
-    "entityTableName": "inspeccion",
     "dto": "no",
-    "pagination": "pagination",
     "service": "serviceImpl",
+    "entityTableName": "inspeccion",
     "jpaMetamodelFiltering": true,
+    "pagination": "pagination",
     "angularJSSuffix": "mySuffix"
 }

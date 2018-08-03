@@ -17,10 +17,10 @@
                 "title": "Inspeccion"
             },
             "orden": "Orden",
-            "fecha": "Fecha",
             "observaciones": "Observaciones",
             "deshabitada": "Deshabitada",
             "usuario": "Usuario",
+            "fechahora": "Fechahora",
             "anomaliaMedidor": "Anomalia Medidor",
             "trabajo": "Trabajo",
             "inmueble": "Inmueble",

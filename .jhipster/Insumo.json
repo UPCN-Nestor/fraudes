@@ -1,0 +1,29 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "trabajo",
+            "otherEntityName": "trabajo",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "descripcion"
+        },
+        {
+            "relationshipName": "material",
+            "otherEntityName": "material",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "descripcion"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "cantidad",
+            "fieldType": "Float"
+        }
+    ],
+    "changelogDate": "20180711163520",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "insumo",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

@@ -91,10 +91,22 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
             .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { this.estados = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.tipoInmuebleService.query()
             .subscribe((res: HttpResponse<TipoInmuebleMySuffix[]>) => { this.tipoinmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+
+        var d = new Date(); 
+        d.setTime(d.getTime() - (3*60*60*1000)); 
+        var dd = d.toISOString();
+        this.inspeccion.fechahora = dd.substring(0,dd.length-5);
     }
 
     getAnomalias() : SelectItem[] {
         return this.anomalias ? this.anomalias.map(x=><SelectItem>{label:x.descripcion, value:x}) : [];
+    }
+
+    getNombre() : string {
+        if(this.inspeccion.etapa.id==0)
+            return 'Excepcional';
+        else
+            return '' + this.etapas.filter(e=> e.id == this.inspeccion.etapa.id)[0].numero + '/' + this.inspeccion.orden;
     }
 
     str(obj) {

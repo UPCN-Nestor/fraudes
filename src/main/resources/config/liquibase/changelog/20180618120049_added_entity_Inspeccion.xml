@@ -26,10 +26,6 @@
                 <constraints nullable="true" />
             </column>
 
-            <column name="fecha" type="date">
-                <constraints nullable="true" />
-            </column>
-
             <column name="observaciones" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -39,6 +35,10 @@
             </column>
 
             <column name="usuario" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="fechahora" type="timestamp">
                 <constraints nullable="true" />
             </column>
 
@@ -60,6 +60,7 @@
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
+        <dropDefaultValue tableName="inspeccion" columnName="fechahora" columnDataType="datetime"/>
         
         <createTable tableName="inspeccion_anomalia_medidor">
             <column name="anomalia_medidors_id" type="bigint">

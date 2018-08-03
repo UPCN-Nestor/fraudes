@@ -3,7 +3,6 @@ package com.upcn.web.rest;
 import com.upcn.FrApp;
 
 import com.upcn.domain.Material;
-import com.upcn.domain.Trabajo;
 import com.upcn.repository.MaterialRepository;
 import com.upcn.service.MaterialService;
 import com.upcn.web.rest.errors.ExceptionTranslator;
@@ -201,25 +200,6 @@ public class MaterialResourceIntTest {
         // Get all the materialList where descripcion is null
         defaultMaterialShouldNotBeFound("descripcion.specified=false");
     }
-
-    @Test
-    @Transactional
-    public void getAllMaterialsByTrabajoIsEqualToSomething() throws Exception {
-        // Initialize the database
-        Trabajo trabajo = TrabajoResourceIntTest.createEntity(em);
-        em.persist(trabajo);
-        em.flush();
-        material.addTrabajo(trabajo);
-        materialRepository.saveAndFlush(material);
-        Long trabajoId = trabajo.getId();
-
-        // Get all the materialList where trabajo equals to trabajoId
-        defaultMaterialShouldBeFound("trabajoId.equals=" + trabajoId);
-
-        // Get all the materialList where trabajo equals to trabajoId + 1
-        defaultMaterialShouldNotBeFound("trabajoId.equals=" + (trabajoId + 1));
-    }
-
     /**
      * Executes the search, and checks that the default entity is returned
      */

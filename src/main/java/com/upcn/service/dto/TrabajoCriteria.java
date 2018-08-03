@@ -32,8 +32,6 @@ public class TrabajoCriteria implements Serializable {
 
     private FloatFilter costo;
 
-    private LongFilter materialId;
-
     private LongFilter inspeccionId;
 
     public TrabajoCriteria() {
@@ -63,14 +61,6 @@ public class TrabajoCriteria implements Serializable {
         this.costo = costo;
     }
 
-    public LongFilter getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(LongFilter materialId) {
-        this.materialId = materialId;
-    }
-
     public LongFilter getInspeccionId() {
         return inspeccionId;
     }
@@ -85,7 +75,6 @@ public class TrabajoCriteria implements Serializable {
                 (id != null ? "id=" + id + ", " : "") +
                 (descripcion != null ? "descripcion=" + descripcion + ", " : "") +
                 (costo != null ? "costo=" + costo + ", " : "") +
-                (materialId != null ? "materialId=" + materialId + ", " : "") +
                 (inspeccionId != null ? "inspeccionId=" + inspeccionId + ", " : "") +
             "}";
     }

@@ -5,7 +5,6 @@ export class TrabajoMySuffix implements BaseEntity {
         public id?: number,
         public descripcion?: string,
         public costo?: number,
-        public materials?: BaseEntity[],
         public inspeccions?: BaseEntity[],
     ) {
     }

@@ -94,24 +94,11 @@
             <column name="descripcion" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="nechegoyen (generated)" id="1529578614338-11">
-        <createTable tableName="trabajo_material">
-            <column name="trabajos_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="materials_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
     <changeSet author="nechegoyen (generated)" id="1529578614338-12">
         <addPrimaryKey columnNames="inspeccions_id, anomalia_medidors_id" tableName="inspeccion_anomalia_medidor"/>
     </changeSet>
     <changeSet author="nechegoyen (generated)" id="1529578614338-13">
         <addPrimaryKey columnNames="inspeccions_id, trabajos_id" tableName="inspeccion_trabajo"/>
-    </changeSet>
-    <changeSet author="nechegoyen (generated)" id="1529578614338-14">
-        <addPrimaryKey columnNames="trabajos_id, materials_id" tableName="trabajo_material"/>
     </changeSet>
     <changeSet author="nechegoyen (generated)" id="1529578614338-15">
         <addForeignKeyConstraint baseColumnNames="inspeccions_id" baseTableName="inspeccion_anomalia_medidor" constraintName="FK1ajfghbr0s88417hsbxgvdlyb" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="inspeccion"/>
@@ -125,17 +112,11 @@
     <changeSet author="nechegoyen (generated)" id="1529578614338-18">
         <addForeignKeyConstraint baseColumnNames="etapa_id" baseTableName="inspeccion" constraintName="FK6yh0f8d3s3nt5f9vrl2qh74me" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="etapa"/>
     </changeSet>
-    <changeSet author="nechegoyen (generated)" id="1529578614338-19">
-        <addForeignKeyConstraint baseColumnNames="trabajos_id" baseTableName="trabajo_material" constraintName="FK8i0wam5pibqba75we3jc7i2uh" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="trabajo"/>
-    </changeSet>
     <changeSet author="nechegoyen (generated)" id="1529578614338-20">
         <addForeignKeyConstraint baseColumnNames="inmueble_id" baseTableName="inspeccion" constraintName="FKeo5yhp5b3d8tw1m119xiy4hvd" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="inmueble"/>
     </changeSet>
     <changeSet author="nechegoyen (generated)" id="1529578614338-21">
         <addForeignKeyConstraint baseColumnNames="estado_id" baseTableName="inspeccion" constraintName="FKlt1840iuv2her3kmring7kt58" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="estado"/>
-    </changeSet>
-    <changeSet author="nechegoyen (generated)" id="1529578614338-22">
-        <addForeignKeyConstraint baseColumnNames="materials_id" baseTableName="trabajo_material" constraintName="FKohodx84nxkmm70f8451c8unh6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="material"/>
     </changeSet>
     <changeSet author="nechegoyen (generated)" id="1529578614338-23">
         <addForeignKeyConstraint baseColumnNames="trabajos_id" baseTableName="inspeccion_trabajo" constraintName="FKqx7r4pfp0kisimuqp24i1rooq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="trabajo"/>

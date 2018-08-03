@@ -7,7 +7,6 @@ import { FrTestModule } from '../../../test.module';
 import { InspeccionMySuffixComponent } from '../../../../../../main/webapp/app/entities/inspeccion-my-suffix/inspeccion-my-suffix.component';
 import { InspeccionMySuffixService } from '../../../../../../main/webapp/app/entities/inspeccion-my-suffix/inspeccion-my-suffix.service';
 import { InspeccionMySuffix } from '../../../../../../main/webapp/app/entities/inspeccion-my-suffix/inspeccion-my-suffix.model';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('Component Tests', () => {
 
@@ -18,7 +17,7 @@ describe('Component Tests', () => {
 
         beforeEach(async(() => {
             TestBed.configureTestingModule({
-                imports: [FrTestModule, BrowserAnimationsModule],
+                imports: [FrTestModule],
                 declarations: [InspeccionMySuffixComponent],
                 providers: [
                     InspeccionMySuffixService

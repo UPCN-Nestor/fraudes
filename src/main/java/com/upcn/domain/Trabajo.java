@@ -31,13 +31,6 @@ public class Trabajo implements Serializable {
     @Column(name = "costo")
     private Float costo;
 
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "trabajo_material",
-               joinColumns = @JoinColumn(name="trabajos_id", referencedColumnName="id"),
-               inverseJoinColumns = @JoinColumn(name="materials_id", referencedColumnName="id"))
-    private Set<Material> materials = new HashSet<>();
-
     @ManyToMany(mappedBy = "trabajos")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -76,31 +69,6 @@ public class Trabajo implements Serializable {
 
     public void setCosto(Float costo) {
         this.costo = costo;
-    }
-
-    public Set<Material> getMaterials() {
-        return materials;
-    }
-
-    public Trabajo materials(Set<Material> materials) {
-        this.materials = materials;
-        return this;
-    }
-
-    public Trabajo addMaterial(Material material) {
-        this.materials.add(material);
-        material.getTrabajos().add(this);
-        return this;
-    }
-
-    public Trabajo removeMaterial(Material material) {
-        this.materials.remove(material);
-        material.getTrabajos().remove(this);
-        return this;
-    }
-
-    public void setMaterials(Set<Material> materials) {
-        this.materials = materials;
     }
 
     public Set<Inspeccion> getInspeccions() {

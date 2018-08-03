@@ -12,12 +12,6 @@
         <dd>
             <span>{{trabajo.costo}}</span>
         </dd>
-        <dt><span jhiTranslate="frApp.trabajo.material">Material</span></dt>
-        <dd>
-            <span *ngFor="let material of trabajo.materials; let last = last">
-                <a [routerLink]="['/material-my-suffix', material?.id ]">{{material.descripcion}}</a>{{last ? '' : ', '}}
-            </span>
-        </dd>
     </dl>
 
     <button type="submit"

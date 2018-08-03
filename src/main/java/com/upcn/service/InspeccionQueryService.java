@@ -1,6 +1,6 @@
 package com.upcn.service;
 
-import java.time.LocalDate;
+
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -75,9 +75,6 @@ public class InspeccionQueryService extends QueryService<Inspeccion> {
             if (criteria.getOrden() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getOrden(), Inspeccion_.orden));
             }
-            if (criteria.getFecha() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getFecha(), Inspeccion_.fecha));
-            }
             if (criteria.getObservaciones() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getObservaciones(), Inspeccion_.observaciones));
             }
@@ -86,6 +83,9 @@ public class InspeccionQueryService extends QueryService<Inspeccion> {
             }
             if (criteria.getUsuario() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getUsuario(), Inspeccion_.usuario));
+            }
+            if (criteria.getFechahora() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getFechahora(), Inspeccion_.fechahora));
             }
             if (criteria.getAnomaliaMedidorId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getAnomaliaMedidorId(), Inspeccion_.anomaliaMedidors, Anomalia_.id));

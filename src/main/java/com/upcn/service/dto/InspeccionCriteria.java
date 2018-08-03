@@ -9,8 +9,8 @@ import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
+import io.github.jhipster.service.filter.InstantFilter;
 
-import io.github.jhipster.service.filter.LocalDateFilter;
 
 
 
@@ -30,13 +30,13 @@ public class InspeccionCriteria implements Serializable {
 
     private LongFilter orden;
 
-    private LocalDateFilter fecha;
-
     private StringFilter observaciones;
 
     private BooleanFilter deshabitada;
 
     private StringFilter usuario;
+
+    private InstantFilter fechahora;
 
     private LongFilter anomaliaMedidorId;
 
@@ -69,14 +69,6 @@ public class InspeccionCriteria implements Serializable {
         this.orden = orden;
     }
 
-    public LocalDateFilter getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(LocalDateFilter fecha) {
-        this.fecha = fecha;
-    }
-
     public StringFilter getObservaciones() {
         return observaciones;
     }
@@ -99,6 +91,14 @@ public class InspeccionCriteria implements Serializable {
 
     public void setUsuario(StringFilter usuario) {
         this.usuario = usuario;
+    }
+
+    public InstantFilter getFechahora() {
+        return fechahora;
+    }
+
+    public void setFechahora(InstantFilter fechahora) {
+        this.fechahora = fechahora;
     }
 
     public LongFilter getAnomaliaMedidorId() {
@@ -154,10 +154,10 @@ public class InspeccionCriteria implements Serializable {
         return "InspeccionCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (orden != null ? "orden=" + orden + ", " : "") +
-                (fecha != null ? "fecha=" + fecha + ", " : "") +
                 (observaciones != null ? "observaciones=" + observaciones + ", " : "") +
                 (deshabitada != null ? "deshabitada=" + deshabitada + ", " : "") +
                 (usuario != null ? "usuario=" + usuario + ", " : "") +
+                (fechahora != null ? "fechahora=" + fechahora + ", " : "") +
                 (anomaliaMedidorId != null ? "anomaliaMedidorId=" + anomaliaMedidorId + ", " : "") +
                 (trabajoId != null ? "trabajoId=" + trabajoId + ", " : "") +
                 (inmuebleId != null ? "inmuebleId=" + inmuebleId + ", " : "") +

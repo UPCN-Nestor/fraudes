@@ -6,7 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -28,9 +28,6 @@ public class Inspeccion implements Serializable {
     @Column(name = "orden")
     private Long orden;
 
-    @Column(name = "fecha")
-    private LocalDate fecha;
-
     @Column(name = "observaciones")
     private String observaciones;
 
@@ -39,6 +36,9 @@ public class Inspeccion implements Serializable {
 
     @Column(name = "usuario")
     private String usuario;
+
+    @Column(name = "fechahora")
+    private Instant fechahora;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -88,19 +88,6 @@ public class Inspeccion implements Serializable {
         this.orden = orden;
     }
 
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    public Inspeccion fecha(LocalDate fecha) {
-        this.fecha = fecha;
-        return this;
-    }
-
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
     public String getObservaciones() {
         return observaciones;
     }
@@ -138,6 +125,19 @@ public class Inspeccion implements Serializable {
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;
+    }
+
+    public Instant getFechahora() {
+        return fechahora;
+    }
+
+    public Inspeccion fechahora(Instant fechahora) {
+        this.fechahora = fechahora;
+        return this;
+    }
+
+    public void setFechahora(Instant fechahora) {
+        this.fechahora = fechahora;
     }
 
     public Set<Anomalia> getAnomaliaMedidors() {
@@ -268,10 +268,10 @@ public class Inspeccion implements Serializable {
         return "Inspeccion{" +
             "id=" + getId() +
             ", orden=" + getOrden() +
-            ", fecha='" + getFecha() + "'" +
             ", observaciones='" + getObservaciones() + "'" +
             ", deshabitada='" + isDeshabitada() + "'" +
             ", usuario='" + getUsuario() + "'" +
+            ", fechahora='" + getFechahora() + "'" +
             "}";
     }
 }

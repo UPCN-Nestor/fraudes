@@ -1,0 +1,38 @@
+
+<div *ngIf="insumo">
+    <h2><span jhiTranslate="frApp.insumo.detail.title">Insumo</span> {{insumo.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="frApp.insumo.cantidad">Cantidad</span></dt>
+        <dd>
+            <span>{{insumo.cantidad}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.insumo.trabajo">Trabajo</span></dt>
+        <dd>
+            <div *ngIf="insumo.trabajo">
+                <a [routerLink]="['/trabajo-my-suffix', insumo.trabajo?.id]">{{insumo.trabajo?.descripcion}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="frApp.insumo.material">Material</span></dt>
+        <dd>
+            <div *ngIf="insumo.material">
+                <a [routerLink]="['/material-my-suffix', insumo.material?.id]">{{insumo.material?.descripcion}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'insumo/'+ insumo.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

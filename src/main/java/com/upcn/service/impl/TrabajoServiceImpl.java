@@ -46,7 +46,7 @@ public class TrabajoServiceImpl implements TrabajoService {
     @Transactional(readOnly = true)
     public List<Trabajo> findAll() {
         log.debug("Request to get all Trabajos");
-        return trabajoRepository.findAllWithEagerRelationships();
+        return trabajoRepository.findAll();
     }
 
     /**
@@ -59,7 +59,7 @@ public class TrabajoServiceImpl implements TrabajoService {
     @Transactional(readOnly = true)
     public Trabajo findOne(Long id) {
         log.debug("Request to get Trabajo : {}", id);
-        return trabajoRepository.findOneWithEagerRelationships(id);
+        return trabajoRepository.findOne(id);
     }
 
     /**

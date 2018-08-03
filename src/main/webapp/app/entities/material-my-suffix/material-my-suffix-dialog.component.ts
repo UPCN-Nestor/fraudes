@@ -4,12 +4,11 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 import { MaterialMySuffix } from './material-my-suffix.model';
 import { MaterialMySuffixPopupService } from './material-my-suffix-popup.service';
 import { MaterialMySuffixService } from './material-my-suffix.service';
-import { TrabajoMySuffix, TrabajoMySuffixService } from '../trabajo-my-suffix';
 
 @Component({
     selector: 'jhi-material-my-suffix-dialog',
@@ -20,21 +19,15 @@ export class MaterialMySuffixDialogComponent implements OnInit {
     material: MaterialMySuffix;
     isSaving: boolean;
 
-    trabajos: TrabajoMySuffix[];
-
     constructor(
         public activeModal: NgbActiveModal,
-        private jhiAlertService: JhiAlertService,
         private materialService: MaterialMySuffixService,
-        private trabajoService: TrabajoMySuffixService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
-        this.trabajoService.query()
-            .subscribe((res: HttpResponse<TrabajoMySuffix[]>) => { this.trabajos = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -65,25 +58,6 @@ export class MaterialMySuffixDialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
-    }
-
-    private onError(error: any) {
-        this.jhiAlertService.error(error.message, null, null);
-    }
-
-    trackTrabajoById(index: number, item: TrabajoMySuffix) {
-        return item.id;
-    }
-
-    getSelected(selectedVals: Array<any>, option: any) {
-        if (selectedVals) {
-            for (let i = 0; i < selectedVals.length; i++) {
-                if (option.id === selectedVals[i].id) {
-                    return selectedVals[i];
-                }
-            }
-        }
-        return option;
     }
 }
 

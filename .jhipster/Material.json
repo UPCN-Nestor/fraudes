@@ -1,14 +1,6 @@
 {
     "fluentMethods": true,
-    "relationships": [
-        {
-            "relationshipType": "many-to-many",
-            "relationshipName": "trabajo",
-            "otherEntityName": "trabajo",
-            "ownerSide": false,
-            "otherEntityRelationshipName": "material"
-        }
-    ],
+    "relationships": [],
     "fields": [
         {
             "fieldName": "descripcion",
@@ -16,10 +8,10 @@
         }
     ],
     "changelogDate": "20180618141328",
-    "entityTableName": "material",
     "dto": "no",
-    "pagination": "no",
     "service": "serviceImpl",
+    "entityTableName": "material",
     "jpaMetamodelFiltering": true,
+    "pagination": "no",
     "angularJSSuffix": "mySuffix"
 }

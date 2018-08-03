@@ -9,7 +9,6 @@ import { FrTestModule } from '../../../test.module';
 import { MaterialMySuffixDialogComponent } from '../../../../../../main/webapp/app/entities/material-my-suffix/material-my-suffix-dialog.component';
 import { MaterialMySuffixService } from '../../../../../../main/webapp/app/entities/material-my-suffix/material-my-suffix.service';
 import { MaterialMySuffix } from '../../../../../../main/webapp/app/entities/material-my-suffix/material-my-suffix.model';
-import { TrabajoMySuffixService } from '../../../../../../main/webapp/app/entities/trabajo-my-suffix';
 
 describe('Component Tests', () => {
 
@@ -25,7 +24,6 @@ describe('Component Tests', () => {
                 imports: [FrTestModule],
                 declarations: [MaterialMySuffixDialogComponent],
                 providers: [
-                    TrabajoMySuffixService,
                     MaterialMySuffixService
                 ]
             })

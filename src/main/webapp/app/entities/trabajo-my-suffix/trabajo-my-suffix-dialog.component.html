@@ -23,12 +23,6 @@
                 [(ngModel)]="trabajo.costo" />
         </div>
 
-        <div class="form-group">
-            <label jhiTranslate="frApp.trabajo.material" for="field_material">Material</label>
-            <select class="form-control" id="field_material" multiple name="material" [(ngModel)]="trabajo.materials">
-                <option [ngValue]="getSelected(trabajo.materials, materialOption)" *ngFor="let materialOption of materials; trackBy: trackMaterialById">{{materialOption.descripcion}}</option>
-            </select>
-        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">

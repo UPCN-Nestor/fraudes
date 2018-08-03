@@ -86,15 +86,6 @@ public class InspeccionResource {
             .body(result);
     }
 
-    @GetMapping("/inspeccions/prueba/{num}")
-    @Timed
-    public ResponseEntity<Inspeccion> getPrueba() {
-        Inspeccion inspeccion = new Inspeccion();
-        inspeccion.setId(1l);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(inspeccion));
-    }
-
-
     /**
      * GET  /inspeccions : get all the inspeccions.
      *

@@ -33,17 +33,6 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         
-        <createTable tableName="trabajo_material">
-            <column name="materials_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="trabajos_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="trabajos_id, materials_id" tableName="trabajo_material"/>
-        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

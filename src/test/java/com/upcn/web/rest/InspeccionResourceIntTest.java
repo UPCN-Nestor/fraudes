@@ -30,8 +30,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.upcn.web.rest.TestUtil.createFormattingConversionService;
@@ -52,9 +52,6 @@ public class InspeccionResourceIntTest {
     private static final Long DEFAULT_ORDEN = 1L;
     private static final Long UPDATED_ORDEN = 2L;
 
-    private static final LocalDate DEFAULT_FECHA = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_FECHA = LocalDate.now(ZoneId.systemDefault());
-
     private static final String DEFAULT_OBSERVACIONES = "AAAAAAAAAA";
     private static final String UPDATED_OBSERVACIONES = "BBBBBBBBBB";
 
@@ -63,6 +60,9 @@ public class InspeccionResourceIntTest {
 
     private static final String DEFAULT_USUARIO = "AAAAAAAAAA";
     private static final String UPDATED_USUARIO = "BBBBBBBBBB";
+
+    private static final Instant DEFAULT_FECHAHORA = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_FECHAHORA = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     @Autowired
     private InspeccionRepository inspeccionRepository;
@@ -109,10 +109,10 @@ public class InspeccionResourceIntTest {
     public static Inspeccion createEntity(EntityManager em) {
         Inspeccion inspeccion = new Inspeccion()
             .orden(DEFAULT_ORDEN)
-            .fecha(DEFAULT_FECHA)
             .observaciones(DEFAULT_OBSERVACIONES)
             .deshabitada(DEFAULT_DESHABITADA)
-            .usuario(DEFAULT_USUARIO);
+            .usuario(DEFAULT_USUARIO)
+            .fechahora(DEFAULT_FECHAHORA);
         return inspeccion;
     }
 
@@ -137,10 +137,10 @@ public class InspeccionResourceIntTest {
         assertThat(inspeccionList).hasSize(databaseSizeBeforeCreate + 1);
         Inspeccion testInspeccion = inspeccionList.get(inspeccionList.size() - 1);
         assertThat(testInspeccion.getOrden()).isEqualTo(DEFAULT_ORDEN);
-        assertThat(testInspeccion.getFecha()).isEqualTo(DEFAULT_FECHA);
         assertThat(testInspeccion.getObservaciones()).isEqualTo(DEFAULT_OBSERVACIONES);
         assertThat(testInspeccion.isDeshabitada()).isEqualTo(DEFAULT_DESHABITADA);
         assertThat(testInspeccion.getUsuario()).isEqualTo(DEFAULT_USUARIO);
+        assertThat(testInspeccion.getFechahora()).isEqualTo(DEFAULT_FECHAHORA);
     }
 
     @Test
@@ -174,10 +174,10 @@ public class InspeccionResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(inspeccion.getId().intValue())))
             .andExpect(jsonPath("$.[*].orden").value(hasItem(DEFAULT_ORDEN.intValue())))
-            .andExpect(jsonPath("$.[*].fecha").value(hasItem(DEFAULT_FECHA.toString())))
             .andExpect(jsonPath("$.[*].observaciones").value(hasItem(DEFAULT_OBSERVACIONES.toString())))
             .andExpect(jsonPath("$.[*].deshabitada").value(hasItem(DEFAULT_DESHABITADA.booleanValue())))
-            .andExpect(jsonPath("$.[*].usuario").value(hasItem(DEFAULT_USUARIO.toString())));
+            .andExpect(jsonPath("$.[*].usuario").value(hasItem(DEFAULT_USUARIO.toString())))
+            .andExpect(jsonPath("$.[*].fechahora").value(hasItem(DEFAULT_FECHAHORA.toString())));
     }
 
     @Test
@@ -192,10 +192,10 @@ public class InspeccionResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(inspeccion.getId().intValue()))
             .andExpect(jsonPath("$.orden").value(DEFAULT_ORDEN.intValue()))
-            .andExpect(jsonPath("$.fecha").value(DEFAULT_FECHA.toString()))
             .andExpect(jsonPath("$.observaciones").value(DEFAULT_OBSERVACIONES.toString()))
             .andExpect(jsonPath("$.deshabitada").value(DEFAULT_DESHABITADA.booleanValue()))
-            .andExpect(jsonPath("$.usuario").value(DEFAULT_USUARIO.toString()));
+            .andExpect(jsonPath("$.usuario").value(DEFAULT_USUARIO.toString()))
+            .andExpect(jsonPath("$.fechahora").value(DEFAULT_FECHAHORA.toString()));
     }
 
     @Test
@@ -261,72 +261,6 @@ public class InspeccionResourceIntTest {
 
         // Get all the inspeccionList where orden less than or equals to UPDATED_ORDEN
         defaultInspeccionShouldBeFound("orden.lessThan=" + UPDATED_ORDEN);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllInspeccionsByFechaIsEqualToSomething() throws Exception {
-        // Initialize the database
-        inspeccionRepository.saveAndFlush(inspeccion);
-
-        // Get all the inspeccionList where fecha equals to DEFAULT_FECHA
-        defaultInspeccionShouldBeFound("fecha.equals=" + DEFAULT_FECHA);
-
-        // Get all the inspeccionList where fecha equals to UPDATED_FECHA
-        defaultInspeccionShouldNotBeFound("fecha.equals=" + UPDATED_FECHA);
-    }
-
-    @Test
-    @Transactional
-    public void getAllInspeccionsByFechaIsInShouldWork() throws Exception {
-        // Initialize the database
-        inspeccionRepository.saveAndFlush(inspeccion);
-
-        // Get all the inspeccionList where fecha in DEFAULT_FECHA or UPDATED_FECHA
-        defaultInspeccionShouldBeFound("fecha.in=" + DEFAULT_FECHA + "," + UPDATED_FECHA);
-
-        // Get all the inspeccionList where fecha equals to UPDATED_FECHA
-        defaultInspeccionShouldNotBeFound("fecha.in=" + UPDATED_FECHA);
-    }
-
-    @Test
-    @Transactional
-    public void getAllInspeccionsByFechaIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        inspeccionRepository.saveAndFlush(inspeccion);
-
-        // Get all the inspeccionList where fecha is not null
-        defaultInspeccionShouldBeFound("fecha.specified=true");
-
-        // Get all the inspeccionList where fecha is null
-        defaultInspeccionShouldNotBeFound("fecha.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllInspeccionsByFechaIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        inspeccionRepository.saveAndFlush(inspeccion);
-
-        // Get all the inspeccionList where fecha greater than or equals to DEFAULT_FECHA
-        defaultInspeccionShouldBeFound("fecha.greaterOrEqualThan=" + DEFAULT_FECHA);
-
-        // Get all the inspeccionList where fecha greater than or equals to UPDATED_FECHA
-        defaultInspeccionShouldNotBeFound("fecha.greaterOrEqualThan=" + UPDATED_FECHA);
-    }
-
-    @Test
-    @Transactional
-    public void getAllInspeccionsByFechaIsLessThanSomething() throws Exception {
-        // Initialize the database
-        inspeccionRepository.saveAndFlush(inspeccion);
-
-        // Get all the inspeccionList where fecha less than or equals to DEFAULT_FECHA
-        defaultInspeccionShouldNotBeFound("fecha.lessThan=" + DEFAULT_FECHA);
-
-        // Get all the inspeccionList where fecha less than or equals to UPDATED_FECHA
-        defaultInspeccionShouldBeFound("fecha.lessThan=" + UPDATED_FECHA);
     }
 
 
@@ -445,6 +379,45 @@ public class InspeccionResourceIntTest {
 
         // Get all the inspeccionList where usuario is null
         defaultInspeccionShouldNotBeFound("usuario.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByFechahoraIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where fechahora equals to DEFAULT_FECHAHORA
+        defaultInspeccionShouldBeFound("fechahora.equals=" + DEFAULT_FECHAHORA);
+
+        // Get all the inspeccionList where fechahora equals to UPDATED_FECHAHORA
+        defaultInspeccionShouldNotBeFound("fechahora.equals=" + UPDATED_FECHAHORA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByFechahoraIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where fechahora in DEFAULT_FECHAHORA or UPDATED_FECHAHORA
+        defaultInspeccionShouldBeFound("fechahora.in=" + DEFAULT_FECHAHORA + "," + UPDATED_FECHAHORA);
+
+        // Get all the inspeccionList where fechahora equals to UPDATED_FECHAHORA
+        defaultInspeccionShouldNotBeFound("fechahora.in=" + UPDATED_FECHAHORA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByFechahoraIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where fechahora is not null
+        defaultInspeccionShouldBeFound("fechahora.specified=true");
+
+        // Get all the inspeccionList where fechahora is null
+        defaultInspeccionShouldNotBeFound("fechahora.specified=false");
     }
 
     @Test
@@ -569,10 +542,10 @@ public class InspeccionResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(inspeccion.getId().intValue())))
             .andExpect(jsonPath("$.[*].orden").value(hasItem(DEFAULT_ORDEN.intValue())))
-            .andExpect(jsonPath("$.[*].fecha").value(hasItem(DEFAULT_FECHA.toString())))
             .andExpect(jsonPath("$.[*].observaciones").value(hasItem(DEFAULT_OBSERVACIONES.toString())))
             .andExpect(jsonPath("$.[*].deshabitada").value(hasItem(DEFAULT_DESHABITADA.booleanValue())))
-            .andExpect(jsonPath("$.[*].usuario").value(hasItem(DEFAULT_USUARIO.toString())));
+            .andExpect(jsonPath("$.[*].usuario").value(hasItem(DEFAULT_USUARIO.toString())))
+            .andExpect(jsonPath("$.[*].fechahora").value(hasItem(DEFAULT_FECHAHORA.toString())));
     }
 
     /**
@@ -609,10 +582,10 @@ public class InspeccionResourceIntTest {
         em.detach(updatedInspeccion);
         updatedInspeccion
             .orden(UPDATED_ORDEN)
-            .fecha(UPDATED_FECHA)
             .observaciones(UPDATED_OBSERVACIONES)
             .deshabitada(UPDATED_DESHABITADA)
-            .usuario(UPDATED_USUARIO);
+            .usuario(UPDATED_USUARIO)
+            .fechahora(UPDATED_FECHAHORA);
 
         restInspeccionMockMvc.perform(put("/api/inspeccions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -624,10 +597,10 @@ public class InspeccionResourceIntTest {
         assertThat(inspeccionList).hasSize(databaseSizeBeforeUpdate);
         Inspeccion testInspeccion = inspeccionList.get(inspeccionList.size() - 1);
         assertThat(testInspeccion.getOrden()).isEqualTo(UPDATED_ORDEN);
-        assertThat(testInspeccion.getFecha()).isEqualTo(UPDATED_FECHA);
         assertThat(testInspeccion.getObservaciones()).isEqualTo(UPDATED_OBSERVACIONES);
         assertThat(testInspeccion.isDeshabitada()).isEqualTo(UPDATED_DESHABITADA);
         assertThat(testInspeccion.getUsuario()).isEqualTo(UPDATED_USUARIO);
+        assertThat(testInspeccion.getFechahora()).isEqualTo(UPDATED_FECHAHORA);
     }
 
     @Test

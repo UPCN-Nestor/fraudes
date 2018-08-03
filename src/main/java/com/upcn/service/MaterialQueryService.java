@@ -75,9 +75,6 @@ public class MaterialQueryService extends QueryService<Material> {
             if (criteria.getDescripcion() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescripcion(), Material_.descripcion));
             }
-            if (criteria.getTrabajoId() != null) {
-                specification = specification.and(buildReferringEntitySpecification(criteria.getTrabajoId(), Material_.trabajos, Trabajo_.id));
-            }
         }
         return specification;
     }
