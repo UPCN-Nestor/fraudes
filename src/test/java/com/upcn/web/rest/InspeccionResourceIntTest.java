@@ -9,6 +9,7 @@ import com.upcn.domain.Inmueble;
 import com.upcn.domain.Etapa;
 import com.upcn.domain.Estado;
 import com.upcn.domain.TipoInmueble;
+import com.upcn.domain.Medidor;
 import com.upcn.repository.InspeccionRepository;
 import com.upcn.service.InspeccionService;
 import com.upcn.web.rest.errors.ExceptionTranslator;
@@ -64,6 +65,15 @@ public class InspeccionResourceIntTest {
     private static final Instant DEFAULT_FECHAHORA = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_FECHAHORA = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
+    private static final String DEFAULT_MEDIDOR_INSTALADO = "AAAAAAAAAA";
+    private static final String UPDATED_MEDIDOR_INSTALADO = "BBBBBBBBBB";
+
+    private static final Float DEFAULT_ULTIMA_LECTURA = 1F;
+    private static final Float UPDATED_ULTIMA_LECTURA = 2F;
+
+    private static final String DEFAULT_MEDIDOR_RETIRADO = "AAAAAAAAAA";
+    private static final String UPDATED_MEDIDOR_RETIRADO = "BBBBBBBBBB";
+
     @Autowired
     private InspeccionRepository inspeccionRepository;
 
@@ -112,7 +122,10 @@ public class InspeccionResourceIntTest {
             .observaciones(DEFAULT_OBSERVACIONES)
             .deshabitada(DEFAULT_DESHABITADA)
             .usuario(DEFAULT_USUARIO)
-            .fechahora(DEFAULT_FECHAHORA);
+            .fechahora(DEFAULT_FECHAHORA)
+            .medidorInstalado(DEFAULT_MEDIDOR_INSTALADO)
+            .ultimaLectura(DEFAULT_ULTIMA_LECTURA)
+            .medidorRetirado(DEFAULT_MEDIDOR_RETIRADO);
         return inspeccion;
     }
 
@@ -141,6 +154,9 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.isDeshabitada()).isEqualTo(DEFAULT_DESHABITADA);
         assertThat(testInspeccion.getUsuario()).isEqualTo(DEFAULT_USUARIO);
         assertThat(testInspeccion.getFechahora()).isEqualTo(DEFAULT_FECHAHORA);
+        assertThat(testInspeccion.getMedidorInstalado()).isEqualTo(DEFAULT_MEDIDOR_INSTALADO);
+        assertThat(testInspeccion.getUltimaLectura()).isEqualTo(DEFAULT_ULTIMA_LECTURA);
+        assertThat(testInspeccion.getMedidorRetirado()).isEqualTo(DEFAULT_MEDIDOR_RETIRADO);
     }
 
     @Test
@@ -177,7 +193,10 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].observaciones").value(hasItem(DEFAULT_OBSERVACIONES.toString())))
             .andExpect(jsonPath("$.[*].deshabitada").value(hasItem(DEFAULT_DESHABITADA.booleanValue())))
             .andExpect(jsonPath("$.[*].usuario").value(hasItem(DEFAULT_USUARIO.toString())))
-            .andExpect(jsonPath("$.[*].fechahora").value(hasItem(DEFAULT_FECHAHORA.toString())));
+            .andExpect(jsonPath("$.[*].fechahora").value(hasItem(DEFAULT_FECHAHORA.toString())))
+            .andExpect(jsonPath("$.[*].medidorInstalado").value(hasItem(DEFAULT_MEDIDOR_INSTALADO.toString())))
+            .andExpect(jsonPath("$.[*].ultimaLectura").value(hasItem(DEFAULT_ULTIMA_LECTURA.doubleValue())))
+            .andExpect(jsonPath("$.[*].medidorRetirado").value(hasItem(DEFAULT_MEDIDOR_RETIRADO.toString())));
     }
 
     @Test
@@ -195,7 +214,10 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.observaciones").value(DEFAULT_OBSERVACIONES.toString()))
             .andExpect(jsonPath("$.deshabitada").value(DEFAULT_DESHABITADA.booleanValue()))
             .andExpect(jsonPath("$.usuario").value(DEFAULT_USUARIO.toString()))
-            .andExpect(jsonPath("$.fechahora").value(DEFAULT_FECHAHORA.toString()));
+            .andExpect(jsonPath("$.fechahora").value(DEFAULT_FECHAHORA.toString()))
+            .andExpect(jsonPath("$.medidorInstalado").value(DEFAULT_MEDIDOR_INSTALADO.toString()))
+            .andExpect(jsonPath("$.ultimaLectura").value(DEFAULT_ULTIMA_LECTURA.doubleValue()))
+            .andExpect(jsonPath("$.medidorRetirado").value(DEFAULT_MEDIDOR_RETIRADO.toString()));
     }
 
     @Test
@@ -422,6 +444,123 @@ public class InspeccionResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllInspeccionsByMedidorInstaladoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where medidorInstalado equals to DEFAULT_MEDIDOR_INSTALADO
+        defaultInspeccionShouldBeFound("medidorInstalado.equals=" + DEFAULT_MEDIDOR_INSTALADO);
+
+        // Get all the inspeccionList where medidorInstalado equals to UPDATED_MEDIDOR_INSTALADO
+        defaultInspeccionShouldNotBeFound("medidorInstalado.equals=" + UPDATED_MEDIDOR_INSTALADO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMedidorInstaladoIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where medidorInstalado in DEFAULT_MEDIDOR_INSTALADO or UPDATED_MEDIDOR_INSTALADO
+        defaultInspeccionShouldBeFound("medidorInstalado.in=" + DEFAULT_MEDIDOR_INSTALADO + "," + UPDATED_MEDIDOR_INSTALADO);
+
+        // Get all the inspeccionList where medidorInstalado equals to UPDATED_MEDIDOR_INSTALADO
+        defaultInspeccionShouldNotBeFound("medidorInstalado.in=" + UPDATED_MEDIDOR_INSTALADO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMedidorInstaladoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where medidorInstalado is not null
+        defaultInspeccionShouldBeFound("medidorInstalado.specified=true");
+
+        // Get all the inspeccionList where medidorInstalado is null
+        defaultInspeccionShouldNotBeFound("medidorInstalado.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByUltimaLecturaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where ultimaLectura equals to DEFAULT_ULTIMA_LECTURA
+        defaultInspeccionShouldBeFound("ultimaLectura.equals=" + DEFAULT_ULTIMA_LECTURA);
+
+        // Get all the inspeccionList where ultimaLectura equals to UPDATED_ULTIMA_LECTURA
+        defaultInspeccionShouldNotBeFound("ultimaLectura.equals=" + UPDATED_ULTIMA_LECTURA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByUltimaLecturaIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where ultimaLectura in DEFAULT_ULTIMA_LECTURA or UPDATED_ULTIMA_LECTURA
+        defaultInspeccionShouldBeFound("ultimaLectura.in=" + DEFAULT_ULTIMA_LECTURA + "," + UPDATED_ULTIMA_LECTURA);
+
+        // Get all the inspeccionList where ultimaLectura equals to UPDATED_ULTIMA_LECTURA
+        defaultInspeccionShouldNotBeFound("ultimaLectura.in=" + UPDATED_ULTIMA_LECTURA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByUltimaLecturaIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where ultimaLectura is not null
+        defaultInspeccionShouldBeFound("ultimaLectura.specified=true");
+
+        // Get all the inspeccionList where ultimaLectura is null
+        defaultInspeccionShouldNotBeFound("ultimaLectura.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMedidorRetiradoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where medidorRetirado equals to DEFAULT_MEDIDOR_RETIRADO
+        defaultInspeccionShouldBeFound("medidorRetirado.equals=" + DEFAULT_MEDIDOR_RETIRADO);
+
+        // Get all the inspeccionList where medidorRetirado equals to UPDATED_MEDIDOR_RETIRADO
+        defaultInspeccionShouldNotBeFound("medidorRetirado.equals=" + UPDATED_MEDIDOR_RETIRADO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMedidorRetiradoIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where medidorRetirado in DEFAULT_MEDIDOR_RETIRADO or UPDATED_MEDIDOR_RETIRADO
+        defaultInspeccionShouldBeFound("medidorRetirado.in=" + DEFAULT_MEDIDOR_RETIRADO + "," + UPDATED_MEDIDOR_RETIRADO);
+
+        // Get all the inspeccionList where medidorRetirado equals to UPDATED_MEDIDOR_RETIRADO
+        defaultInspeccionShouldNotBeFound("medidorRetirado.in=" + UPDATED_MEDIDOR_RETIRADO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMedidorRetiradoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where medidorRetirado is not null
+        defaultInspeccionShouldBeFound("medidorRetirado.specified=true");
+
+        // Get all the inspeccionList where medidorRetirado is null
+        defaultInspeccionShouldNotBeFound("medidorRetirado.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllInspeccionsByAnomaliaMedidorIsEqualToSomething() throws Exception {
         // Initialize the database
         Anomalia anomaliaMedidor = AnomaliaResourceIntTest.createEntity(em);
@@ -533,6 +672,25 @@ public class InspeccionResourceIntTest {
         defaultInspeccionShouldNotBeFound("tipoInmuebleId.equals=" + (tipoInmuebleId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMedidorNuevoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Medidor medidorNuevo = MedidorResourceIntTest.createEntity(em);
+        em.persist(medidorNuevo);
+        em.flush();
+        inspeccion.setMedidorNuevo(medidorNuevo);
+        inspeccionRepository.saveAndFlush(inspeccion);
+        Long medidorNuevoId = medidorNuevo.getId();
+
+        // Get all the inspeccionList where medidorNuevo equals to medidorNuevoId
+        defaultInspeccionShouldBeFound("medidorNuevoId.equals=" + medidorNuevoId);
+
+        // Get all the inspeccionList where medidorNuevo equals to medidorNuevoId + 1
+        defaultInspeccionShouldNotBeFound("medidorNuevoId.equals=" + (medidorNuevoId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -545,7 +703,10 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].observaciones").value(hasItem(DEFAULT_OBSERVACIONES.toString())))
             .andExpect(jsonPath("$.[*].deshabitada").value(hasItem(DEFAULT_DESHABITADA.booleanValue())))
             .andExpect(jsonPath("$.[*].usuario").value(hasItem(DEFAULT_USUARIO.toString())))
-            .andExpect(jsonPath("$.[*].fechahora").value(hasItem(DEFAULT_FECHAHORA.toString())));
+            .andExpect(jsonPath("$.[*].fechahora").value(hasItem(DEFAULT_FECHAHORA.toString())))
+            .andExpect(jsonPath("$.[*].medidorInstalado").value(hasItem(DEFAULT_MEDIDOR_INSTALADO.toString())))
+            .andExpect(jsonPath("$.[*].ultimaLectura").value(hasItem(DEFAULT_ULTIMA_LECTURA.doubleValue())))
+            .andExpect(jsonPath("$.[*].medidorRetirado").value(hasItem(DEFAULT_MEDIDOR_RETIRADO.toString())));
     }
 
     /**
@@ -585,7 +746,10 @@ public class InspeccionResourceIntTest {
             .observaciones(UPDATED_OBSERVACIONES)
             .deshabitada(UPDATED_DESHABITADA)
             .usuario(UPDATED_USUARIO)
-            .fechahora(UPDATED_FECHAHORA);
+            .fechahora(UPDATED_FECHAHORA)
+            .medidorInstalado(UPDATED_MEDIDOR_INSTALADO)
+            .ultimaLectura(UPDATED_ULTIMA_LECTURA)
+            .medidorRetirado(UPDATED_MEDIDOR_RETIRADO);
 
         restInspeccionMockMvc.perform(put("/api/inspeccions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -601,6 +765,9 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.isDeshabitada()).isEqualTo(UPDATED_DESHABITADA);
         assertThat(testInspeccion.getUsuario()).isEqualTo(UPDATED_USUARIO);
         assertThat(testInspeccion.getFechahora()).isEqualTo(UPDATED_FECHAHORA);
+        assertThat(testInspeccion.getMedidorInstalado()).isEqualTo(UPDATED_MEDIDOR_INSTALADO);
+        assertThat(testInspeccion.getUltimaLectura()).isEqualTo(UPDATED_ULTIMA_LECTURA);
+        assertThat(testInspeccion.getMedidorRetirado()).isEqualTo(UPDATED_MEDIDOR_RETIRADO);
     }
 
     @Test

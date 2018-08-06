@@ -17,6 +17,8 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * REST controller for managing Medidor.
@@ -80,11 +82,19 @@ public class MedidorResource {
     /**
      * GET  /medidors : get all the medidors.
      *
+     * @param filter the filter of the request
      * @return the ResponseEntity with status 200 (OK) and the list of medidors in body
      */
     @GetMapping("/medidors")
     @Timed
-    public List<Medidor> getAllMedidors() {
+    public List<Medidor> getAllMedidors(@RequestParam(required = false) String filter) {
+        if ("inspeccion-is-null".equals(filter)) {
+            log.debug("REST request to get all Medidors where inspeccion is null");
+            return StreamSupport
+                .stream(medidorRepository.findAll().spliterator(), false)
+                .filter(medidor -> medidor.getInspeccion() == null)
+                .collect(Collectors.toList());
+        }
         log.debug("REST request to get all Medidors");
         return medidorRepository.findAll();
         }

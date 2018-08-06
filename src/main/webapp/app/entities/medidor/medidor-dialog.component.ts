@@ -4,11 +4,12 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { Medidor } from './medidor.model';
 import { MedidorPopupService } from './medidor-popup.service';
 import { MedidorService } from './medidor.service';
+import { InspeccionMySuffix, InspeccionMySuffixService } from '../inspeccion-my-suffix';
 
 @Component({
     selector: 'jhi-medidor-dialog',
@@ -19,15 +20,21 @@ export class MedidorDialogComponent implements OnInit {
     medidor: Medidor;
     isSaving: boolean;
 
+    inspeccions: InspeccionMySuffix[];
+
     constructor(
         public activeModal: NgbActiveModal,
+        private jhiAlertService: JhiAlertService,
         private medidorService: MedidorService,
+        private inspeccionService: InspeccionMySuffixService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
+        this.inspeccionService.query()
+            .subscribe((res: HttpResponse<InspeccionMySuffix[]>) => { this.inspeccions = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -58,6 +65,14 @@ export class MedidorDialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+
+    private onError(error: any) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+
+    trackInspeccionById(index: number, item: InspeccionMySuffix) {
+        return item.id;
     }
 }
 

@@ -87,6 +87,15 @@ public class InspeccionQueryService extends QueryService<Inspeccion> {
             if (criteria.getFechahora() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getFechahora(), Inspeccion_.fechahora));
             }
+            if (criteria.getMedidorInstalado() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getMedidorInstalado(), Inspeccion_.medidorInstalado));
+            }
+            if (criteria.getUltimaLectura() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getUltimaLectura(), Inspeccion_.ultimaLectura));
+            }
+            if (criteria.getMedidorRetirado() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getMedidorRetirado(), Inspeccion_.medidorRetirado));
+            }
             if (criteria.getAnomaliaMedidorId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getAnomaliaMedidorId(), Inspeccion_.anomaliaMedidors, Anomalia_.id));
             }
@@ -104,6 +113,9 @@ public class InspeccionQueryService extends QueryService<Inspeccion> {
             }
             if (criteria.getTipoInmuebleId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getTipoInmuebleId(), Inspeccion_.tipoInmueble, TipoInmueble_.id));
+            }
+            if (criteria.getMedidorNuevoId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getMedidorNuevoId(), Inspeccion_.medidorNuevo, Medidor_.id));
             }
         }
         return specification;

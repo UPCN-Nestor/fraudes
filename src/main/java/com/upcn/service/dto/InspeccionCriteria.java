@@ -38,6 +38,12 @@ public class InspeccionCriteria implements Serializable {
 
     private InstantFilter fechahora;
 
+    private StringFilter medidorInstalado;
+
+    private FloatFilter ultimaLectura;
+
+    private StringFilter medidorRetirado;
+
     private LongFilter anomaliaMedidorId;
 
     private LongFilter trabajoId;
@@ -49,6 +55,8 @@ public class InspeccionCriteria implements Serializable {
     private LongFilter estadoId;
 
     private LongFilter tipoInmuebleId;
+
+    private LongFilter medidorNuevoId;
 
     public InspeccionCriteria() {
     }
@@ -101,6 +109,30 @@ public class InspeccionCriteria implements Serializable {
         this.fechahora = fechahora;
     }
 
+    public StringFilter getMedidorInstalado() {
+        return medidorInstalado;
+    }
+
+    public void setMedidorInstalado(StringFilter medidorInstalado) {
+        this.medidorInstalado = medidorInstalado;
+    }
+
+    public FloatFilter getUltimaLectura() {
+        return ultimaLectura;
+    }
+
+    public void setUltimaLectura(FloatFilter ultimaLectura) {
+        this.ultimaLectura = ultimaLectura;
+    }
+
+    public StringFilter getMedidorRetirado() {
+        return medidorRetirado;
+    }
+
+    public void setMedidorRetirado(StringFilter medidorRetirado) {
+        this.medidorRetirado = medidorRetirado;
+    }
+
     public LongFilter getAnomaliaMedidorId() {
         return anomaliaMedidorId;
     }
@@ -149,6 +181,14 @@ public class InspeccionCriteria implements Serializable {
         this.tipoInmuebleId = tipoInmuebleId;
     }
 
+    public LongFilter getMedidorNuevoId() {
+        return medidorNuevoId;
+    }
+
+    public void setMedidorNuevoId(LongFilter medidorNuevoId) {
+        this.medidorNuevoId = medidorNuevoId;
+    }
+
     @Override
     public String toString() {
         return "InspeccionCriteria{" +
@@ -158,12 +198,16 @@ public class InspeccionCriteria implements Serializable {
                 (deshabitada != null ? "deshabitada=" + deshabitada + ", " : "") +
                 (usuario != null ? "usuario=" + usuario + ", " : "") +
                 (fechahora != null ? "fechahora=" + fechahora + ", " : "") +
+                (medidorInstalado != null ? "medidorInstalado=" + medidorInstalado + ", " : "") +
+                (ultimaLectura != null ? "ultimaLectura=" + ultimaLectura + ", " : "") +
+                (medidorRetirado != null ? "medidorRetirado=" + medidorRetirado + ", " : "") +
                 (anomaliaMedidorId != null ? "anomaliaMedidorId=" + anomaliaMedidorId + ", " : "") +
                 (trabajoId != null ? "trabajoId=" + trabajoId + ", " : "") +
                 (inmuebleId != null ? "inmuebleId=" + inmuebleId + ", " : "") +
                 (etapaId != null ? "etapaId=" + etapaId + ", " : "") +
                 (estadoId != null ? "estadoId=" + estadoId + ", " : "") +
                 (tipoInmuebleId != null ? "tipoInmuebleId=" + tipoInmuebleId + ", " : "") +
+                (medidorNuevoId != null ? "medidorNuevoId=" + medidorNuevoId + ", " : "") +
             "}";
     }
 

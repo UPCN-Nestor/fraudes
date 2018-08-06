@@ -1,5 +1,6 @@
 package com.upcn.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -25,6 +26,10 @@ public class Medidor implements Serializable {
     @Column(name = "numero")
     private String numero;
 
+    @OneToOne(mappedBy = "medidorNuevo")
+    @JsonIgnore
+    private Inspeccion inspeccion;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -45,6 +50,19 @@ public class Medidor implements Serializable {
 
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    public Inspeccion getInspeccion() {
+        return inspeccion;
+    }
+
+    public Medidor inspeccion(Inspeccion inspeccion) {
+        this.inspeccion = inspeccion;
+        return this;
+    }
+
+    public void setInspeccion(Inspeccion inspeccion) {
+        this.inspeccion = inspeccion;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -9,6 +9,7 @@ import { FrTestModule } from '../../../test.module';
 import { MedidorDialogComponent } from '../../../../../../main/webapp/app/entities/medidor/medidor-dialog.component';
 import { MedidorService } from '../../../../../../main/webapp/app/entities/medidor/medidor.service';
 import { Medidor } from '../../../../../../main/webapp/app/entities/medidor/medidor.model';
+import { InspeccionMySuffixService } from '../../../../../../main/webapp/app/entities/inspeccion-my-suffix';
 
 describe('Component Tests', () => {
 
@@ -24,6 +25,7 @@ describe('Component Tests', () => {
                 imports: [FrTestModule],
                 declarations: [MedidorDialogComponent],
                 providers: [
+                    InspeccionMySuffixService,
                     MedidorService
                 ]
             })

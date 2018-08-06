@@ -40,6 +40,15 @@ public class Inspeccion implements Serializable {
     @Column(name = "fechahora")
     private Instant fechahora;
 
+    @Column(name = "medidor_instalado")
+    private String medidorInstalado;
+
+    @Column(name = "ultima_lectura")
+    private Float ultimaLectura;
+
+    @Column(name = "medidor_retirado")
+    private String medidorRetirado;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "inspeccion_anomalia_medidor",
@@ -65,6 +74,10 @@ public class Inspeccion implements Serializable {
 
     @ManyToOne
     private TipoInmueble tipoInmueble;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Medidor medidorNuevo;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -138,6 +151,45 @@ public class Inspeccion implements Serializable {
 
     public void setFechahora(Instant fechahora) {
         this.fechahora = fechahora;
+    }
+
+    public String getMedidorInstalado() {
+        return medidorInstalado;
+    }
+
+    public Inspeccion medidorInstalado(String medidorInstalado) {
+        this.medidorInstalado = medidorInstalado;
+        return this;
+    }
+
+    public void setMedidorInstalado(String medidorInstalado) {
+        this.medidorInstalado = medidorInstalado;
+    }
+
+    public Float getUltimaLectura() {
+        return ultimaLectura;
+    }
+
+    public Inspeccion ultimaLectura(Float ultimaLectura) {
+        this.ultimaLectura = ultimaLectura;
+        return this;
+    }
+
+    public void setUltimaLectura(Float ultimaLectura) {
+        this.ultimaLectura = ultimaLectura;
+    }
+
+    public String getMedidorRetirado() {
+        return medidorRetirado;
+    }
+
+    public Inspeccion medidorRetirado(String medidorRetirado) {
+        this.medidorRetirado = medidorRetirado;
+        return this;
+    }
+
+    public void setMedidorRetirado(String medidorRetirado) {
+        this.medidorRetirado = medidorRetirado;
     }
 
     public Set<Anomalia> getAnomaliaMedidors() {
@@ -241,6 +293,19 @@ public class Inspeccion implements Serializable {
     public void setTipoInmueble(TipoInmueble tipoInmueble) {
         this.tipoInmueble = tipoInmueble;
     }
+
+    public Medidor getMedidorNuevo() {
+        return medidorNuevo;
+    }
+
+    public Inspeccion medidorNuevo(Medidor medidor) {
+        this.medidorNuevo = medidor;
+        return this;
+    }
+
+    public void setMedidorNuevo(Medidor medidor) {
+        this.medidorNuevo = medidor;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -272,6 +337,9 @@ public class Inspeccion implements Serializable {
             ", deshabitada='" + isDeshabitada() + "'" +
             ", usuario='" + getUsuario() + "'" +
             ", fechahora='" + getFechahora() + "'" +
+            ", medidorInstalado='" + getMedidorInstalado() + "'" +
+            ", ultimaLectura=" + getUltimaLectura() +
+            ", medidorRetirado='" + getMedidorRetirado() + "'" +
             "}";
     }
 }

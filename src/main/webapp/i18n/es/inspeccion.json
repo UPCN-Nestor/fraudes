@@ -21,12 +21,16 @@
             "deshabitada": "Deshabitada",
             "usuario": "Usuario",
             "fechahora": "Fechahora",
+            "medidorInstalado": "Medidor Instalado",
+            "ultimaLectura": "Ultima Lectura",
+            "medidorRetirado": "Medidor Retirado",
             "anomaliaMedidor": "Anomalia Medidor",
             "trabajo": "Trabajo",
             "inmueble": "Inmueble",
             "etapa": "Etapa",
             "estado": "Estado",
-            "tipoInmueble": "Tipo Inmueble"
+            "tipoInmueble": "Tipo Inmueble",
+            "medidorNuevo": "Medidor Nuevo"
         }
     }
 }

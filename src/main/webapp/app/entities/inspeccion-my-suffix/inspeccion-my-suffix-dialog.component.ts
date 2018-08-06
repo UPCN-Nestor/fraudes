@@ -15,6 +15,7 @@ import { InmuebleMySuffix, InmuebleMySuffixService } from '../inmueble-my-suffix
 import { EtapaMySuffix, EtapaMySuffixService } from '../etapa-my-suffix';
 import { EstadoMySuffix, EstadoMySuffixService } from '../estado-my-suffix';
 import { TipoInmuebleMySuffix, TipoInmuebleMySuffixService } from '../tipo-inmueble-my-suffix';
+import { Medidor, MedidorService } from '../medidor';
 
 import { Principal } from '../../shared';
 
@@ -43,7 +44,9 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
 
     tipoinmuebles: TipoInmuebleMySuffix[];
 
-    currentAccount: any;
+    medidornuevos: Medidor[];
+
+	currentAccount: any;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -55,8 +58,9 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         private etapaService: EtapaMySuffixService,
         private estadoService: EstadoMySuffixService,
         private tipoInmuebleService: TipoInmuebleMySuffixService,
+        private medidorService: MedidorService,
         private eventManager: JhiEventManager,
-        private principal: Principal
+		private principal: Principal
     ) {
     }
 
@@ -91,8 +95,21 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
             .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { this.estados = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.tipoInmuebleService.query()
             .subscribe((res: HttpResponse<TipoInmuebleMySuffix[]>) => { this.tipoinmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        this.medidorService
+            .query({filter: 'inspeccion-is-null'})
+            .subscribe((res: HttpResponse<Medidor[]>) => {
+                if (!this.inspeccion.medidorNuevo || !this.inspeccion.medidorNuevo.id) {
+                    this.medidornuevos = res.body;
+                } else {
+                    this.medidorService
+                        .find(this.inspeccion.medidorNuevo.id)
+                        .subscribe((subRes: HttpResponse<Medidor>) => {
+                            this.medidornuevos = [subRes.body].concat(res.body);
+                        }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
+                }
+            }, (res: HttpErrorResponse) => this.onError(res.message));
 
-        var d = new Date(); 
+	    var d = new Date(); 
         d.setTime(d.getTime() - (3*60*60*1000)); 
         var dd = d.toISOString();
         this.inspeccion.fechahora = dd.substring(0,dd.length-5);
@@ -168,6 +185,10 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
     }
 
     trackTipoInmuebleById(index: number, item: TipoInmuebleMySuffix) {
+        return item.id;
+    }
+
+    trackMedidorById(index: number, item: Medidor) {
         return item.id;
     }
 
