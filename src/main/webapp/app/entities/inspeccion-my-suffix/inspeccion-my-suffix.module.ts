@@ -1,6 +1,13 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ButtonModule } from 'primeng/primeng'; 
+import { DropdownModule } from 'primeng/dropdown';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {SelectButtonModule} from 'primeng/selectbutton';
+
 import { FrSharedModule } from '../../shared';
 import {
     InspeccionMySuffixService,
@@ -24,7 +31,12 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         FrSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
+        RouterModule.forChild(ENTITY_STATES),
+        ButtonModule,    
+        DropdownModule,
+        InputSwitchModule,
+        MultiSelectModule,
+        SelectButtonModule
     ],
     declarations: [
         InspeccionMySuffixComponent,

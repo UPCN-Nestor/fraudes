@@ -7,6 +7,15 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { InspeccionMySuffix } from './inspeccion-my-suffix.model';
 import { InspeccionMySuffixService } from './inspeccion-my-suffix.service';
 import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { EtapaMySuffix } from '../etapa-my-suffix';
+import { EstadoMySuffix } from '../estado-my-suffix';
+import { DropdownModule } from 'primeng/dropdown';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import { SelectItem } from 'primeng/api';
+import { EtapaMySuffixService } from '../etapa-my-suffix/etapa-my-suffix.service';
+import { EstadoMySuffixService } from '../estado-my-suffix/estado-my-suffix.service';
+
+declare var printJS: any;
 
 @Component({
     selector: 'jhi-inspeccion-my-suffix',
@@ -29,6 +38,11 @@ currentAccount: any;
     previousPage: any;
     reverse: any;
 
+    etapas : SelectItem[];
+    etapaSeleccionada : number;
+
+    ocultarFinalizadas : boolean = true;
+
     constructor(
         private inspeccionService: InspeccionMySuffixService,
         private parseLinks: JhiParseLinks,
@@ -36,7 +50,9 @@ currentAccount: any;
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private etapaService: EtapaMySuffixService,
+        private estadoService: EstadoMySuffixService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -45,6 +61,24 @@ currentAccount: any;
             this.reverse = data.pagingParams.ascending;
             this.predicate = data.pagingParams.predicate;
         });
+
+        this.etapaService.query({
+            page: 1,
+            size: 100,
+            sort: ["id,desc"]
+        }).subscribe(
+            (res: HttpResponse<EtapaMySuffix[]>) => {
+                this.etapas = res.body.map(x => <SelectItem>{value: x.id, label: ''+x.numero});
+            },
+            (res: HttpErrorResponse) => { 
+                alert(res.message);
+            }
+        );
+
+    }
+
+    print() {
+        printJS('printJS-form', 'html');
     }
 
     loadAll() {
@@ -56,6 +90,29 @@ currentAccount: any;
                 (res: HttpErrorResponse) => this.onError(res.message)
         );
     }
+
+    getInspeccionesMostradas() {
+      
+        //alert((<EstadoMySuffix>this.inspeccions[0].estado).descripcion);
+        //return this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion != 'Finalizado' : true);
+        return this.ocultarFinalizadas ? this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion.trim() !== 'Finalizado' : true) : this.inspeccions;
+    }
+
+    cambioEtapa() {
+        this.loadByEtapa();        
+    }
+
+    loadByEtapa() {
+        this.inspeccionService.query({
+            'etapaId.equals': this.etapaSeleccionada,
+            page: this.page - 1,
+            size: this.itemsPerPage,
+            sort: this.sort()}).subscribe(
+                (res: HttpResponse<InspeccionMySuffix[]>) => this.onSuccess(res.body, res.headers),
+                (res: HttpErrorResponse) => this.onError(res.message)
+        );
+    }
+
     loadPage(page: number) {
         if (page !== this.previousPage) {
             this.previousPage = page;
@@ -65,12 +122,13 @@ currentAccount: any;
     transition() {
         this.router.navigate(['/inspeccion-my-suffix'], {queryParams:
             {
+                'etapaId.equals': this.etapaSeleccionada,
                 page: this.page,
                 size: this.itemsPerPage,
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
             }
         });
-        this.loadAll();
+        this.loadByEtapa();
     }
 
     clear() {
@@ -79,10 +137,12 @@ currentAccount: any;
             page: this.page,
             sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
         }]);
-        this.loadAll();
+        this.loadByEtapa();
     }
     ngOnInit() {
-        this.loadAll();
+        this.etapaSeleccionada = 1;
+
+        this.loadByEtapa();
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
@@ -97,7 +157,7 @@ currentAccount: any;
         return item.id;
     }
     registerChangeInInspeccions() {
-        this.eventSubscriber = this.eventManager.subscribe('inspeccionListModification', (response) => this.loadAll());
+        this.eventSubscriber = this.eventManager.subscribe('inspeccionListModification', (response) => this.loadByEtapa());
     }
 
     sort() {
@@ -118,4 +178,5 @@ currentAccount: any;
     private onError(error) {
         this.jhiAlertService.error(error.message, null, null);
     }
+
 }

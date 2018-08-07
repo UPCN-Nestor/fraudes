@@ -1,111 +1,65 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
+    
+
     <div class="modal-header">
-        <h4 class="modal-title" id="myInspeccionLabel" jhiTranslate="frApp.inspeccion.home.createOrEditLabel">Create or edit a Inspeccion</h4>
+        <h4 *jhiHasAnyAuthority="'ROLE_ADMIN'" class="modal-title" id="myInspeccionLabel">{{inspeccion.id ? "Inspección " + getNombre() : "Nueva inspección"}}</h4>
+        <h4 *jhiHasAnyAuthority="'ROLE_USER'" class="modal-title" id="myInspeccionLabel">Inspección {{inspeccion.id ? getNombre() : "excepcional"}}</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="clear()">&times;</button>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" [hidden]="!inspeccion.id">
-            <label for="id" jhiTranslate="global.field.id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                   [(ngModel)]="inspeccion.id" readonly />
+
+        <div style="color:red !important;" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.etapa" for="field_etapa">Etapa</label>
+                <select class="form-control" id="field_etapa" name="etapa" [(ngModel)]="inspeccion.etapa" >
+                    <option [ngValue]="null"></option>
+                    <option [ngValue]="etapaOption.id === inspeccion.etapa?.id ? inspeccion.etapa : etapaOption" *ngFor="let etapaOption of etapas; trackBy: trackEtapaById">{{etapaOption.numero}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.orden" for="field_orden">Orden (dejar vacío para insertar al final)</label>
+                <input type="number" class="form-control" name="orden" id="field_orden"
+                    [(ngModel)]="inspeccion.orden" />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.inmueble" for="field_inmueble">Inmueble</label>
+                <select class="form-control" id="field_inmueble" name="inmueble" [(ngModel)]="inspeccion.inmueble" >
+                    <option [ngValue]="null"></option>
+                    <option [ngValue]="inmuebleOption.id === inspeccion.inmueble?.id ? inspeccion.inmueble : inmuebleOption" *ngFor="let inmuebleOption of inmuebles; trackBy: trackInmuebleById">{{inspeccion.inmueble?.calle}} {{inspeccion.inmueble?.altura}}
+                            {{inspeccion.inmueble?.piso}} {{inspeccion.inmueble?.depto}} {{inspeccion.inmueble?.anexo}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorInstalado" for="field_medidorInstalado">Medidor Instalado</label>
+                <input type="text" class="form-control" name="medidorInstalado" id="field_medidorInstalado"
+                    [(ngModel)]="inspeccion.medidorInstalado" />
+            </div>
         </div>
+        <!--
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.orden" for="field_orden">Orden</label>
             <input type="number" class="form-control" name="orden" id="field_orden"
-                [(ngModel)]="inspeccion.orden" />
+                [(ngModel)]="inspeccion.orden" readonly />
         </div>
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.observaciones" for="field_observaciones">Observaciones</label>
-            <input type="text" class="form-control" name="observaciones" id="field_observaciones"
-                [(ngModel)]="inspeccion.observaciones" />
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.etapa" for="field_etapa">Etapa</label>
+                <select class="form-control" id="field_etapa" name="etapa" [(ngModel)]="inspeccion.etapa" readonly>
+                    <option [ngValue]="null"></option>
+                    <option [ngValue]="etapaOption.id === inspeccion.etapa?.id ? inspeccion.etapa : etapaOption" *ngFor="let etapaOption of etapas; trackBy: trackEtapaById">{{etapaOption.numero}}</option>
+                </select>
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.deshabitada" for="field_deshabitada">Deshabitada</label>
-            <input type="checkbox" class="form-control" name="deshabitada" id="field_deshabitada"
-                [(ngModel)]="inspeccion.deshabitada" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.usuario" for="field_usuario">Usuario</label>
-            <input type="text" class="form-control" name="usuario" id="field_usuario"
-                [(ngModel)]="inspeccion.usuario" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.fechahora" for="field_fechahora">Fechahora</label>
+        -->
+       <div class="form-group">
+            <label class="form-control-label" for="field_fechahora">Fecha y hora</label>
             <div class="d-flex">
                 <input id="field_fechahora" type="datetime-local" class="form-control" name="fechahora" [(ngModel)]="inspeccion.fechahora"
                 />
             </div>
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorInstalado" for="field_medidorInstalado">Medidor Instalado</label>
-            <input type="text" class="form-control" name="medidorInstalado" id="field_medidorInstalado"
-                [(ngModel)]="inspeccion.medidorInstalado" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.ultimaLectura" for="field_ultimaLectura">Ultima Lectura</label>
-            <input type="number" class="form-control" name="ultimaLectura" id="field_ultimaLectura"
-                [(ngModel)]="inspeccion.ultimaLectura" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorRetirado" for="field_medidorRetirado">Medidor Retirado</label>
-            <input type="text" class="form-control" name="medidorRetirado" id="field_medidorRetirado"
-                [(ngModel)]="inspeccion.medidorRetirado" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.socio" for="field_socio">Socio</label>
-            <input type="number" class="form-control" name="socio" id="field_socio"
-                [(ngModel)]="inspeccion.socio" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.suministro" for="field_suministro">Suministro</label>
-            <input type="number" class="form-control" name="suministro" id="field_suministro"
-                [(ngModel)]="inspeccion.suministro" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.nombre" for="field_nombre">Nombre</label>
-            <input type="text" class="form-control" name="nombre" id="field_nombre"
-                [(ngModel)]="inspeccion.nombre" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.tarifa" for="field_tarifa">Tarifa</label>
-            <input type="text" class="form-control" name="tarifa" id="field_tarifa"
-                [(ngModel)]="inspeccion.tarifa" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.mtsCable" for="field_mtsCable">Mts Cable</label>
-            <input type="number" class="form-control" name="mtsCable" id="field_mtsCable"
-                [(ngModel)]="inspeccion.mtsCable" />
-        </div>
 
-        <div class="form-group">
-            <label jhiTranslate="frApp.inspeccion.anomaliaMedidor" for="field_anomaliaMedidor">Anomalia Medidor</label>
-            <select class="form-control" id="field_anomaliaMedidor" multiple name="anomaliaMedidor" [(ngModel)]="inspeccion.anomaliaMedidors">
-                <option [ngValue]="getSelected(inspeccion.anomaliaMedidors, anomaliaOption)" *ngFor="let anomaliaOption of anomalias; trackBy: trackAnomaliaById">{{anomaliaOption.descripcion}}</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label jhiTranslate="frApp.inspeccion.trabajo" for="field_trabajo">Trabajo</label>
-            <select class="form-control" id="field_trabajo" multiple name="trabajo" [(ngModel)]="inspeccion.trabajos">
-                <option [ngValue]="getSelected(inspeccion.trabajos, trabajoOption)" *ngFor="let trabajoOption of trabajos; trackBy: trackTrabajoById">{{trabajoOption.descripcion}}</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.inmueble" for="field_inmueble">Inmueble</label>
-            <select class="form-control" id="field_inmueble" name="inmueble" [(ngModel)]="inspeccion.inmueble" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="inmuebleOption.id === inspeccion.inmueble?.id ? inspeccion.inmueble : inmuebleOption" *ngFor="let inmuebleOption of inmuebles; trackBy: trackInmuebleById">{{inmuebleOption.id}}</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.etapa" for="field_etapa">Etapa</label>
-            <select class="form-control" id="field_etapa" name="etapa" [(ngModel)]="inspeccion.etapa" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="etapaOption.id === inspeccion.etapa?.id ? inspeccion.etapa : etapaOption" *ngFor="let etapaOption of etapas; trackBy: trackEtapaById">{{etapaOption.numero}}</option>
-            </select>
-        </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.estado" for="field_estado">Estado</label>
             <select class="form-control" id="field_estado" name="estado" [(ngModel)]="inspeccion.estado" >
@@ -113,12 +67,73 @@
                 <option [ngValue]="estadoOption.id === inspeccion.estado?.id ? inspeccion.estado : estadoOption" *ngFor="let estadoOption of estados; trackBy: trackEstadoById">{{estadoOption.descripcion}}</option>
             </select>
         </div>
+        <div class="form-group" *ngIf="this.inspeccion.id">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.inmueble" for="field_inmueble">Inmueble</label>
+            <div *ngIf="inspeccion.inmueble" style="font-weight: bold;">
+            {{inspeccion.inmueble.calle}} {{inspeccion.inmueble.altura}} {{inspeccion.inmueble.depto}} {{inspeccion.inmueble.piso}} {{inspeccion.inmueble.anexo}}
+            </div>
+            <!--
+            <select class="form-control" id="field_inmueble" name="inmueble" [(ngModel)]="inspeccion.inmueble" readonly>
+                <option [ngValue]="null"></option>
+                <option [ngValue]="inmuebleOption.id === inspeccion.inmueble?.id ? inspeccion.inmueble : inmuebleOption" *ngFor="let inmuebleOption of inmuebles; trackBy: trackInmuebleById">{{inmuebleOption.calle}} {{inmuebleOption.altura}} {{inmuebleOption.depto}} {{inmuebleOption.piso}} {{inmuebleOption.anexo}}</option>
+            </select>
+            -->
+        </div>
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.tipoInmueble" for="field_tipoInmueble">Tipo Inmueble</label>
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.tipoInmueble" for="field_tipoInmueble">Tipo de Inmueble</label>
             <select class="form-control" id="field_tipoInmueble" name="tipoInmueble" [(ngModel)]="inspeccion.tipoInmueble" >
                 <option [ngValue]="null"></option>
                 <option [ngValue]="tipoInmuebleOption.id === inspeccion.tipoInmueble?.id ? inspeccion.tipoInmueble : tipoInmuebleOption" *ngFor="let tipoInmuebleOption of tipoinmuebles; trackBy: trackTipoInmuebleById">{{tipoInmuebleOption.descripcion}}</option>
             </select>
+        </div>
+        <div style="text-align: left;">
+            <!--<label class="form-control-label" jhiTranslate="frApp.inspeccion.deshabitada" for="field_deshabitada">Deshabitada</label>-->
+            <p-inputSwitch  name="deshabitada" id="field_deshabitada" 
+                [(ngModel)]="inspeccion.deshabitada" onLabel="Deshabitada" offLabel="Habitada" ></p-inputSwitch>
+                <!--
+            <input type="checkbox" class="form-control" name="deshabitada" id="field_deshabitada"
+                [(ngModel)]="inspeccion.deshabitada" />
+                -->
+        </div>
+
+        <!--
+        <div class="form-group">
+            <label class="form-control-label" for="field_usuario">Responsable</label>
+            <input type="text" class="form-control" name="usuario" id="field_usuario"
+                [(ngModel)]="inspeccion.usuario" readonly />
+        </div>
+        -->
+
+        <label jhiTranslate="frApp.inspeccion.anomaliaMedidor" for="field_anomaliaMedidor">Anomalia Medidor</label>
+        
+        <div><p-multiSelect id="field_anomaliaMedidor" name="anomaliaMedidor" defaultLabel="(Seleccionar)" filter="false" showHeader="false"
+            [options]="getAnomalias()" [(ngModel)]="inspeccion.anomaliaMedidors"></p-multiSelect>    
+        </div>
+        
+        <label jhiTranslate="frApp.inspeccion.trabajo" for="field_trabajo">Trabajo</label>
+        <!--
+        <p-selectButton multiple="multiple" class="form-control" id="field_trabajo" name="trabajo" dataKey="id"
+            [options]="trabajos" optionLabel="descripcion" [(ngModel)]="inspeccion.trabajos"></p-selectButton>
+         -->
+        <div>
+        <p-multiSelect id="field_trabajo" name="trabajo" defaultLabel="(Seleccionar)" filter="false" showHeader="false"
+            [options]="trabajos" optionLabel="descripcion" [(ngModel)]="inspeccion.trabajos"></p-multiSelect>
+        </div>
+        <!--
+        {{str(inspeccion.trabajos[0])}}
+        {{str(inspeccion.trabajos[1])}}
+        -->
+
+        <div *ngIf="usaMedidor()">
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorRetirado" for="field_medidorRetirado">Medidor Retirado</label>
+            <input type="text" class="form-control" name="medidorRetirado" id="field_medidorRetirado"
+                [(ngModel)]="inspeccion.medidorRetirado" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.ultimaLectura" for="field_ultimaLectura">Ultima Lectura</label>
+            <input type="number" class="form-control" name="ultimaLectura" id="field_ultimaLectura"
+                [(ngModel)]="inspeccion.ultimaLectura" />
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorNuevo" for="field_medidorNuevo">Medidor Nuevo</label>
@@ -127,6 +142,22 @@
                 <option [ngValue]="medidorOption.id === inspeccion.medidorNuevo?.id ? inspeccion.medidorNuevo : medidorOption" *ngFor="let medidorOption of medidornuevos; trackBy: trackMedidorById">{{medidorOption.numero}}</option>
             </select>
         </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" jfor="field_foto">Foto</label><br/>
+            <input type="file" id="field_foto" accept="image/*" capture>    
+        </div>
+
+        <div class="form-group">
+            <div>
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.observaciones" for="field_observaciones">Observaciones</label>
+            <span *ngIf="!this.inspeccion.id" style="font-size:small; color:red;" >(Ingrese dirección y detalles de la observación)    
+            </div>    
+            <input type="text" class="form-control" name="observaciones" id="field_observaciones"
+                [(ngModel)]="inspeccion.observaciones" />
+        </div>
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
