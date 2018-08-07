@@ -25,6 +25,9 @@ public class Insumo implements Serializable {
     @Column(name = "cantidad")
     private Float cantidad;
 
+    @Column(name = "es_editable")
+    private Boolean esEditable;
+
     @ManyToOne
     private Trabajo trabajo;
 
@@ -51,6 +54,19 @@ public class Insumo implements Serializable {
 
     public void setCantidad(Float cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public Boolean isEsEditable() {
+        return esEditable;
+    }
+
+    public Insumo esEditable(Boolean esEditable) {
+        this.esEditable = esEditable;
+        return this;
+    }
+
+    public void setEsEditable(Boolean esEditable) {
+        this.esEditable = esEditable;
     }
 
     public Trabajo getTrabajo() {
@@ -105,6 +121,7 @@ public class Insumo implements Serializable {
         return "Insumo{" +
             "id=" + getId() +
             ", cantidad=" + getCantidad() +
+            ", esEditable='" + isEsEditable() + "'" +
             "}";
     }
 }

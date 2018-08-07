@@ -18,6 +18,7 @@
             <tr>
             <th><span jhiTranslate="global.field.id">ID</span></th>
             <th><span jhiTranslate="frApp.insumo.cantidad">Cantidad</span></th>
+            <th><span jhiTranslate="frApp.insumo.esEditable">Es Editable</span></th>
             <th><span jhiTranslate="frApp.insumo.trabajo">Trabajo</span></th>
             <th><span jhiTranslate="frApp.insumo.material">Material</span></th>
             <th></th>
@@ -27,6 +28,7 @@
             <tr *ngFor="let insumo of insumos ;trackBy: trackId">
                 <td><a [routerLink]="['../insumo', insumo.id ]">{{insumo.id}}</a></td>
                 <td>{{insumo.cantidad}}</td>
+                <td>{{insumo.esEditable}}</td>
                 <td>
                     <div *ngIf="insumo.trabajo">
                         <a [routerLink]="['../trabajo-my-suffix', insumo.trabajo?.id ]" >{{insumo.trabajo?.descripcion}}</a>

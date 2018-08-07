@@ -41,6 +41,9 @@ public class InsumoResourceIntTest {
     private static final Float DEFAULT_CANTIDAD = 1F;
     private static final Float UPDATED_CANTIDAD = 2F;
 
+    private static final Boolean DEFAULT_ES_EDITABLE = false;
+    private static final Boolean UPDATED_ES_EDITABLE = true;
+
     @Autowired
     private InsumoRepository insumoRepository;
 
@@ -79,7 +82,8 @@ public class InsumoResourceIntTest {
      */
     public static Insumo createEntity(EntityManager em) {
         Insumo insumo = new Insumo()
-            .cantidad(DEFAULT_CANTIDAD);
+            .cantidad(DEFAULT_CANTIDAD)
+            .esEditable(DEFAULT_ES_EDITABLE);
         return insumo;
     }
 
@@ -104,6 +108,7 @@ public class InsumoResourceIntTest {
         assertThat(insumoList).hasSize(databaseSizeBeforeCreate + 1);
         Insumo testInsumo = insumoList.get(insumoList.size() - 1);
         assertThat(testInsumo.getCantidad()).isEqualTo(DEFAULT_CANTIDAD);
+        assertThat(testInsumo.isEsEditable()).isEqualTo(DEFAULT_ES_EDITABLE);
     }
 
     @Test
@@ -136,7 +141,8 @@ public class InsumoResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(insumo.getId().intValue())))
-            .andExpect(jsonPath("$.[*].cantidad").value(hasItem(DEFAULT_CANTIDAD.doubleValue())));
+            .andExpect(jsonPath("$.[*].cantidad").value(hasItem(DEFAULT_CANTIDAD.doubleValue())))
+            .andExpect(jsonPath("$.[*].esEditable").value(hasItem(DEFAULT_ES_EDITABLE.booleanValue())));
     }
 
     @Test
@@ -150,7 +156,8 @@ public class InsumoResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(insumo.getId().intValue()))
-            .andExpect(jsonPath("$.cantidad").value(DEFAULT_CANTIDAD.doubleValue()));
+            .andExpect(jsonPath("$.cantidad").value(DEFAULT_CANTIDAD.doubleValue()))
+            .andExpect(jsonPath("$.esEditable").value(DEFAULT_ES_EDITABLE.booleanValue()));
     }
 
     @Test
@@ -173,7 +180,8 @@ public class InsumoResourceIntTest {
         // Disconnect from session so that the updates on updatedInsumo are not directly saved in db
         em.detach(updatedInsumo);
         updatedInsumo
-            .cantidad(UPDATED_CANTIDAD);
+            .cantidad(UPDATED_CANTIDAD)
+            .esEditable(UPDATED_ES_EDITABLE);
 
         restInsumoMockMvc.perform(put("/api/insumos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -185,6 +193,7 @@ public class InsumoResourceIntTest {
         assertThat(insumoList).hasSize(databaseSizeBeforeUpdate);
         Insumo testInsumo = insumoList.get(insumoList.size() - 1);
         assertThat(testInsumo.getCantidad()).isEqualTo(UPDATED_CANTIDAD);
+        assertThat(testInsumo.isEsEditable()).isEqualTo(UPDATED_ES_EDITABLE);
     }
 
     @Test

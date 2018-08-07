@@ -17,6 +17,7 @@
                 "title": "Insumo"
             },
             "cantidad": "Cantidad",
+            "esEditable": "Es Editable",
             "trabajo": "Trabajo",
             "material": "Material"
         }

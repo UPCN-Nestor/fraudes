@@ -25,6 +25,9 @@ public class Material implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
+    @Column(name = "codigo")
+    private String codigo;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -45,6 +48,19 @@ public class Material implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public Material codigo(String codigo) {
+        this.codigo = codigo;
+        return this;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -73,6 +89,7 @@ public class Material implements Serializable {
         return "Material{" +
             "id=" + getId() +
             ", descripcion='" + getDescripcion() + "'" +
+            ", codigo='" + getCodigo() + "'" +
             "}";
     }
 }

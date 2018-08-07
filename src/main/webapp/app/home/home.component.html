@@ -3,7 +3,7 @@
 
     </div>
     <div class="col-md-9">
-        <h1 class="display-4">Sistema Fraudes</h1>
+        <h4 class="display-4">Sistema Fraudes</h4>
         <p class="lead">Usina Popular Cooperativa de Necochea "Sebastián de María"</p>
 
         <div [ngSwitch]="isAuthenticated()">
@@ -14,13 +14,8 @@
                 <p-button label="Cargar inspecciones" (onClick)="inspecciones()"></p-button>                            
                 <br/><br/>
             </div>
-            <div class="alert alert-warning">Para
-                <a class="alert-link" (click)="login()">iniciar una sesión</a>
-                <span> puede utilizar las cuentas de prueba:<br/>- Administrador (nombre "admin", clave "admin") <br/>- Usuario (nombre "user", clave "user").</span>
-            </div>
-
         </div>
 
     </div>
-</div>
-
+</div>   
+   

@@ -126,6 +126,13 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
             return '' + this.etapas.filter(e=> e.id == this.inspeccion.etapa.id)[0].numero + '/' + this.inspeccion.orden;
     }
 
+    usaMedidor() : boolean {
+        if(this.inspeccion.trabajos==null) 
+            return false;
+        return this.inspeccion.trabajos.filter(x=>this.trabajos.find(t=>t.id==x.id).usaMedidor==true).length > 0;
+    }
+
+
     str(obj) {
         return JSON.stringify(obj);
     }

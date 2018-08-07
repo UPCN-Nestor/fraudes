@@ -5,6 +5,10 @@
         {
             "fieldName": "descripcion",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "codigo",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20180618141328",

@@ -3,13 +3,13 @@
     "frApp": {
         "inspeccion" : {
             "home": {
-                "title": "Inspeccions",
-                "createLabel": "Crear nuevo Inspeccion",
+                "title": "Inspecciones",
+                "createLabel": "Crear nueva Inspeccion",
                 "createOrEditLabel": "Crear o editar Inspeccion"
             },
-            "created": "Un nuevo Inspeccion ha sido creado con el identificador {{ param }}",
-            "updated": "Un Inspeccion ha sido actualizado con el identificador {{ param }}",
-            "deleted": "Un Inspeccion ha sido eliminado con el identificador {{ param }}",
+            "created": "Una nueva Inspeccion ha sido creada con el identificador {{ param }}",
+            "updated": "Una Inspeccion ha sido actualizada con el identificador {{ param }}",
+            "deleted": "Una Inspeccion ha sido eliminada con el identificador {{ param }}",
             "delete": {
                 "question": "¿Seguro que quiere eliminar Inspeccion {{ id }}?"
             },

@@ -11,7 +11,7 @@ export const anomaliaRoute: Routes = [
         path: 'anomalia-my-suffix',
         component: AnomaliaMySuffixComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.anomalia.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const anomaliaRoute: Routes = [
         path: 'anomalia-my-suffix/:id',
         component: AnomaliaMySuffixDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.anomalia.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -31,7 +31,7 @@ export const anomaliaPopupRoute: Routes = [
         path: 'anomalia-my-suffix-new',
         component: AnomaliaMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.anomalia.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -41,7 +41,7 @@ export const anomaliaPopupRoute: Routes = [
         path: 'anomalia-my-suffix/:id/edit',
         component: AnomaliaMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.anomalia.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const anomaliaPopupRoute: Routes = [
         path: 'anomalia-my-suffix/:id/delete',
         component: AnomaliaMySuffixDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.anomalia.home.title'
         },
         canActivate: [UserRouteAccessService],

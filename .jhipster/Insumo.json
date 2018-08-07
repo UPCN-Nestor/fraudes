@@ -18,6 +18,10 @@
         {
             "fieldName": "cantidad",
             "fieldType": "Float"
+        },
+        {
+            "fieldName": "esEditable",
+            "fieldType": "Boolean"
         }
     ],
     "changelogDate": "20180711163520",

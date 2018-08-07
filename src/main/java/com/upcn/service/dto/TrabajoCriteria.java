@@ -32,6 +32,8 @@ public class TrabajoCriteria implements Serializable {
 
     private FloatFilter costo;
 
+    private BooleanFilter usaMedidor;
+
     private LongFilter inspeccionId;
 
     public TrabajoCriteria() {
@@ -61,6 +63,14 @@ public class TrabajoCriteria implements Serializable {
         this.costo = costo;
     }
 
+    public BooleanFilter getUsaMedidor() {
+        return usaMedidor;
+    }
+
+    public void setUsaMedidor(BooleanFilter usaMedidor) {
+        this.usaMedidor = usaMedidor;
+    }
+
     public LongFilter getInspeccionId() {
         return inspeccionId;
     }
@@ -75,6 +85,7 @@ public class TrabajoCriteria implements Serializable {
                 (id != null ? "id=" + id + ", " : "") +
                 (descripcion != null ? "descripcion=" + descripcion + ", " : "") +
                 (costo != null ? "costo=" + costo + ", " : "") +
+                (usaMedidor != null ? "usaMedidor=" + usaMedidor + ", " : "") +
                 (inspeccionId != null ? "inspeccionId=" + inspeccionId + ", " : "") +
             "}";
     }

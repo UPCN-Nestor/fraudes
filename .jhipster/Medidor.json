@@ -1,0 +1,24 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "inspeccion",
+            "otherEntityName": "inspeccion",
+            "relationshipType": "one-to-one",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "medidorNuevo"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "numero",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180803135507",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "medidor",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

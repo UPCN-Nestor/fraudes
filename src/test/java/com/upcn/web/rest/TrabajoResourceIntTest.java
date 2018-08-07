@@ -48,6 +48,9 @@ public class TrabajoResourceIntTest {
     private static final Float DEFAULT_COSTO = 1F;
     private static final Float UPDATED_COSTO = 2F;
 
+    private static final Boolean DEFAULT_USA_MEDIDOR = false;
+    private static final Boolean UPDATED_USA_MEDIDOR = true;
+
     @Autowired
     private TrabajoRepository trabajoRepository;
 
@@ -93,7 +96,8 @@ public class TrabajoResourceIntTest {
     public static Trabajo createEntity(EntityManager em) {
         Trabajo trabajo = new Trabajo()
             .descripcion(DEFAULT_DESCRIPCION)
-            .costo(DEFAULT_COSTO);
+            .costo(DEFAULT_COSTO)
+            .usaMedidor(DEFAULT_USA_MEDIDOR);
         return trabajo;
     }
 
@@ -119,6 +123,7 @@ public class TrabajoResourceIntTest {
         Trabajo testTrabajo = trabajoList.get(trabajoList.size() - 1);
         assertThat(testTrabajo.getDescripcion()).isEqualTo(DEFAULT_DESCRIPCION);
         assertThat(testTrabajo.getCosto()).isEqualTo(DEFAULT_COSTO);
+        assertThat(testTrabajo.isUsaMedidor()).isEqualTo(DEFAULT_USA_MEDIDOR);
     }
 
     @Test
@@ -152,7 +157,8 @@ public class TrabajoResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(trabajo.getId().intValue())))
             .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())))
-            .andExpect(jsonPath("$.[*].costo").value(hasItem(DEFAULT_COSTO.doubleValue())));
+            .andExpect(jsonPath("$.[*].costo").value(hasItem(DEFAULT_COSTO.doubleValue())))
+            .andExpect(jsonPath("$.[*].usaMedidor").value(hasItem(DEFAULT_USA_MEDIDOR.booleanValue())));
     }
 
     @Test
@@ -167,7 +173,8 @@ public class TrabajoResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(trabajo.getId().intValue()))
             .andExpect(jsonPath("$.descripcion").value(DEFAULT_DESCRIPCION.toString()))
-            .andExpect(jsonPath("$.costo").value(DEFAULT_COSTO.doubleValue()));
+            .andExpect(jsonPath("$.costo").value(DEFAULT_COSTO.doubleValue()))
+            .andExpect(jsonPath("$.usaMedidor").value(DEFAULT_USA_MEDIDOR.booleanValue()));
     }
 
     @Test
@@ -250,6 +257,45 @@ public class TrabajoResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllTrabajosByUsaMedidorIsEqualToSomething() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where usaMedidor equals to DEFAULT_USA_MEDIDOR
+        defaultTrabajoShouldBeFound("usaMedidor.equals=" + DEFAULT_USA_MEDIDOR);
+
+        // Get all the trabajoList where usaMedidor equals to UPDATED_USA_MEDIDOR
+        defaultTrabajoShouldNotBeFound("usaMedidor.equals=" + UPDATED_USA_MEDIDOR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByUsaMedidorIsInShouldWork() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where usaMedidor in DEFAULT_USA_MEDIDOR or UPDATED_USA_MEDIDOR
+        defaultTrabajoShouldBeFound("usaMedidor.in=" + DEFAULT_USA_MEDIDOR + "," + UPDATED_USA_MEDIDOR);
+
+        // Get all the trabajoList where usaMedidor equals to UPDATED_USA_MEDIDOR
+        defaultTrabajoShouldNotBeFound("usaMedidor.in=" + UPDATED_USA_MEDIDOR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByUsaMedidorIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where usaMedidor is not null
+        defaultTrabajoShouldBeFound("usaMedidor.specified=true");
+
+        // Get all the trabajoList where usaMedidor is null
+        defaultTrabajoShouldNotBeFound("usaMedidor.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllTrabajosByInspeccionIsEqualToSomething() throws Exception {
         // Initialize the database
         Inspeccion inspeccion = InspeccionResourceIntTest.createEntity(em);
@@ -275,7 +321,8 @@ public class TrabajoResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(trabajo.getId().intValue())))
             .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())))
-            .andExpect(jsonPath("$.[*].costo").value(hasItem(DEFAULT_COSTO.doubleValue())));
+            .andExpect(jsonPath("$.[*].costo").value(hasItem(DEFAULT_COSTO.doubleValue())))
+            .andExpect(jsonPath("$.[*].usaMedidor").value(hasItem(DEFAULT_USA_MEDIDOR.booleanValue())));
     }
 
     /**
@@ -312,7 +359,8 @@ public class TrabajoResourceIntTest {
         em.detach(updatedTrabajo);
         updatedTrabajo
             .descripcion(UPDATED_DESCRIPCION)
-            .costo(UPDATED_COSTO);
+            .costo(UPDATED_COSTO)
+            .usaMedidor(UPDATED_USA_MEDIDOR);
 
         restTrabajoMockMvc.perform(put("/api/trabajos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -325,6 +373,7 @@ public class TrabajoResourceIntTest {
         Trabajo testTrabajo = trabajoList.get(trabajoList.size() - 1);
         assertThat(testTrabajo.getDescripcion()).isEqualTo(UPDATED_DESCRIPCION);
         assertThat(testTrabajo.getCosto()).isEqualTo(UPDATED_COSTO);
+        assertThat(testTrabajo.isUsaMedidor()).isEqualTo(UPDATED_USA_MEDIDOR);
     }
 
     @Test

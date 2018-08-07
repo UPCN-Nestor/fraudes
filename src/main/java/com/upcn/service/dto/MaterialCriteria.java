@@ -30,6 +30,8 @@ public class MaterialCriteria implements Serializable {
 
     private StringFilter descripcion;
 
+    private StringFilter codigo;
+
     public MaterialCriteria() {
     }
 
@@ -49,11 +51,20 @@ public class MaterialCriteria implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public StringFilter getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(StringFilter codigo) {
+        this.codigo = codigo;
+    }
+
     @Override
     public String toString() {
         return "MaterialCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (descripcion != null ? "descripcion=" + descripcion + ", " : "") +
+                (codigo != null ? "codigo=" + codigo + ", " : "") +
             "}";
     }
 

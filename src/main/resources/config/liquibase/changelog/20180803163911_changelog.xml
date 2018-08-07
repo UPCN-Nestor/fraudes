@@ -1,0 +1,172 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="nechegoyen (generated)" id="1533314383225-1">
+        <createTable tableName="anomalia">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="anomaliaPK"/>
+            </column>
+            <column name="descripcion" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-2">
+        <createTable tableName="estado">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="estadoPK"/>
+            </column>
+            <column name="descripcion" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-3">
+        <createTable tableName="etapa">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="etapaPK"/>
+            </column>
+            <column name="descripcion_corta" type="VARCHAR(255)"/>
+            <column name="descripcion_larga" type="VARCHAR(255)"/>
+            <column name="numero" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-4">
+        <createTable tableName="inmueble">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="inmueblePK"/>
+            </column>
+            <column name="altura" type="VARCHAR(255)"/>
+            <column name="anexo" type="VARCHAR(255)"/>
+            <column name="calle" type="VARCHAR(255)"/>
+            <column name="depto" type="VARCHAR(255)"/>
+            <column name="id_glm" type="INT"/>
+            <column name="piso" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-5">
+        <createTable tableName="inspeccion">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="inspeccionPK"/>
+            </column>
+            <column name="deshabitada" type="BIT"/>
+            <column name="fechahora" type="TINYBLOB"/>
+            <column name="medidor_instalado" type="VARCHAR(255)"/>
+            <column name="medidor_retirado" type="VARCHAR(255)"/>
+            <column name="observaciones" type="VARCHAR(255)"/>
+            <column name="orden" type="BIGINT"/>
+            <column name="ultima_lectura" type="FLOAT"/>
+            <column name="usuario" type="VARCHAR(255)"/>
+            <column name="estado_id" type="BIGINT"/>
+            <column name="etapa_id" type="BIGINT"/>
+            <column name="inmueble_id" type="BIGINT"/>
+            <column name="medidor_nuevo_id" type="BIGINT"/>
+            <column name="tipo_inmueble_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-6">
+        <createTable tableName="inspeccion_anomalia_medidor">
+            <column name="inspeccions_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="anomalia_medidors_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-7">
+        <createTable tableName="inspeccion_trabajo">
+            <column name="inspeccions_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trabajos_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-8">
+        <createTable tableName="insumo">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="insumoPK"/>
+            </column>
+            <column name="cantidad" type="FLOAT"/>
+            <column name="material_id" type="BIGINT"/>
+            <column name="trabajo_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="nechegoyen (generated)" id="1533314383225-14">
+        <createTable tableName="material">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="materialPK"/>
+            </column>
+            <column name="descripcion" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-15">
+        <createTable tableName="medidor">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="medidorPK"/>
+            </column>
+            <column name="numero" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-16">
+        <createTable tableName="tipo_inmueble">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="tipo_inmueblePK"/>
+            </column>
+            <column name="descripcion" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-17">
+        <createTable tableName="trabajo">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="trabajoPK"/>
+            </column>
+            <column name="costo" type="FLOAT"/>
+            <column name="descripcion" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-18">
+        <addPrimaryKey columnNames="inspeccions_id, anomalia_medidors_id" tableName="inspeccion_anomalia_medidor"/>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-19">
+        <addPrimaryKey columnNames="inspeccions_id, trabajos_id" tableName="inspeccion_trabajo"/>
+    </changeSet>
+
+    <changeSet author="nechegoyen (generated)" id="1533314383225-23">
+        <addUniqueConstraint columnNames="medidor_nuevo_id" constraintName="UC_INSPECCIONMEDIDOR_NUEVO_ID_COL" tableName="inspeccion"/>
+    </changeSet>
+
+    <changeSet author="nechegoyen (generated)" id="1533314383225-26">
+        <addForeignKeyConstraint baseColumnNames="inspeccions_id" baseTableName="inspeccion_anomalia_medidor" constraintName="FK1ajfghbr0s88417hsbxgvdlyb" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="inspeccion"/>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-27">
+        <addForeignKeyConstraint baseColumnNames="anomalia_medidors_id" baseTableName="inspeccion_anomalia_medidor" constraintName="FK2482uh0dgv9n8t50fkuqiy6x4" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="anomalia"/>
+    </changeSet>
+
+    <changeSet author="nechegoyen (generated)" id="1533314383225-30">
+        <addForeignKeyConstraint baseColumnNames="tipo_inmueble_id" baseTableName="inspeccion" constraintName="FK2vp3da481p1v9fngkvyq6dfyc" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="tipo_inmueble"/>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-31">
+        <addForeignKeyConstraint baseColumnNames="medidor_nuevo_id" baseTableName="inspeccion" constraintName="FK3jp9y3v2d8tpkhvlxsvjpobnl" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="medidor"/>
+    </changeSet>
+
+    <changeSet author="nechegoyen (generated)" id="1533314383225-33">
+        <addForeignKeyConstraint baseColumnNames="etapa_id" baseTableName="inspeccion" constraintName="FK6yh0f8d3s3nt5f9vrl2qh74me" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="etapa"/>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-34">
+        <addForeignKeyConstraint baseColumnNames="material_id" baseTableName="insumo" constraintName="FK737rad6kxsu2p0q2f8pekt4dn" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="material"/>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-35">
+        <addForeignKeyConstraint baseColumnNames="trabajo_id" baseTableName="insumo" constraintName="FK7ruo8179l3cp1kg9bh1ialh8i" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="trabajo"/>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-36">
+        <addForeignKeyConstraint baseColumnNames="inmueble_id" baseTableName="inspeccion" constraintName="FKeo5yhp5b3d8tw1m119xiy4hvd" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="inmueble"/>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-37">
+        <addForeignKeyConstraint baseColumnNames="estado_id" baseTableName="inspeccion" constraintName="FKlt1840iuv2her3kmring7kt58" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="estado"/>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-38">
+        <addForeignKeyConstraint baseColumnNames="trabajos_id" baseTableName="inspeccion_trabajo" constraintName="FKqx7r4pfp0kisimuqp24i1rooq" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="trabajo"/>
+    </changeSet>
+    <changeSet author="nechegoyen (generated)" id="1533314383225-39">
+        <addForeignKeyConstraint baseColumnNames="inspeccions_id" baseTableName="inspeccion_trabajo" constraintName="FKrq2p1k1976jvdbxirw9ospdnt" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="inspeccion"/>
+    </changeSet>
+</databaseChangeLog>

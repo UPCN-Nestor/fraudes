@@ -17,6 +17,11 @@
             <input type="number" class="form-control" name="cantidad" id="field_cantidad"
                 [(ngModel)]="insumo.cantidad" />
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.insumo.esEditable" for="field_esEditable">Es Editable</label>
+            <input type="checkbox" class="form-control" name="esEditable" id="field_esEditable"
+                [(ngModel)]="insumo.esEditable" />
+        </div>
 
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.insumo.trabajo" for="field_trabajo">Trabajo</label>

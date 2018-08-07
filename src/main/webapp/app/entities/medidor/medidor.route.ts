@@ -11,7 +11,7 @@ export const medidorRoute: Routes = [
         path: 'medidor',
         component: MedidorComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.medidor.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const medidorRoute: Routes = [
         path: 'medidor/:id',
         component: MedidorDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.medidor.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -31,7 +31,7 @@ export const medidorPopupRoute: Routes = [
         path: 'medidor-new',
         component: MedidorPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.medidor.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -41,7 +41,7 @@ export const medidorPopupRoute: Routes = [
         path: 'medidor/:id/edit',
         component: MedidorPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.medidor.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const medidorPopupRoute: Routes = [
         path: 'medidor/:id/delete',
         component: MedidorDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.medidor.home.title'
         },
         canActivate: [UserRouteAccessService],

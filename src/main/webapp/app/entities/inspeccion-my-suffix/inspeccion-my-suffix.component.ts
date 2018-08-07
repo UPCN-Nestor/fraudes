@@ -13,6 +13,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import { SelectItem } from 'primeng/api';
 import { EtapaMySuffixService } from '../etapa-my-suffix/etapa-my-suffix.service';
+import { EstadoMySuffixService } from '../estado-my-suffix/estado-my-suffix.service';
 
 declare var printJS: any;
 
@@ -50,7 +51,8 @@ currentAccount: any;
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private eventManager: JhiEventManager,
-        private etapaService: EtapaMySuffixService
+        private etapaService: EtapaMySuffixService,
+        private estadoService: EstadoMySuffixService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -72,6 +74,7 @@ currentAccount: any;
                 alert(res.message);
             }
         );
+
     }
 
     print() {
@@ -89,11 +92,14 @@ currentAccount: any;
     }
 
     getInspeccionesMostradas() {
-        return this.ocultarFinalizadas ? this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion != 'Finalizado' : true) : this.inspeccions;
+      
+        //alert((<EstadoMySuffix>this.inspeccions[0].estado).descripcion);  // === 'Finalizado');
+        return this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion != 'Finalizado' : true);
+        //return this.ocultarFinalizadas == true ? this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion != 'Finalizado' : true) : this.inspeccions;
     }
 
     cambioEtapa() {
-        this.loadByEtapa();
+        this.loadByEtapa();        
     }
 
     loadByEtapa() {

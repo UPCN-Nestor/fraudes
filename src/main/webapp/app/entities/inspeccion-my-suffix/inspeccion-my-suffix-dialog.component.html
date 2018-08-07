@@ -1,13 +1,43 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
+    
+
     <div class="modal-header">
-        <h4 class="modal-title" id="myInspeccionLabel">Inspección {{inspeccion.id ? getNombre() : "excepcional"}}</h4>
+        <h4 *jhiHasAnyAuthority="'ROLE_ADMIN'" class="modal-title" id="myInspeccionLabel">{{inspeccion.id ? "Inspección " + getNombre() : "Nueva inspección"}}</h4>
+        <h4 *jhiHasAnyAuthority="'ROLE_USER'" class="modal-title" id="myInspeccionLabel">Inspección {{inspeccion.id ? getNombre() : "excepcional"}}</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="clear()">&times;</button>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
 
+        <div style="color:red !important;" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.etapa" for="field_etapa">Etapa</label>
+                <select class="form-control" id="field_etapa" name="etapa" [(ngModel)]="inspeccion.etapa" >
+                    <option [ngValue]="null"></option>
+                    <option [ngValue]="etapaOption.id === inspeccion.etapa?.id ? inspeccion.etapa : etapaOption" *ngFor="let etapaOption of etapas; trackBy: trackEtapaById">{{etapaOption.numero}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.orden" for="field_orden">Orden (dejar vacío para insertar al final)</label>
+                <input type="number" class="form-control" name="orden" id="field_orden"
+                    [(ngModel)]="inspeccion.orden" />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.inmueble" for="field_inmueble">Inmueble</label>
+                <select class="form-control" id="field_inmueble" name="inmueble" [(ngModel)]="inspeccion.inmueble" >
+                    <option [ngValue]="null"></option>
+                    <option [ngValue]="inmuebleOption.id === inspeccion.inmueble?.id ? inspeccion.inmueble : inmuebleOption" *ngFor="let inmuebleOption of inmuebles; trackBy: trackInmuebleById">{{inspeccion.inmueble?.calle}} {{inspeccion.inmueble?.altura}}
+                            {{inspeccion.inmueble?.piso}} {{inspeccion.inmueble?.depto}} {{inspeccion.inmueble?.anexo}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorInstalado" for="field_medidorInstalado">Medidor Instalado</label>
+                <input type="text" class="form-control" name="medidorInstalado" id="field_medidorInstalado"
+                    [(ngModel)]="inspeccion.medidorInstalado" />
+            </div>
+        </div>
         <!--
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.orden" for="field_orden">Orden</label>
@@ -49,6 +79,13 @@
             </select>
             -->
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.tipoInmueble" for="field_tipoInmueble">Tipo de Inmueble</label>
+            <select class="form-control" id="field_tipoInmueble" name="tipoInmueble" [(ngModel)]="inspeccion.tipoInmueble" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="tipoInmuebleOption.id === inspeccion.tipoInmueble?.id ? inspeccion.tipoInmueble : tipoInmuebleOption" *ngFor="let tipoInmuebleOption of tipoinmuebles; trackBy: trackTipoInmuebleById">{{tipoInmuebleOption.descripcion}}</option>
+            </select>
+        </div>
         <div style="text-align: left;">
             <!--<label class="form-control-label" jhiTranslate="frApp.inspeccion.deshabitada" for="field_deshabitada">Deshabitada</label>-->
             <p-inputSwitch  name="deshabitada" id="field_deshabitada" 
@@ -58,14 +95,6 @@
                 [(ngModel)]="inspeccion.deshabitada" />
                 -->
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.tipoInmueble" for="field_tipoInmueble">Tipo de Inmueble</label>
-            <select class="form-control" id="field_tipoInmueble" name="tipoInmueble" [(ngModel)]="inspeccion.tipoInmueble" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="tipoInmuebleOption.id === inspeccion.tipoInmueble?.id ? inspeccion.tipoInmueble : tipoInmuebleOption" *ngFor="let tipoInmuebleOption of tipoinmuebles; trackBy: trackTipoInmuebleById">{{tipoInmuebleOption.descripcion}}</option>
-            </select>
-        </div>
-
 
         <!--
         <div class="form-group">
@@ -94,8 +123,31 @@
         {{str(inspeccion.trabajos[0])}}
         {{str(inspeccion.trabajos[1])}}
         -->
-        <input type="file" accept="image/*" capture>
-    
+
+        <div *ngIf="usaMedidor()">
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorRetirado" for="field_medidorRetirado">Medidor Retirado</label>
+            <input type="text" class="form-control" name="medidorRetirado" id="field_medidorRetirado"
+                [(ngModel)]="inspeccion.medidorRetirado" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.ultimaLectura" for="field_ultimaLectura">Ultima Lectura</label>
+            <input type="number" class="form-control" name="ultimaLectura" id="field_ultimaLectura"
+                [(ngModel)]="inspeccion.ultimaLectura" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorNuevo" for="field_medidorNuevo">Medidor Nuevo</label>
+            <select class="form-control" id="field_medidorNuevo" name="medidorNuevo" [(ngModel)]="inspeccion.medidorNuevo">
+                <option [ngValue]="null"></option>
+                <option [ngValue]="medidorOption.id === inspeccion.medidorNuevo?.id ? inspeccion.medidorNuevo : medidorOption" *ngFor="let medidorOption of medidornuevos; trackBy: trackMedidorById">{{medidorOption.numero}}</option>
+            </select>
+        </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" jfor="field_foto">Foto</label><br/>
+            <input type="file" id="field_foto" accept="image/*" capture>    
+        </div>
 
         <div class="form-group">
             <div>

@@ -11,7 +11,7 @@ export const etapaRoute: Routes = [
         path: 'etapa-my-suffix',
         component: EtapaMySuffixComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.etapa.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const etapaRoute: Routes = [
         path: 'etapa-my-suffix/:id',
         component: EtapaMySuffixDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.etapa.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -31,7 +31,7 @@ export const etapaPopupRoute: Routes = [
         path: 'etapa-my-suffix-new',
         component: EtapaMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.etapa.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -41,7 +41,7 @@ export const etapaPopupRoute: Routes = [
         path: 'etapa-my-suffix/:id/edit',
         component: EtapaMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.etapa.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const etapaPopupRoute: Routes = [
         path: 'etapa-my-suffix/:id/delete',
         component: EtapaMySuffixDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.etapa.home.title'
         },
         canActivate: [UserRouteAccessService],

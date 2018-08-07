@@ -2,6 +2,7 @@ package com.upcn.service.impl;
 
 import com.upcn.service.InspeccionService;
 import com.upcn.domain.Inspeccion;
+import com.upcn.repository.EstadoRepository;
 import com.upcn.repository.InspeccionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,9 +22,11 @@ public class InspeccionServiceImpl implements InspeccionService {
     private final Logger log = LoggerFactory.getLogger(InspeccionServiceImpl.class);
 
     private final InspeccionRepository inspeccionRepository;
+    private final EstadoRepository estadoRepository;
 
-    public InspeccionServiceImpl(InspeccionRepository inspeccionRepository) {
+    public InspeccionServiceImpl(InspeccionRepository inspeccionRepository, EstadoRepository estadoRepository) {
         this.inspeccionRepository = inspeccionRepository;
+        this.estadoRepository = estadoRepository;
     }
 
     /**
@@ -35,6 +38,17 @@ public class InspeccionServiceImpl implements InspeccionService {
     @Override
     public Inspeccion save(Inspeccion inspeccion) {
         log.debug("Request to save Inspeccion : {}", inspeccion);
+        if(inspeccion.getOrden()==null) {
+            long max = 0;
+            for(Inspeccion i : inspeccionRepository.findAll()) {
+                if(i.getEtapa().getId() == inspeccion.getEtapa().getId() && i.getOrden() > max)
+                    max = i.getOrden();
+            }
+            inspeccion.setOrden(max+1);
+        }
+        if(inspeccion.getEstado()==null)
+            inspeccion.setEstado(estadoRepository.findOne(1l));
+
         return inspeccionRepository.save(inspeccion);
     }
 

@@ -18,6 +18,7 @@
             },
             "descripcion": "Descripcion",
             "costo": "Costo",
+            "usaMedidor": "Usa Medidor",
             "inspeccion": "Inspeccion"
         }
     }

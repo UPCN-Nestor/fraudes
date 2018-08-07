@@ -44,6 +44,9 @@ public class MaterialResourceIntTest {
     private static final String DEFAULT_DESCRIPCION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPCION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_CODIGO = "AAAAAAAAAA";
+    private static final String UPDATED_CODIGO = "BBBBBBBBBB";
+
     @Autowired
     private MaterialRepository materialRepository;
 
@@ -88,7 +91,8 @@ public class MaterialResourceIntTest {
      */
     public static Material createEntity(EntityManager em) {
         Material material = new Material()
-            .descripcion(DEFAULT_DESCRIPCION);
+            .descripcion(DEFAULT_DESCRIPCION)
+            .codigo(DEFAULT_CODIGO);
         return material;
     }
 
@@ -113,6 +117,7 @@ public class MaterialResourceIntTest {
         assertThat(materialList).hasSize(databaseSizeBeforeCreate + 1);
         Material testMaterial = materialList.get(materialList.size() - 1);
         assertThat(testMaterial.getDescripcion()).isEqualTo(DEFAULT_DESCRIPCION);
+        assertThat(testMaterial.getCodigo()).isEqualTo(DEFAULT_CODIGO);
     }
 
     @Test
@@ -145,7 +150,8 @@ public class MaterialResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(material.getId().intValue())))
-            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())));
+            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())))
+            .andExpect(jsonPath("$.[*].codigo").value(hasItem(DEFAULT_CODIGO.toString())));
     }
 
     @Test
@@ -159,7 +165,8 @@ public class MaterialResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(material.getId().intValue()))
-            .andExpect(jsonPath("$.descripcion").value(DEFAULT_DESCRIPCION.toString()));
+            .andExpect(jsonPath("$.descripcion").value(DEFAULT_DESCRIPCION.toString()))
+            .andExpect(jsonPath("$.codigo").value(DEFAULT_CODIGO.toString()));
     }
 
     @Test
@@ -200,6 +207,45 @@ public class MaterialResourceIntTest {
         // Get all the materialList where descripcion is null
         defaultMaterialShouldNotBeFound("descripcion.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCodigoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where codigo equals to DEFAULT_CODIGO
+        defaultMaterialShouldBeFound("codigo.equals=" + DEFAULT_CODIGO);
+
+        // Get all the materialList where codigo equals to UPDATED_CODIGO
+        defaultMaterialShouldNotBeFound("codigo.equals=" + UPDATED_CODIGO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCodigoIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where codigo in DEFAULT_CODIGO or UPDATED_CODIGO
+        defaultMaterialShouldBeFound("codigo.in=" + DEFAULT_CODIGO + "," + UPDATED_CODIGO);
+
+        // Get all the materialList where codigo equals to UPDATED_CODIGO
+        defaultMaterialShouldNotBeFound("codigo.in=" + UPDATED_CODIGO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCodigoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where codigo is not null
+        defaultMaterialShouldBeFound("codigo.specified=true");
+
+        // Get all the materialList where codigo is null
+        defaultMaterialShouldNotBeFound("codigo.specified=false");
+    }
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -208,7 +254,8 @@ public class MaterialResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(material.getId().intValue())))
-            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())));
+            .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())))
+            .andExpect(jsonPath("$.[*].codigo").value(hasItem(DEFAULT_CODIGO.toString())));
     }
 
     /**
@@ -244,7 +291,8 @@ public class MaterialResourceIntTest {
         // Disconnect from session so that the updates on updatedMaterial are not directly saved in db
         em.detach(updatedMaterial);
         updatedMaterial
-            .descripcion(UPDATED_DESCRIPCION);
+            .descripcion(UPDATED_DESCRIPCION)
+            .codigo(UPDATED_CODIGO);
 
         restMaterialMockMvc.perform(put("/api/materials")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -256,6 +304,7 @@ public class MaterialResourceIntTest {
         assertThat(materialList).hasSize(databaseSizeBeforeUpdate);
         Material testMaterial = materialList.get(materialList.size() - 1);
         assertThat(testMaterial.getDescripcion()).isEqualTo(UPDATED_DESCRIPCION);
+        assertThat(testMaterial.getCodigo()).isEqualTo(UPDATED_CODIGO);
     }
 
     @Test

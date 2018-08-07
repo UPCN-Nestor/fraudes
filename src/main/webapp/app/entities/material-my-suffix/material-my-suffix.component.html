@@ -18,6 +18,7 @@
             <tr>
             <th><span jhiTranslate="global.field.id">ID</span></th>
             <th><span jhiTranslate="frApp.material.descripcion">Descripcion</span></th>
+            <th><span jhiTranslate="frApp.material.codigo">Codigo</span></th>
             <th></th>
             </tr>
             </thead>
@@ -25,6 +26,7 @@
             <tr *ngFor="let material of materials ;trackBy: trackId">
                 <td><a [routerLink]="['../material-my-suffix', material.id ]">{{material.id}}</a></td>
                 <td>{{material.descripcion}}</td>
+                <td>{{material.codigo}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

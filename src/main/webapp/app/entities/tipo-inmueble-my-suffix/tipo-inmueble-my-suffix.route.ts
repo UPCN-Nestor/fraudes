@@ -11,7 +11,7 @@ export const tipoInmuebleRoute: Routes = [
         path: 'tipo-inmueble-my-suffix',
         component: TipoInmuebleMySuffixComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.tipoInmueble.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const tipoInmuebleRoute: Routes = [
         path: 'tipo-inmueble-my-suffix/:id',
         component: TipoInmuebleMySuffixDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.tipoInmueble.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -31,7 +31,7 @@ export const tipoInmueblePopupRoute: Routes = [
         path: 'tipo-inmueble-my-suffix-new',
         component: TipoInmuebleMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.tipoInmueble.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -41,7 +41,7 @@ export const tipoInmueblePopupRoute: Routes = [
         path: 'tipo-inmueble-my-suffix/:id/edit',
         component: TipoInmuebleMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.tipoInmueble.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const tipoInmueblePopupRoute: Routes = [
         path: 'tipo-inmueble-my-suffix/:id/delete',
         component: TipoInmuebleMySuffixDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.tipoInmueble.home.title'
         },
         canActivate: [UserRouteAccessService],

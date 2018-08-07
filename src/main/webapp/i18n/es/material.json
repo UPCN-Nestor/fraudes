@@ -16,7 +16,8 @@
             "detail": {
                 "title": "Material"
             },
-            "descripcion": "Descripcion"
+            "descripcion": "Descripcion",
+            "codigo": "Codigo"
         }
     }
 }

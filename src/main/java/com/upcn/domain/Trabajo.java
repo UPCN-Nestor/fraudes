@@ -31,6 +31,9 @@ public class Trabajo implements Serializable {
     @Column(name = "costo")
     private Float costo;
 
+    @Column(name = "usa_medidor")
+    private Boolean usaMedidor;
+
     @ManyToMany(mappedBy = "trabajos")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -69,6 +72,19 @@ public class Trabajo implements Serializable {
 
     public void setCosto(Float costo) {
         this.costo = costo;
+    }
+
+    public Boolean isUsaMedidor() {
+        return usaMedidor;
+    }
+
+    public Trabajo usaMedidor(Boolean usaMedidor) {
+        this.usaMedidor = usaMedidor;
+        return this;
+    }
+
+    public void setUsaMedidor(Boolean usaMedidor) {
+        this.usaMedidor = usaMedidor;
     }
 
     public Set<Inspeccion> getInspeccions() {
@@ -123,6 +139,7 @@ public class Trabajo implements Serializable {
             "id=" + getId() +
             ", descripcion='" + getDescripcion() + "'" +
             ", costo=" + getCosto() +
+            ", usaMedidor='" + isUsaMedidor() + "'" +
             "}";
     }
 }

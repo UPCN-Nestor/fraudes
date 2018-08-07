@@ -11,7 +11,7 @@ export const estadoRoute: Routes = [
         path: 'estado-my-suffix',
         component: EstadoMySuffixComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.estado.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const estadoRoute: Routes = [
         path: 'estado-my-suffix/:id',
         component: EstadoMySuffixDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.estado.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -31,7 +31,7 @@ export const estadoPopupRoute: Routes = [
         path: 'estado-my-suffix-new',
         component: EstadoMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.estado.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -41,7 +41,7 @@ export const estadoPopupRoute: Routes = [
         path: 'estado-my-suffix/:id/edit',
         component: EstadoMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.estado.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const estadoPopupRoute: Routes = [
         path: 'estado-my-suffix/:id/delete',
         component: EstadoMySuffixDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.estado.home.title'
         },
         canActivate: [UserRouteAccessService],

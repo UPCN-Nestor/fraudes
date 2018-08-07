@@ -17,6 +17,10 @@
         {
             "fieldName": "costo",
             "fieldType": "Float"
+        },
+        {
+            "fieldName": "usaMedidor",
+            "fieldType": "Boolean"
         }
     ],
     "changelogDate": "20180618141326",

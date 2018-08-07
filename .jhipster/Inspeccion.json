@@ -40,6 +40,14 @@
             "relationshipName": "tipoInmueble",
             "otherEntityName": "tipoInmueble",
             "otherEntityField": "descripcion"
+        },
+        {
+            "relationshipName": "medidorNuevo",
+            "otherEntityName": "medidor",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "numero",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "inspeccion"
         }
     ],
     "fields": [
@@ -62,6 +70,18 @@
         {
             "fieldName": "fechahora",
             "fieldType": "Instant"
+        },
+        {
+            "fieldName": "medidorInstalado",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "ultimaLectura",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "medidorRetirado",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20180618120049",
