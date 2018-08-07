@@ -17,12 +17,6 @@ import { EstadoMySuffix, EstadoMySuffixService } from '../estado-my-suffix';
 import { TipoInmuebleMySuffix, TipoInmuebleMySuffixService } from '../tipo-inmueble-my-suffix';
 import { Medidor, MedidorService } from '../medidor';
 
-import { Principal } from '../../shared';
-
-import {MultiSelectModule} from 'primeng/multiselect';
-import { SelectItem } from 'primeng/api';
-import {SelectButtonModule} from 'primeng/selectbutton';
-
 @Component({
     selector: 'jhi-inspeccion-my-suffix-dialog',
     templateUrl: './inspeccion-my-suffix-dialog.component.html'
@@ -46,8 +40,6 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
 
     medidornuevos: Medidor[];
 
-	currentAccount: any;
-
     constructor(
         public activeModal: NgbActiveModal,
         private jhiAlertService: JhiAlertService,
@@ -59,38 +51,20 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         private estadoService: EstadoMySuffixService,
         private tipoInmuebleService: TipoInmuebleMySuffixService,
         private medidorService: MedidorService,
-        private eventManager: JhiEventManager,
-		private principal: Principal
+        private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
-        this.principal.identity().then((account) => {
-            this.currentAccount = account;
-            this.inspeccion.usuario = this.currentAccount.login;
-        });
-
-        //this.pruebas = [{label:'x', value:'xx'}, {label:'y', value: 'yy'}];
-        //this.prueba = ['xx'];
-
         this.isSaving = false;
         this.anomaliaService.query()
             .subscribe((res: HttpResponse<AnomaliaMySuffix[]>) => { this.anomalias = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.trabajoService.query()
-            .subscribe((res: HttpResponse<TrabajoMySuffix[]>) => { 
-                this.trabajos = res.body;
-            }, (res: HttpErrorResponse) => this.onError(res.message));
+            .subscribe((res: HttpResponse<TrabajoMySuffix[]>) => { this.trabajos = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.inmuebleService.query()
             .subscribe((res: HttpResponse<InmuebleMySuffix[]>) => { this.inmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.etapaService.query()
-            .subscribe((res: HttpResponse<EtapaMySuffix[]>) => { 
-                this.etapas = res.body; 
-                if(!this.inspeccion.id) {
-
-                    this.inspeccion.etapa = <EtapaMySuffix>(this.etapas.filter(x=>x.numero==0)[0]);
-                    //alert(this.etapas.filter(x=>x.numero==0).numero);
-                }
-            }, (res: HttpErrorResponse) => this.onError(res.message));
+            .subscribe((res: HttpResponse<EtapaMySuffix[]>) => { this.etapas = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.estadoService.query()
             .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { this.estados = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.tipoInmuebleService.query()
@@ -108,33 +82,6 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
                         }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
             }, (res: HttpErrorResponse) => this.onError(res.message));
-
-	    var d = new Date(); 
-        d.setTime(d.getTime() - (3*60*60*1000)); 
-        var dd = d.toISOString();
-        this.inspeccion.fechahora = dd.substring(0,dd.length-5);
-    }
-
-    getAnomalias() : SelectItem[] {
-        return this.anomalias ? this.anomalias.map(x=><SelectItem>{label:x.descripcion, value:x}) : [];
-    }
-
-    getNombre() : string {
-        if(this.inspeccion.etapa.id==0)
-            return 'Excepcional';
-        else
-            return '' + this.etapas.filter(e=> e.id == this.inspeccion.etapa.id)[0].numero + '/' + this.inspeccion.orden;
-    }
-
-    usaMedidor() : boolean {
-        if(this.inspeccion.trabajos==null) 
-            return false;
-        return this.inspeccion.trabajos.filter(x=>this.trabajos.find(t=>t.id==x.id).usaMedidor==true).length > 0;
-    }
-
-
-    str(obj) {
-        return JSON.stringify(obj);
     }
 
     clear() {

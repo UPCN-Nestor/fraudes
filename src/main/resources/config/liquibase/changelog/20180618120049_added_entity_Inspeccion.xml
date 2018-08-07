@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="autoIncrement" value="true"/>
+
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql"/>
+
+    <!--
+        Added the entity Inspeccion.
+    -->
+    <changeSet id="20180618120049-1" author="jhipster">
+        <createTable tableName="inspeccion">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="orden" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="observaciones" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="deshabitada" type="bit">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="usuario" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="fechahora" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="medidor_instalado" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="ultima_lectura" type="${floatType}">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="medidor_retirado" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="socio" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="suministro" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="nombre" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="tarifa" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="mts_cable" type="${floatType}">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="inmueble_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="etapa_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="estado_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="tipo_inmueble_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="medidor_nuevo_id" type="bigint">
+                <constraints unique="true" nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        <dropDefaultValue tableName="inspeccion" columnName="fechahora" columnDataType="datetime"/>
+        
+        <createTable tableName="inspeccion_anomalia_medidor">
+            <column name="anomalia_medidors_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inspeccions_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="inspeccions_id, anomalia_medidors_id" tableName="inspeccion_anomalia_medidor"/>
+        
+        <createTable tableName="inspeccion_trabajo">
+            <column name="trabajos_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inspeccions_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="inspeccions_id, trabajos_id" tableName="inspeccion_trabajo"/>
+        
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+</databaseChangeLog>

@@ -96,6 +96,21 @@ public class InspeccionQueryService extends QueryService<Inspeccion> {
             if (criteria.getMedidorRetirado() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getMedidorRetirado(), Inspeccion_.medidorRetirado));
             }
+            if (criteria.getSocio() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getSocio(), Inspeccion_.socio));
+            }
+            if (criteria.getSuministro() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getSuministro(), Inspeccion_.suministro));
+            }
+            if (criteria.getNombre() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getNombre(), Inspeccion_.nombre));
+            }
+            if (criteria.getTarifa() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getTarifa(), Inspeccion_.tarifa));
+            }
+            if (criteria.getMtsCable() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getMtsCable(), Inspeccion_.mtsCable));
+            }
             if (criteria.getAnomaliaMedidorId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getAnomaliaMedidorId(), Inspeccion_.anomaliaMedidors, Anomalia_.id));
             }

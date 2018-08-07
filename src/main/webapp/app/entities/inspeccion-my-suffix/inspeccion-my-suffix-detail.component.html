@@ -24,6 +24,38 @@
         <dd>
             <span>{{inspeccion.fechahora | date:'medium'}}</span>
         </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.medidorInstalado">Medidor Instalado</span></dt>
+        <dd>
+            <span>{{inspeccion.medidorInstalado}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.ultimaLectura">Ultima Lectura</span></dt>
+        <dd>
+            <span>{{inspeccion.ultimaLectura}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.medidorRetirado">Medidor Retirado</span></dt>
+        <dd>
+            <span>{{inspeccion.medidorRetirado}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.socio">Socio</span></dt>
+        <dd>
+            <span>{{inspeccion.socio}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.suministro">Suministro</span></dt>
+        <dd>
+            <span>{{inspeccion.suministro}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.nombre">Nombre</span></dt>
+        <dd>
+            <span>{{inspeccion.nombre}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.tarifa">Tarifa</span></dt>
+        <dd>
+            <span>{{inspeccion.tarifa}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.mtsCable">Mts Cable</span></dt>
+        <dd>
+            <span>{{inspeccion.mtsCable}}</span>
+        </dd>
         <dt><span jhiTranslate="frApp.inspeccion.anomaliaMedidor">Anomalia Medidor</span></dt>
         <dd>
             <span *ngFor="let anomaliaMedidor of inspeccion.anomaliaMedidors; let last = last">
@@ -60,9 +92,14 @@
                 <a [routerLink]="['/tipo-inmueble-my-suffix', inspeccion.tipoInmueble?.id]">{{inspeccion.tipoInmueble?.descripcion}}</a>
             </div>
         </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.medidorNuevo">Medidor Nuevo</span></dt>
+        <dd>
+            <div *ngIf="inspeccion.medidorNuevo">
+                <a [routerLink]="['/medidor', inspeccion.medidorNuevo?.id]">{{inspeccion.medidorNuevo?.numero}}</a>
+            </div>
+        </dd>
     </dl>
 
-  
     <button type="submit"
             (click)="previousState()"
             class="btn btn-info">

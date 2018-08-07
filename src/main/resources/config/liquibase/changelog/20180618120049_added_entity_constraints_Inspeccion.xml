@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity Inspeccion.
+    -->
+    <changeSet id="20180618120049-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="inspeccions_id"
+                                 baseTableName="inspeccion_anomalia_medidor"
+                                 constraintName="fk_inspeccion_anomalia_medidor_inspeccions_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspeccion"/>
+        <addForeignKeyConstraint baseColumnNames="anomalia_medidors_id"
+                                 baseTableName="inspeccion_anomalia_medidor"
+                                 constraintName="fk_inspeccion_anomalia_medidor_anomalia_medidors_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="anomalia"/>
+        
+        <addForeignKeyConstraint baseColumnNames="inspeccions_id"
+                                 baseTableName="inspeccion_trabajo"
+                                 constraintName="fk_inspeccion_trabajo_inspeccions_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inspeccion"/>
+        <addForeignKeyConstraint baseColumnNames="trabajos_id"
+                                 baseTableName="inspeccion_trabajo"
+                                 constraintName="fk_inspeccion_trabajo_trabajos_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="trabajo"/>
+        
+        <addForeignKeyConstraint baseColumnNames="inmueble_id"
+                                 baseTableName="inspeccion"
+                                 constraintName="fk_inspeccion_inmueble_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="inmueble"/>
+
+        <addForeignKeyConstraint baseColumnNames="etapa_id"
+                                 baseTableName="inspeccion"
+                                 constraintName="fk_inspeccion_etapa_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="etapa"/>
+
+        <addForeignKeyConstraint baseColumnNames="estado_id"
+                                 baseTableName="inspeccion"
+                                 constraintName="fk_inspeccion_estado_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="estado"/>
+
+        <addForeignKeyConstraint baseColumnNames="tipo_inmueble_id"
+                                 baseTableName="inspeccion"
+                                 constraintName="fk_inspeccion_tipo_inmueble_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="tipo_inmueble"/>
+
+        <addForeignKeyConstraint baseColumnNames="medidor_nuevo_id"
+                                 baseTableName="inspeccion"
+                                 constraintName="fk_inspeccion_medidor_nuevo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="medidor"/>
+
+    </changeSet>
+</databaseChangeLog>

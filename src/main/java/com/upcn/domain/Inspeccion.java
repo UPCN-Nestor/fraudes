@@ -49,6 +49,21 @@ public class Inspeccion implements Serializable {
     @Column(name = "medidor_retirado")
     private String medidorRetirado;
 
+    @Column(name = "socio")
+    private Integer socio;
+
+    @Column(name = "suministro")
+    private Integer suministro;
+
+    @Column(name = "nombre")
+    private String nombre;
+
+    @Column(name = "tarifa")
+    private String tarifa;
+
+    @Column(name = "mts_cable")
+    private Float mtsCable;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "inspeccion_anomalia_medidor",
@@ -190,6 +205,71 @@ public class Inspeccion implements Serializable {
 
     public void setMedidorRetirado(String medidorRetirado) {
         this.medidorRetirado = medidorRetirado;
+    }
+
+    public Integer getSocio() {
+        return socio;
+    }
+
+    public Inspeccion socio(Integer socio) {
+        this.socio = socio;
+        return this;
+    }
+
+    public void setSocio(Integer socio) {
+        this.socio = socio;
+    }
+
+    public Integer getSuministro() {
+        return suministro;
+    }
+
+    public Inspeccion suministro(Integer suministro) {
+        this.suministro = suministro;
+        return this;
+    }
+
+    public void setSuministro(Integer suministro) {
+        this.suministro = suministro;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Inspeccion nombre(String nombre) {
+        this.nombre = nombre;
+        return this;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTarifa() {
+        return tarifa;
+    }
+
+    public Inspeccion tarifa(String tarifa) {
+        this.tarifa = tarifa;
+        return this;
+    }
+
+    public void setTarifa(String tarifa) {
+        this.tarifa = tarifa;
+    }
+
+    public Float getMtsCable() {
+        return mtsCable;
+    }
+
+    public Inspeccion mtsCable(Float mtsCable) {
+        this.mtsCable = mtsCable;
+        return this;
+    }
+
+    public void setMtsCable(Float mtsCable) {
+        this.mtsCable = mtsCable;
     }
 
     public Set<Anomalia> getAnomaliaMedidors() {
@@ -340,6 +420,11 @@ public class Inspeccion implements Serializable {
             ", medidorInstalado='" + getMedidorInstalado() + "'" +
             ", ultimaLectura=" + getUltimaLectura() +
             ", medidorRetirado='" + getMedidorRetirado() + "'" +
+            ", socio=" + getSocio() +
+            ", suministro=" + getSuministro() +
+            ", nombre='" + getNombre() + "'" +
+            ", tarifa='" + getTarifa() + "'" +
+            ", mtsCable=" + getMtsCable() +
             "}";
     }
 }

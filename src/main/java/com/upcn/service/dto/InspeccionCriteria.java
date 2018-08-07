@@ -44,6 +44,16 @@ public class InspeccionCriteria implements Serializable {
 
     private StringFilter medidorRetirado;
 
+    private IntegerFilter socio;
+
+    private IntegerFilter suministro;
+
+    private StringFilter nombre;
+
+    private StringFilter tarifa;
+
+    private FloatFilter mtsCable;
+
     private LongFilter anomaliaMedidorId;
 
     private LongFilter trabajoId;
@@ -133,6 +143,46 @@ public class InspeccionCriteria implements Serializable {
         this.medidorRetirado = medidorRetirado;
     }
 
+    public IntegerFilter getSocio() {
+        return socio;
+    }
+
+    public void setSocio(IntegerFilter socio) {
+        this.socio = socio;
+    }
+
+    public IntegerFilter getSuministro() {
+        return suministro;
+    }
+
+    public void setSuministro(IntegerFilter suministro) {
+        this.suministro = suministro;
+    }
+
+    public StringFilter getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(StringFilter nombre) {
+        this.nombre = nombre;
+    }
+
+    public StringFilter getTarifa() {
+        return tarifa;
+    }
+
+    public void setTarifa(StringFilter tarifa) {
+        this.tarifa = tarifa;
+    }
+
+    public FloatFilter getMtsCable() {
+        return mtsCable;
+    }
+
+    public void setMtsCable(FloatFilter mtsCable) {
+        this.mtsCable = mtsCable;
+    }
+
     public LongFilter getAnomaliaMedidorId() {
         return anomaliaMedidorId;
     }
@@ -201,6 +251,11 @@ public class InspeccionCriteria implements Serializable {
                 (medidorInstalado != null ? "medidorInstalado=" + medidorInstalado + ", " : "") +
                 (ultimaLectura != null ? "ultimaLectura=" + ultimaLectura + ", " : "") +
                 (medidorRetirado != null ? "medidorRetirado=" + medidorRetirado + ", " : "") +
+                (socio != null ? "socio=" + socio + ", " : "") +
+                (suministro != null ? "suministro=" + suministro + ", " : "") +
+                (nombre != null ? "nombre=" + nombre + ", " : "") +
+                (tarifa != null ? "tarifa=" + tarifa + ", " : "") +
+                (mtsCable != null ? "mtsCable=" + mtsCable + ", " : "") +
                 (anomaliaMedidorId != null ? "anomaliaMedidorId=" + anomaliaMedidorId + ", " : "") +
                 (trabajoId != null ? "trabajoId=" + trabajoId + ", " : "") +
                 (inmuebleId != null ? "inmuebleId=" + inmuebleId + ", " : "") +

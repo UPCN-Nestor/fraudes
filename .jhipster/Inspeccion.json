@@ -82,6 +82,26 @@
         {
             "fieldName": "medidorRetirado",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "socio",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "suministro",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "nombre",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "tarifa",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mtsCable",
+            "fieldType": "Float"
         }
     ],
     "changelogDate": "20180618120049",

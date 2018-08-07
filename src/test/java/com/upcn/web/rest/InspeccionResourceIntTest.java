@@ -74,6 +74,21 @@ public class InspeccionResourceIntTest {
     private static final String DEFAULT_MEDIDOR_RETIRADO = "AAAAAAAAAA";
     private static final String UPDATED_MEDIDOR_RETIRADO = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_SOCIO = 1;
+    private static final Integer UPDATED_SOCIO = 2;
+
+    private static final Integer DEFAULT_SUMINISTRO = 1;
+    private static final Integer UPDATED_SUMINISTRO = 2;
+
+    private static final String DEFAULT_NOMBRE = "AAAAAAAAAA";
+    private static final String UPDATED_NOMBRE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_TARIFA = "AAAAAAAAAA";
+    private static final String UPDATED_TARIFA = "BBBBBBBBBB";
+
+    private static final Float DEFAULT_MTS_CABLE = 1F;
+    private static final Float UPDATED_MTS_CABLE = 2F;
+
     @Autowired
     private InspeccionRepository inspeccionRepository;
 
@@ -125,7 +140,12 @@ public class InspeccionResourceIntTest {
             .fechahora(DEFAULT_FECHAHORA)
             .medidorInstalado(DEFAULT_MEDIDOR_INSTALADO)
             .ultimaLectura(DEFAULT_ULTIMA_LECTURA)
-            .medidorRetirado(DEFAULT_MEDIDOR_RETIRADO);
+            .medidorRetirado(DEFAULT_MEDIDOR_RETIRADO)
+            .socio(DEFAULT_SOCIO)
+            .suministro(DEFAULT_SUMINISTRO)
+            .nombre(DEFAULT_NOMBRE)
+            .tarifa(DEFAULT_TARIFA)
+            .mtsCable(DEFAULT_MTS_CABLE);
         return inspeccion;
     }
 
@@ -157,6 +177,11 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getMedidorInstalado()).isEqualTo(DEFAULT_MEDIDOR_INSTALADO);
         assertThat(testInspeccion.getUltimaLectura()).isEqualTo(DEFAULT_ULTIMA_LECTURA);
         assertThat(testInspeccion.getMedidorRetirado()).isEqualTo(DEFAULT_MEDIDOR_RETIRADO);
+        assertThat(testInspeccion.getSocio()).isEqualTo(DEFAULT_SOCIO);
+        assertThat(testInspeccion.getSuministro()).isEqualTo(DEFAULT_SUMINISTRO);
+        assertThat(testInspeccion.getNombre()).isEqualTo(DEFAULT_NOMBRE);
+        assertThat(testInspeccion.getTarifa()).isEqualTo(DEFAULT_TARIFA);
+        assertThat(testInspeccion.getMtsCable()).isEqualTo(DEFAULT_MTS_CABLE);
     }
 
     @Test
@@ -196,7 +221,12 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].fechahora").value(hasItem(DEFAULT_FECHAHORA.toString())))
             .andExpect(jsonPath("$.[*].medidorInstalado").value(hasItem(DEFAULT_MEDIDOR_INSTALADO.toString())))
             .andExpect(jsonPath("$.[*].ultimaLectura").value(hasItem(DEFAULT_ULTIMA_LECTURA.doubleValue())))
-            .andExpect(jsonPath("$.[*].medidorRetirado").value(hasItem(DEFAULT_MEDIDOR_RETIRADO.toString())));
+            .andExpect(jsonPath("$.[*].medidorRetirado").value(hasItem(DEFAULT_MEDIDOR_RETIRADO.toString())))
+            .andExpect(jsonPath("$.[*].socio").value(hasItem(DEFAULT_SOCIO)))
+            .andExpect(jsonPath("$.[*].suministro").value(hasItem(DEFAULT_SUMINISTRO)))
+            .andExpect(jsonPath("$.[*].nombre").value(hasItem(DEFAULT_NOMBRE.toString())))
+            .andExpect(jsonPath("$.[*].tarifa").value(hasItem(DEFAULT_TARIFA.toString())))
+            .andExpect(jsonPath("$.[*].mtsCable").value(hasItem(DEFAULT_MTS_CABLE.doubleValue())));
     }
 
     @Test
@@ -217,7 +247,12 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.fechahora").value(DEFAULT_FECHAHORA.toString()))
             .andExpect(jsonPath("$.medidorInstalado").value(DEFAULT_MEDIDOR_INSTALADO.toString()))
             .andExpect(jsonPath("$.ultimaLectura").value(DEFAULT_ULTIMA_LECTURA.doubleValue()))
-            .andExpect(jsonPath("$.medidorRetirado").value(DEFAULT_MEDIDOR_RETIRADO.toString()));
+            .andExpect(jsonPath("$.medidorRetirado").value(DEFAULT_MEDIDOR_RETIRADO.toString()))
+            .andExpect(jsonPath("$.socio").value(DEFAULT_SOCIO))
+            .andExpect(jsonPath("$.suministro").value(DEFAULT_SUMINISTRO))
+            .andExpect(jsonPath("$.nombre").value(DEFAULT_NOMBRE.toString()))
+            .andExpect(jsonPath("$.tarifa").value(DEFAULT_TARIFA.toString()))
+            .andExpect(jsonPath("$.mtsCable").value(DEFAULT_MTS_CABLE.doubleValue()));
     }
 
     @Test
@@ -561,6 +596,255 @@ public class InspeccionResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllInspeccionsBySocioIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where socio equals to DEFAULT_SOCIO
+        defaultInspeccionShouldBeFound("socio.equals=" + DEFAULT_SOCIO);
+
+        // Get all the inspeccionList where socio equals to UPDATED_SOCIO
+        defaultInspeccionShouldNotBeFound("socio.equals=" + UPDATED_SOCIO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsBySocioIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where socio in DEFAULT_SOCIO or UPDATED_SOCIO
+        defaultInspeccionShouldBeFound("socio.in=" + DEFAULT_SOCIO + "," + UPDATED_SOCIO);
+
+        // Get all the inspeccionList where socio equals to UPDATED_SOCIO
+        defaultInspeccionShouldNotBeFound("socio.in=" + UPDATED_SOCIO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsBySocioIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where socio is not null
+        defaultInspeccionShouldBeFound("socio.specified=true");
+
+        // Get all the inspeccionList where socio is null
+        defaultInspeccionShouldNotBeFound("socio.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsBySocioIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where socio greater than or equals to DEFAULT_SOCIO
+        defaultInspeccionShouldBeFound("socio.greaterOrEqualThan=" + DEFAULT_SOCIO);
+
+        // Get all the inspeccionList where socio greater than or equals to UPDATED_SOCIO
+        defaultInspeccionShouldNotBeFound("socio.greaterOrEqualThan=" + UPDATED_SOCIO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsBySocioIsLessThanSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where socio less than or equals to DEFAULT_SOCIO
+        defaultInspeccionShouldNotBeFound("socio.lessThan=" + DEFAULT_SOCIO);
+
+        // Get all the inspeccionList where socio less than or equals to UPDATED_SOCIO
+        defaultInspeccionShouldBeFound("socio.lessThan=" + UPDATED_SOCIO);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsBySuministroIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where suministro equals to DEFAULT_SUMINISTRO
+        defaultInspeccionShouldBeFound("suministro.equals=" + DEFAULT_SUMINISTRO);
+
+        // Get all the inspeccionList where suministro equals to UPDATED_SUMINISTRO
+        defaultInspeccionShouldNotBeFound("suministro.equals=" + UPDATED_SUMINISTRO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsBySuministroIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where suministro in DEFAULT_SUMINISTRO or UPDATED_SUMINISTRO
+        defaultInspeccionShouldBeFound("suministro.in=" + DEFAULT_SUMINISTRO + "," + UPDATED_SUMINISTRO);
+
+        // Get all the inspeccionList where suministro equals to UPDATED_SUMINISTRO
+        defaultInspeccionShouldNotBeFound("suministro.in=" + UPDATED_SUMINISTRO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsBySuministroIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where suministro is not null
+        defaultInspeccionShouldBeFound("suministro.specified=true");
+
+        // Get all the inspeccionList where suministro is null
+        defaultInspeccionShouldNotBeFound("suministro.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsBySuministroIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where suministro greater than or equals to DEFAULT_SUMINISTRO
+        defaultInspeccionShouldBeFound("suministro.greaterOrEqualThan=" + DEFAULT_SUMINISTRO);
+
+        // Get all the inspeccionList where suministro greater than or equals to UPDATED_SUMINISTRO
+        defaultInspeccionShouldNotBeFound("suministro.greaterOrEqualThan=" + UPDATED_SUMINISTRO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsBySuministroIsLessThanSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where suministro less than or equals to DEFAULT_SUMINISTRO
+        defaultInspeccionShouldNotBeFound("suministro.lessThan=" + DEFAULT_SUMINISTRO);
+
+        // Get all the inspeccionList where suministro less than or equals to UPDATED_SUMINISTRO
+        defaultInspeccionShouldBeFound("suministro.lessThan=" + UPDATED_SUMINISTRO);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByNombreIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where nombre equals to DEFAULT_NOMBRE
+        defaultInspeccionShouldBeFound("nombre.equals=" + DEFAULT_NOMBRE);
+
+        // Get all the inspeccionList where nombre equals to UPDATED_NOMBRE
+        defaultInspeccionShouldNotBeFound("nombre.equals=" + UPDATED_NOMBRE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByNombreIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where nombre in DEFAULT_NOMBRE or UPDATED_NOMBRE
+        defaultInspeccionShouldBeFound("nombre.in=" + DEFAULT_NOMBRE + "," + UPDATED_NOMBRE);
+
+        // Get all the inspeccionList where nombre equals to UPDATED_NOMBRE
+        defaultInspeccionShouldNotBeFound("nombre.in=" + UPDATED_NOMBRE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByNombreIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where nombre is not null
+        defaultInspeccionShouldBeFound("nombre.specified=true");
+
+        // Get all the inspeccionList where nombre is null
+        defaultInspeccionShouldNotBeFound("nombre.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByTarifaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where tarifa equals to DEFAULT_TARIFA
+        defaultInspeccionShouldBeFound("tarifa.equals=" + DEFAULT_TARIFA);
+
+        // Get all the inspeccionList where tarifa equals to UPDATED_TARIFA
+        defaultInspeccionShouldNotBeFound("tarifa.equals=" + UPDATED_TARIFA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByTarifaIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where tarifa in DEFAULT_TARIFA or UPDATED_TARIFA
+        defaultInspeccionShouldBeFound("tarifa.in=" + DEFAULT_TARIFA + "," + UPDATED_TARIFA);
+
+        // Get all the inspeccionList where tarifa equals to UPDATED_TARIFA
+        defaultInspeccionShouldNotBeFound("tarifa.in=" + UPDATED_TARIFA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByTarifaIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where tarifa is not null
+        defaultInspeccionShouldBeFound("tarifa.specified=true");
+
+        // Get all the inspeccionList where tarifa is null
+        defaultInspeccionShouldNotBeFound("tarifa.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMtsCableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where mtsCable equals to DEFAULT_MTS_CABLE
+        defaultInspeccionShouldBeFound("mtsCable.equals=" + DEFAULT_MTS_CABLE);
+
+        // Get all the inspeccionList where mtsCable equals to UPDATED_MTS_CABLE
+        defaultInspeccionShouldNotBeFound("mtsCable.equals=" + UPDATED_MTS_CABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMtsCableIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where mtsCable in DEFAULT_MTS_CABLE or UPDATED_MTS_CABLE
+        defaultInspeccionShouldBeFound("mtsCable.in=" + DEFAULT_MTS_CABLE + "," + UPDATED_MTS_CABLE);
+
+        // Get all the inspeccionList where mtsCable equals to UPDATED_MTS_CABLE
+        defaultInspeccionShouldNotBeFound("mtsCable.in=" + UPDATED_MTS_CABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMtsCableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where mtsCable is not null
+        defaultInspeccionShouldBeFound("mtsCable.specified=true");
+
+        // Get all the inspeccionList where mtsCable is null
+        defaultInspeccionShouldNotBeFound("mtsCable.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllInspeccionsByAnomaliaMedidorIsEqualToSomething() throws Exception {
         // Initialize the database
         Anomalia anomaliaMedidor = AnomaliaResourceIntTest.createEntity(em);
@@ -706,7 +990,12 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].fechahora").value(hasItem(DEFAULT_FECHAHORA.toString())))
             .andExpect(jsonPath("$.[*].medidorInstalado").value(hasItem(DEFAULT_MEDIDOR_INSTALADO.toString())))
             .andExpect(jsonPath("$.[*].ultimaLectura").value(hasItem(DEFAULT_ULTIMA_LECTURA.doubleValue())))
-            .andExpect(jsonPath("$.[*].medidorRetirado").value(hasItem(DEFAULT_MEDIDOR_RETIRADO.toString())));
+            .andExpect(jsonPath("$.[*].medidorRetirado").value(hasItem(DEFAULT_MEDIDOR_RETIRADO.toString())))
+            .andExpect(jsonPath("$.[*].socio").value(hasItem(DEFAULT_SOCIO)))
+            .andExpect(jsonPath("$.[*].suministro").value(hasItem(DEFAULT_SUMINISTRO)))
+            .andExpect(jsonPath("$.[*].nombre").value(hasItem(DEFAULT_NOMBRE.toString())))
+            .andExpect(jsonPath("$.[*].tarifa").value(hasItem(DEFAULT_TARIFA.toString())))
+            .andExpect(jsonPath("$.[*].mtsCable").value(hasItem(DEFAULT_MTS_CABLE.doubleValue())));
     }
 
     /**
@@ -749,7 +1038,12 @@ public class InspeccionResourceIntTest {
             .fechahora(UPDATED_FECHAHORA)
             .medidorInstalado(UPDATED_MEDIDOR_INSTALADO)
             .ultimaLectura(UPDATED_ULTIMA_LECTURA)
-            .medidorRetirado(UPDATED_MEDIDOR_RETIRADO);
+            .medidorRetirado(UPDATED_MEDIDOR_RETIRADO)
+            .socio(UPDATED_SOCIO)
+            .suministro(UPDATED_SUMINISTRO)
+            .nombre(UPDATED_NOMBRE)
+            .tarifa(UPDATED_TARIFA)
+            .mtsCable(UPDATED_MTS_CABLE);
 
         restInspeccionMockMvc.perform(put("/api/inspeccions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -768,6 +1062,11 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getMedidorInstalado()).isEqualTo(UPDATED_MEDIDOR_INSTALADO);
         assertThat(testInspeccion.getUltimaLectura()).isEqualTo(UPDATED_ULTIMA_LECTURA);
         assertThat(testInspeccion.getMedidorRetirado()).isEqualTo(UPDATED_MEDIDOR_RETIRADO);
+        assertThat(testInspeccion.getSocio()).isEqualTo(UPDATED_SOCIO);
+        assertThat(testInspeccion.getSuministro()).isEqualTo(UPDATED_SUMINISTRO);
+        assertThat(testInspeccion.getNombre()).isEqualTo(UPDATED_NOMBRE);
+        assertThat(testInspeccion.getTarifa()).isEqualTo(UPDATED_TARIFA);
+        assertThat(testInspeccion.getMtsCable()).isEqualTo(UPDATED_MTS_CABLE);
     }
 
     @Test
