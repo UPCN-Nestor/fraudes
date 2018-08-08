@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
@@ -61,16 +61,25 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         private medidorService: MedidorService,
         private eventManager: JhiEventManager,
         private dataUtils: JhiDataUtils,
-		private principal: Principal
+        private principal: Principal,
+        private elementRef: ElementRef
     ) {
+    }
+ 
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
     }
 
     openFile(contentType, field) {
         return this.dataUtils.openFile(contentType, field);
     }
 
-    loadFoto(e) {
-        alert(e.target.data);
+    setFileData(event, entity, field, isImage) {
+        this.dataUtils.setFileData(event, entity, field, isImage);
+    }
+
+    clearInputImage(field: string, fieldContentType: string, idInput: string) {
+        this.dataUtils.clearInputImage(this.inspeccion, this.elementRef, field, fieldContentType, idInput);
     }
 
     ngOnInit() {
@@ -133,6 +142,19 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
             return 'Excepcional';
         else
             return '' + this.etapas.filter(e=> e.id == this.inspeccion.etapa.id)[0].numero + '/' + this.inspeccion.orden;
+    }
+
+    usaCable() : boolean {
+        let usa = false;
+        if(this.inspeccion.trabajos.filter(x=>this.trabajos.find(t=>t.id==x.id).usaCable==true).length > 0)
+            usa = true;
+
+        if(usa)
+            this.inspeccion.mtsCable = 7;
+        else
+            this.inspeccion.mtsCable = 0;
+            
+        return usa;
     }
 
     usaMedidor() : boolean {

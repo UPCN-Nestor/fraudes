@@ -68,7 +68,7 @@ currentAccount: any;
             sort: ["id,desc"]
         }).subscribe(
             (res: HttpResponse<EtapaMySuffix[]>) => {
-                this.etapas = res.body.map(x => <SelectItem>{value: x.id, label: ''+x.numero});
+                this.etapas = res.body.map(x => <SelectItem>{value: x.id, label: ''+x.numero+' - '+x.descripcionCorta});
             },
             (res: HttpErrorResponse) => { 
                 alert(res.message);

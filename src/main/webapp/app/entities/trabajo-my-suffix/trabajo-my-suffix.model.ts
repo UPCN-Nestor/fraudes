@@ -6,8 +6,10 @@ export class TrabajoMySuffix implements BaseEntity {
         public descripcion?: string,
         public costo?: number,
         public usaMedidor?: boolean,
+        public usaCable?: boolean,
         public inspeccions?: BaseEntity[],
     ) {
         this.usaMedidor = false;
+        this.usaCable = false;
     }
 }

@@ -81,6 +81,9 @@ public class TrabajoQueryService extends QueryService<Trabajo> {
             if (criteria.getUsaMedidor() != null) {
                 specification = specification.and(buildSpecification(criteria.getUsaMedidor(), Trabajo_.usaMedidor));
             }
+            if (criteria.getUsaCable() != null) {
+                specification = specification.and(buildSpecification(criteria.getUsaCable(), Trabajo_.usaCable));
+            }
             if (criteria.getInspeccionId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getInspeccionId(), Trabajo_.inspeccions, Inspeccion_.id));
             }

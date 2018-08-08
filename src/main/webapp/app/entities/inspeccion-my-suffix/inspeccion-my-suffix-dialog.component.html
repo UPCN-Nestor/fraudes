@@ -123,13 +123,14 @@
         {{str(inspeccion.trabajos[0])}}
         {{str(inspeccion.trabajos[1])}}
         -->
-
-        <div *ngIf="usaMedidor()">
+   
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorRetirado" for="field_medidorRetirado">Medidor Retirado</label>
+            <label class="form-control-label" for="field_medidorRetirado">Medidor Actual</label>
             <input type="text" class="form-control" name="medidorRetirado" id="field_medidorRetirado"
                 [(ngModel)]="inspeccion.medidorRetirado" />
         </div>
+
+        <div *ngIf="usaMedidor()">
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.ultimaLectura" for="field_ultimaLectura">Ultima Lectura</label>
             <input type="number" class="form-control" name="ultimaLectura" id="field_ultimaLectura"
@@ -142,18 +143,37 @@
                 <option [ngValue]="medidorOption.id === inspeccion.medidorNuevo?.id ? inspeccion.medidorNuevo : medidorOption" *ngFor="let medidorOption of medidornuevos; trackBy: trackMedidorById">{{medidorOption.numero}}</option>
             </select>
         </div>
+        <div class="form-group">
+                <label class="form-control-label" for="field_lecturaNuevo">Lectura inicial de medidor nuevo</label>
+                <input type="number" class="form-control" name="lecturaNuevo" id="field_lecturaNuevo"
+                    [(ngModel)]="inspeccion.lecturaNuevo" />
+        </div>
+        </div>
+
+        <div class="form-group" *ngIf="usaCable()">
+            <label class="form-control-label" for="field_mtsCable">Metros de cable</label>
+            <input type="number" class="form-control" name="mtsCable" id="field_mtsCable"
+                [(ngModel)]="inspeccion.mtsCable" />
         </div>
 
         <div class="form-group">
-            <label class="form-control-label" jfor="field_foto">Foto</label><br/>
-            <input (ngModelChange)="loadFoto($event)" type="file" id="field_foto" accept="image/*" capture>    
-        </div>      
-        <div *ngIf="inspeccion.foto">
-            <a (click)="openFile(inspeccion.fotoContentType, inspeccion.foto)">
-                <img [src]="'data:' + inspeccion.fotoContentType + ';base64,' + inspeccion.foto" style="max-width: 100%;" alt="inspeccion image"/>
-            </a>
-            {{inspeccion.fotoContentType}}, {{byteSize(inspeccion.foto)}}
-        </div>
+                <label class="form-control-label" jhiTranslate="frApp.inspeccion.foto" for="field_foto">Foto</label>
+                <div>
+                    <img [src]="'data:' + inspeccion.fotoContentType + ';base64,' + inspeccion.foto" style="max-height: 100px;" *ngIf="inspeccion.foto" alt="inspeccion image"/>
+                    <div *ngIf="inspeccion.foto" class="form-text text-danger clearfix">
+                        <span class="pull-left">{{inspeccion.fotoContentType}}, {{byteSize(inspeccion.foto)}}</span>
+                        <button type="button" (click)="clearInputImage('foto', 'fotoContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                            <span class="fa fa-times"></span>
+                        </button>
+                    </div>
+                    <input type="file" id="file_foto" (change)="setFileData($event, inspeccion, 'foto', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
+                </div>
+                <input type="hidden" class="form-control" name="foto" id="field_foto"
+                    [(ngModel)]="inspeccion.foto" />
+                <input type="hidden" class="form-control" name="fotoContentType" id="field_fotoContentType"
+                    [(ngModel)]="inspeccion.fotoContentType" />
+            </div>
+        
     
 
         <div class="form-group">

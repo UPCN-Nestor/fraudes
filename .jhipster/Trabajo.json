@@ -21,6 +21,10 @@
         {
             "fieldName": "usaMedidor",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "usaCable",
+            "fieldType": "Boolean"
         }
     ],
     "changelogDate": "20180618141326",

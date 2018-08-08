@@ -19,6 +19,7 @@
             "descripcion": "Descripcion",
             "costo": "Costo",
             "usaMedidor": "Usa Medidor",
+            "usaCable": "Usa Cable",
             "inspeccion": "Inspeccion"
         }
     }
