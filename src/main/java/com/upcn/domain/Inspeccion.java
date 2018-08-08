@@ -64,6 +64,16 @@ public class Inspeccion implements Serializable {
     @Column(name = "mts_cable")
     private Float mtsCable;
 
+    @Column(name = "lectura_nuevo")
+    private Float lecturaNuevo;
+
+    @Lob
+    @Column(name = "foto")
+    private byte[] foto;
+
+    @Column(name = "foto_content_type")
+    private String fotoContentType;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "inspeccion_anomalia_medidor",
@@ -272,6 +282,45 @@ public class Inspeccion implements Serializable {
         this.mtsCable = mtsCable;
     }
 
+    public Float getLecturaNuevo() {
+        return lecturaNuevo;
+    }
+
+    public Inspeccion lecturaNuevo(Float lecturaNuevo) {
+        this.lecturaNuevo = lecturaNuevo;
+        return this;
+    }
+
+    public void setLecturaNuevo(Float lecturaNuevo) {
+        this.lecturaNuevo = lecturaNuevo;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public Inspeccion foto(byte[] foto) {
+        this.foto = foto;
+        return this;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+
+    public String getFotoContentType() {
+        return fotoContentType;
+    }
+
+    public Inspeccion fotoContentType(String fotoContentType) {
+        this.fotoContentType = fotoContentType;
+        return this;
+    }
+
+    public void setFotoContentType(String fotoContentType) {
+        this.fotoContentType = fotoContentType;
+    }
+
     public Set<Anomalia> getAnomaliaMedidors() {
         return anomaliaMedidors;
     }
@@ -425,6 +474,9 @@ public class Inspeccion implements Serializable {
             ", nombre='" + getNombre() + "'" +
             ", tarifa='" + getTarifa() + "'" +
             ", mtsCable=" + getMtsCable() +
+            ", lecturaNuevo=" + getLecturaNuevo() +
+            ", foto='" + getFoto() + "'" +
+            ", fotoContentType='" + getFotoContentType() + "'" +
             "}";
     }
 }

@@ -102,6 +102,15 @@
         {
             "fieldName": "mtsCable",
             "fieldType": "Float"
+        },
+        {
+            "fieldName": "lecturaNuevo",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "foto",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
         }
     ],
     "changelogDate": "20180618120049",

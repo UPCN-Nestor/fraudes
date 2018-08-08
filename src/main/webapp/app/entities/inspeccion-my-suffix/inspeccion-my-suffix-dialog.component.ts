@@ -4,7 +4,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
 import { InspeccionMySuffix } from './inspeccion-my-suffix.model';
 import { InspeccionMySuffixPopupService } from './inspeccion-my-suffix-popup.service';
@@ -60,8 +60,17 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         private tipoInmuebleService: TipoInmuebleMySuffixService,
         private medidorService: MedidorService,
         private eventManager: JhiEventManager,
+        private dataUtils: JhiDataUtils,
 		private principal: Principal
     ) {
+    }
+
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
+    }
+
+    loadFoto(e) {
+        alert(e.target.data);
     }
 
     ngOnInit() {

@@ -54,6 +54,8 @@ public class InspeccionCriteria implements Serializable {
 
     private FloatFilter mtsCable;
 
+    private FloatFilter lecturaNuevo;
+
     private LongFilter anomaliaMedidorId;
 
     private LongFilter trabajoId;
@@ -183,6 +185,14 @@ public class InspeccionCriteria implements Serializable {
         this.mtsCable = mtsCable;
     }
 
+    public FloatFilter getLecturaNuevo() {
+        return lecturaNuevo;
+    }
+
+    public void setLecturaNuevo(FloatFilter lecturaNuevo) {
+        this.lecturaNuevo = lecturaNuevo;
+    }
+
     public LongFilter getAnomaliaMedidorId() {
         return anomaliaMedidorId;
     }
@@ -256,6 +266,7 @@ public class InspeccionCriteria implements Serializable {
                 (nombre != null ? "nombre=" + nombre + ", " : "") +
                 (tarifa != null ? "tarifa=" + tarifa + ", " : "") +
                 (mtsCable != null ? "mtsCable=" + mtsCable + ", " : "") +
+                (lecturaNuevo != null ? "lecturaNuevo=" + lecturaNuevo + ", " : "") +
                 (anomaliaMedidorId != null ? "anomaliaMedidorId=" + anomaliaMedidorId + ", " : "") +
                 (trabajoId != null ? "trabajoId=" + trabajoId + ", " : "") +
                 (inmuebleId != null ? "inmuebleId=" + inmuebleId + ", " : "") +

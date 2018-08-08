@@ -29,6 +29,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
 import java.time.Instant;
@@ -89,6 +90,14 @@ public class InspeccionResourceIntTest {
     private static final Float DEFAULT_MTS_CABLE = 1F;
     private static final Float UPDATED_MTS_CABLE = 2F;
 
+    private static final Float DEFAULT_LECTURA_NUEVO = 1F;
+    private static final Float UPDATED_LECTURA_NUEVO = 2F;
+
+    private static final byte[] DEFAULT_FOTO = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_FOTO = TestUtil.createByteArray(2, "1");
+    private static final String DEFAULT_FOTO_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_FOTO_CONTENT_TYPE = "image/png";
+
     @Autowired
     private InspeccionRepository inspeccionRepository;
 
@@ -145,7 +154,10 @@ public class InspeccionResourceIntTest {
             .suministro(DEFAULT_SUMINISTRO)
             .nombre(DEFAULT_NOMBRE)
             .tarifa(DEFAULT_TARIFA)
-            .mtsCable(DEFAULT_MTS_CABLE);
+            .mtsCable(DEFAULT_MTS_CABLE)
+            .lecturaNuevo(DEFAULT_LECTURA_NUEVO)
+            .foto(DEFAULT_FOTO)
+            .fotoContentType(DEFAULT_FOTO_CONTENT_TYPE);
         return inspeccion;
     }
 
@@ -182,6 +194,9 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getNombre()).isEqualTo(DEFAULT_NOMBRE);
         assertThat(testInspeccion.getTarifa()).isEqualTo(DEFAULT_TARIFA);
         assertThat(testInspeccion.getMtsCable()).isEqualTo(DEFAULT_MTS_CABLE);
+        assertThat(testInspeccion.getLecturaNuevo()).isEqualTo(DEFAULT_LECTURA_NUEVO);
+        assertThat(testInspeccion.getFoto()).isEqualTo(DEFAULT_FOTO);
+        assertThat(testInspeccion.getFotoContentType()).isEqualTo(DEFAULT_FOTO_CONTENT_TYPE);
     }
 
     @Test
@@ -226,7 +241,10 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].suministro").value(hasItem(DEFAULT_SUMINISTRO)))
             .andExpect(jsonPath("$.[*].nombre").value(hasItem(DEFAULT_NOMBRE.toString())))
             .andExpect(jsonPath("$.[*].tarifa").value(hasItem(DEFAULT_TARIFA.toString())))
-            .andExpect(jsonPath("$.[*].mtsCable").value(hasItem(DEFAULT_MTS_CABLE.doubleValue())));
+            .andExpect(jsonPath("$.[*].mtsCable").value(hasItem(DEFAULT_MTS_CABLE.doubleValue())))
+            .andExpect(jsonPath("$.[*].lecturaNuevo").value(hasItem(DEFAULT_LECTURA_NUEVO.doubleValue())))
+            .andExpect(jsonPath("$.[*].fotoContentType").value(hasItem(DEFAULT_FOTO_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].foto").value(hasItem(Base64Utils.encodeToString(DEFAULT_FOTO))));
     }
 
     @Test
@@ -252,7 +270,10 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.suministro").value(DEFAULT_SUMINISTRO))
             .andExpect(jsonPath("$.nombre").value(DEFAULT_NOMBRE.toString()))
             .andExpect(jsonPath("$.tarifa").value(DEFAULT_TARIFA.toString()))
-            .andExpect(jsonPath("$.mtsCable").value(DEFAULT_MTS_CABLE.doubleValue()));
+            .andExpect(jsonPath("$.mtsCable").value(DEFAULT_MTS_CABLE.doubleValue()))
+            .andExpect(jsonPath("$.lecturaNuevo").value(DEFAULT_LECTURA_NUEVO.doubleValue()))
+            .andExpect(jsonPath("$.fotoContentType").value(DEFAULT_FOTO_CONTENT_TYPE))
+            .andExpect(jsonPath("$.foto").value(Base64Utils.encodeToString(DEFAULT_FOTO)));
     }
 
     @Test
@@ -845,6 +866,45 @@ public class InspeccionResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllInspeccionsByLecturaNuevoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where lecturaNuevo equals to DEFAULT_LECTURA_NUEVO
+        defaultInspeccionShouldBeFound("lecturaNuevo.equals=" + DEFAULT_LECTURA_NUEVO);
+
+        // Get all the inspeccionList where lecturaNuevo equals to UPDATED_LECTURA_NUEVO
+        defaultInspeccionShouldNotBeFound("lecturaNuevo.equals=" + UPDATED_LECTURA_NUEVO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByLecturaNuevoIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where lecturaNuevo in DEFAULT_LECTURA_NUEVO or UPDATED_LECTURA_NUEVO
+        defaultInspeccionShouldBeFound("lecturaNuevo.in=" + DEFAULT_LECTURA_NUEVO + "," + UPDATED_LECTURA_NUEVO);
+
+        // Get all the inspeccionList where lecturaNuevo equals to UPDATED_LECTURA_NUEVO
+        defaultInspeccionShouldNotBeFound("lecturaNuevo.in=" + UPDATED_LECTURA_NUEVO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByLecturaNuevoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where lecturaNuevo is not null
+        defaultInspeccionShouldBeFound("lecturaNuevo.specified=true");
+
+        // Get all the inspeccionList where lecturaNuevo is null
+        defaultInspeccionShouldNotBeFound("lecturaNuevo.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllInspeccionsByAnomaliaMedidorIsEqualToSomething() throws Exception {
         // Initialize the database
         Anomalia anomaliaMedidor = AnomaliaResourceIntTest.createEntity(em);
@@ -995,7 +1055,10 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].suministro").value(hasItem(DEFAULT_SUMINISTRO)))
             .andExpect(jsonPath("$.[*].nombre").value(hasItem(DEFAULT_NOMBRE.toString())))
             .andExpect(jsonPath("$.[*].tarifa").value(hasItem(DEFAULT_TARIFA.toString())))
-            .andExpect(jsonPath("$.[*].mtsCable").value(hasItem(DEFAULT_MTS_CABLE.doubleValue())));
+            .andExpect(jsonPath("$.[*].mtsCable").value(hasItem(DEFAULT_MTS_CABLE.doubleValue())))
+            .andExpect(jsonPath("$.[*].lecturaNuevo").value(hasItem(DEFAULT_LECTURA_NUEVO.doubleValue())))
+            .andExpect(jsonPath("$.[*].fotoContentType").value(hasItem(DEFAULT_FOTO_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].foto").value(hasItem(Base64Utils.encodeToString(DEFAULT_FOTO))));
     }
 
     /**
@@ -1043,7 +1106,10 @@ public class InspeccionResourceIntTest {
             .suministro(UPDATED_SUMINISTRO)
             .nombre(UPDATED_NOMBRE)
             .tarifa(UPDATED_TARIFA)
-            .mtsCable(UPDATED_MTS_CABLE);
+            .mtsCable(UPDATED_MTS_CABLE)
+            .lecturaNuevo(UPDATED_LECTURA_NUEVO)
+            .foto(UPDATED_FOTO)
+            .fotoContentType(UPDATED_FOTO_CONTENT_TYPE);
 
         restInspeccionMockMvc.perform(put("/api/inspeccions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -1067,6 +1133,9 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getNombre()).isEqualTo(UPDATED_NOMBRE);
         assertThat(testInspeccion.getTarifa()).isEqualTo(UPDATED_TARIFA);
         assertThat(testInspeccion.getMtsCable()).isEqualTo(UPDATED_MTS_CABLE);
+        assertThat(testInspeccion.getLecturaNuevo()).isEqualTo(UPDATED_LECTURA_NUEVO);
+        assertThat(testInspeccion.getFoto()).isEqualTo(UPDATED_FOTO);
+        assertThat(testInspeccion.getFotoContentType()).isEqualTo(UPDATED_FOTO_CONTENT_TYPE);
     }
 
     @Test
