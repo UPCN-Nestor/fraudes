@@ -94,9 +94,9 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         this.isSaving = false;
         this.anomaliaService.query()
             .subscribe((res: HttpResponse<AnomaliaMySuffix[]>) => { this.anomalias = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-        this.trabajoService.query()
+        this.trabajoService.query({sort: ['descripcion']})
             .subscribe((res: HttpResponse<TrabajoMySuffix[]>) => { 
-                this.trabajos = res.body;
+                this.trabajos = res.body.sort((a,b)=>{return a.descripcion < b.descripcion ? -1 : 1});
             }, (res: HttpErrorResponse) => this.onError(res.message));
         this.inmuebleService.query()
             .subscribe((res: HttpResponse<InmuebleMySuffix[]>) => { this.inmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
