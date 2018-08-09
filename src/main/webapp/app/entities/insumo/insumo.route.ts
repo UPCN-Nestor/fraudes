@@ -11,7 +11,7 @@ export const insumoRoute: Routes = [
         path: 'insumo',
         component: InsumoComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.insumo.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const insumoRoute: Routes = [
         path: 'insumo/:id',
         component: InsumoDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.insumo.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -31,7 +31,7 @@ export const insumoPopupRoute: Routes = [
         path: 'insumo-new',
         component: InsumoPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.insumo.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -41,7 +41,7 @@ export const insumoPopupRoute: Routes = [
         path: 'insumo/:id/edit',
         component: InsumoPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.insumo.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const insumoPopupRoute: Routes = [
         path: 'insumo/:id/delete',
         component: InsumoDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.insumo.home.title'
         },
         canActivate: [UserRouteAccessService],

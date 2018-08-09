@@ -1,0 +1,37 @@
+LOAD DATA INFILE 'C:\\JH\\SQL\\Fr1a5.txt' INTO TABLE xls;
+
+
+
+*** Split strings
+
+CREATE FUNCTION SPLIT_STR(
+  x VARCHAR(255),
+  delim VARCHAR(12),
+  pos INT
+)
+RETURNS VARCHAR(255)
+RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(x, delim, pos),
+       LENGTH(SUBSTRING_INDEX(x, delim, pos -1)) + 1),
+       delim, '');
+
+
+Uso:
+SELECT SPLIT_STR('a|bb|ccc|dd', '|', 3) as third;	   
+	   
+	   
+
+*** Importar inmuebles
+
+insert into inmueble(calle, altura) 
+SELECT distinct SPLIT_STR(`domicilio`, ' ', 1) as calle, SPLIT_STR(`domicilio`, ' ', 2) as altura from xls	   
+
+
+*** Importar inspecciones
+
+insert into inspeccion(etapa_id, orden, nombre, socio, suministro, tarifa, estado_id, inmueble_id)
+select e.id as etapa_id, e.id * 10000 + (@rownum := @rownum + 1) as orden, razon_social as nombre, substr(usuario,1,6) as socio, substr(usuario,7,6) as suministro, tarifa, 1, i.id as inmueble_id 
+from xls x join (select id, concat(calle, ' ', altura) as domicilio from inmueble) i
+	join etapa e
+	cross join (select @rownum := 0) r
+where x.domicilio = i.domicilio
+	and x.etapa = e.numero

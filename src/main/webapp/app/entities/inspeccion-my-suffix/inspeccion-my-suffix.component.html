@@ -1,7 +1,7 @@
 <div>
     <jhi-alert></jhi-alert>
     
-    <h3>
+    <h4>
         <span>Inspecciones</span>
         <button class="btn btn-primary float-right jh-create-entity create-inspeccion-my-suffix" [routerLink]="['/', { outlets: { popup: ['inspeccion-my-suffix-new'] } }]">
             <span class="fa fa-plus"></span>
@@ -10,7 +10,7 @@
             <span *jhiHasAnyAuthority="'ROLE_ADMIN'">Nueva
             </span>
         </button>
-    </h3>
+    </h4>
     <!--
     <button pButton type="button" label="Prueba servicio" (click)="prueba()"></button>
     <br/><br/>
@@ -18,7 +18,8 @@
     <br/><br/>
     -->
     <table cellpadding="5"><tr><td>Etapa</td>
-        <td *jhiHasAnyAuthority="'ROLE_USER'"><p-dropdown disabled="true" [options]="etapas" [(ngModel)]="etapaSeleccionada" (onChange)="cambioEtapa()"></p-dropdown></td>
+        <td *jhiHasAnyAuthority="'ROLE_USER'"><p-dropdown  [options]="etapas" [(ngModel)]="etapaSeleccionada" (onChange)="cambioEtapa()"></p-dropdown></td> 
+        <!--disabled="true"-->
         <td *jhiHasAnyAuthority="'ROLE_ADMIN'"><p-dropdown [options]="etapas" [(ngModel)]="etapaSeleccionada" (onChange)="cambioEtapa()"></p-dropdown></td>
     </tr>
     <tr><td>Finalizadas</td>
@@ -33,8 +34,7 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="orden"><span jhiTranslate="frApp.inspeccion.orden">Orden</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="inmueble.id"><span jhiTranslate="frApp.inspeccion.inmueble">Inmueble</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="inmueble.calle,inmueble.altura"><span jhiTranslate="frApp.inspeccion.inmueble">Inmueble</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="estado.descripcion"><span jhiTranslate="frApp.inspeccion.estado">Estado</span> <span class="fa fa-sort"></span></th>
 			<th jhiSortBy="fechahora"><span>Fecha</span> <span class="fa fa-sort"></span></th>
                 
@@ -42,34 +42,19 @@
             </thead>
             <tbody>
             <tr *ngFor="let inspeccion of getInspeccionesMostradas() ;trackBy: trackId" [routerLink]="['/', { outlets: { popup: 'inspeccion-my-suffix/'+ inspeccion.id + '/edit'} }]">
-                <td>{{inspeccion.orden}}</td>
                 <td>
                     <div *ngIf="inspeccion.inmueble">
-                        <a [routerLink]="['../inmueble-my-suffix', inspeccion.inmueble?.id ]" >{{inspeccion.inmueble?.calle}} {{inspeccion.inmueble?.altura}}
-                            {{inspeccion.inmueble?.piso}} {{inspeccion.inmueble?.depto}} {{inspeccion.inmueble?.anexo}}
-                        </a>
+                        {{inspeccion.inmueble?.calle}} {{inspeccion.inmueble?.altura}}
+                            {{inspeccion.inmueble?.piso}} {{inspeccion.inmueble?.depto}} {{inspeccion.inmueble?.anexo}}                    
                     </div>
                 </td>
                 <td>
                     <div *ngIf="inspeccion.estado">
-                        <a [routerLink]="['../estado-my-suffix', inspeccion.estado?.id ]" >{{inspeccion.estado?.descripcion}}</a>
+                        {{inspeccion.estado?.descripcion}}
                     </div>
                 </td>
                 <td>{{inspeccion.fechahora | date:'short'}}</td>
-                <!--
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'inspeccion-my-suffix/'+ inspeccion.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
-                            <span class="d-none d-md-inline">Cargar inspección</span>
-                        </button>
-                    </div>
-                </td>
-                -->
+
             </tr>
             </tbody>
         </table>

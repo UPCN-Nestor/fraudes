@@ -11,7 +11,7 @@ export const materialRoute: Routes = [
         path: 'material-my-suffix',
         component: MaterialMySuffixComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.material.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const materialRoute: Routes = [
         path: 'material-my-suffix/:id',
         component: MaterialMySuffixDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.material.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -31,7 +31,7 @@ export const materialPopupRoute: Routes = [
         path: 'material-my-suffix-new',
         component: MaterialMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.material.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -41,7 +41,7 @@ export const materialPopupRoute: Routes = [
         path: 'material-my-suffix/:id/edit',
         component: MaterialMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.material.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const materialPopupRoute: Routes = [
         path: 'material-my-suffix/:id/delete',
         component: MaterialMySuffixDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'frApp.material.home.title'
         },
         canActivate: [UserRouteAccessService],
