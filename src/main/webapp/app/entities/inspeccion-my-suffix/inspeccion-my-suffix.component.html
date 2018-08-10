@@ -22,6 +22,10 @@
         <!--disabled="true"-->
         <td *jhiHasAnyAuthority="'ROLE_ADMIN'"><p-dropdown [options]="etapas" [(ngModel)]="etapaSeleccionada" (onChange)="cambioEtapa()"></p-dropdown></td>
     </tr>
+    <tr>
+        <td>Filtro por medidor</td>
+        <td><input [(ngModel)]="filtroMedidor"></td>
+    </tr>
     <tr><td>Finalizadas</td>
         <td><p-inputSwitch [(ngModel)]="ocultarFinalizadas" onLabel="Ocultar" offLabel="Mostrar" ></p-inputSwitch></td>
     </tr>
@@ -35,9 +39,9 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="inmueble.calle,inmueble.altura"><span jhiTranslate="frApp.inspeccion.inmueble">Inmueble</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="medidorInstalado"><span>Medidor</span> <span class="fa fa-sort"></span></th> 
             <th jhiSortBy="estado.descripcion"><span jhiTranslate="frApp.inspeccion.estado">Estado</span> <span class="fa fa-sort"></span></th>
-			<th jhiSortBy="fechahora"><span>Fecha</span> <span class="fa fa-sort"></span></th>
-                
+			<th jhiSortBy="fechahora"><span>Fecha</span> <span class="fa fa-sort"></span></th>                
             </tr>
             </thead>
             <tbody>
@@ -46,6 +50,11 @@
                     <div *ngIf="inspeccion.inmueble">
                         {{inspeccion.inmueble?.calle}} {{inspeccion.inmueble?.altura}}
                             {{inspeccion.inmueble?.piso}} {{inspeccion.inmueble?.depto}} {{inspeccion.inmueble?.anexo}}                    
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="inspeccion.medidorInstalado">
+                        {{inspeccion.medidorInstalado}}
                     </div>
                 </td>
                 <td>

@@ -10,6 +10,12 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" *ngIf="this.inspeccion.id">
+        <div *ngIf="inspeccion.inmueble" style="font-weight: bold;">
+            Calle {{inspeccion.inmueble.calle}} Nº{{inspeccion.inmueble.altura}} {{inspeccion.inmueble.depto}} {{inspeccion.inmueble.piso}} {{inspeccion.inmueble.anexo}}
+        </div>
+        <div style="font-weight: bold;">Socio {{inspeccion.socio}}/{{inspeccion.suministro}} ({{inspeccion.tarifa}}) {{inspeccion.estadoGLM}}</div>
+        </div>
 
         <div style="color:red !important;" *jhiHasAnyAuthority="'ROLE_ADMIN'">
             <div class="form-group">
@@ -66,18 +72,10 @@
                 <option [ngValue]="null"></option>
                 <option [ngValue]="estadoOption.id === inspeccion.estado?.id ? inspeccion.estado : estadoOption" *ngFor="let estadoOption of estados; trackBy: trackEstadoById">{{estadoOption.descripcion}}</option>
             </select>
-        </div>
-        <div class="form-group" *ngIf="this.inspeccion.id">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.inmueble" for="field_inmueble">Inmueble</label>
-            <div *ngIf="inspeccion.inmueble" style="font-weight: bold;">
-            {{inspeccion.inmueble.calle}} {{inspeccion.inmueble.altura}} {{inspeccion.inmueble.depto}} {{inspeccion.inmueble.piso}} {{inspeccion.inmueble.anexo}}
-            </div>
-            <!--
-            <select class="form-control" id="field_inmueble" name="inmueble" [(ngModel)]="inspeccion.inmueble" readonly>
-                <option [ngValue]="null"></option>
-                <option [ngValue]="inmuebleOption.id === inspeccion.inmueble?.id ? inspeccion.inmueble : inmuebleOption" *ngFor="let inmuebleOption of inmuebles; trackBy: trackInmuebleById">{{inmuebleOption.calle}} {{inmuebleOption.altura}} {{inmuebleOption.depto}} {{inmuebleOption.piso}} {{inmuebleOption.anexo}}</option>
-            </select>
-            -->
+        </div>         
+
+     
+        <!-- ANULADO PORQUE NO ESTÁ EN LA PLANILLA NUEVA ProElec
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="frApp.inspeccion.tipoInmueble" for="field_tipoInmueble">Tipo de Inmueble</label>
@@ -87,14 +85,10 @@
             </select>
         </div>
         <div style="text-align: left;">
-            <!--<label class="form-control-label" jhiTranslate="frApp.inspeccion.deshabitada" for="field_deshabitada">Deshabitada</label>-->
             <p-inputSwitch  name="deshabitada" id="field_deshabitada" 
-                [(ngModel)]="inspeccion.deshabitada" onLabel="Deshabitada" offLabel="Habitada" ></p-inputSwitch>
-                <!--
-            <input type="checkbox" class="form-control" name="deshabitada" id="field_deshabitada"
-                [(ngModel)]="inspeccion.deshabitada" />
-                -->
+                [(ngModel)]="inspeccion.deshabitada" onLabel="Deshabitada" offLabel="Habitada" ></p-inputSwitch>    
         </div>
+        -->
 
         <!--
         <div class="form-group">
@@ -103,8 +97,21 @@
                 [(ngModel)]="inspeccion.usuario" readonly />
         </div>
         -->
+        <div style="font-weight: bold;" class="form-group">
+                Medidor Instalado Nº {{inspeccion.medidorInstalado}}, última lectura: {{inspeccion.ultimaLectura}} ({{inspeccion.fechaToma}})
+        </div>        
+        <div class="form-group">
+            <label class="form-control-label" for="field_medidorRetirado">Medidor Hallado (dejar vacío si coincide)</label>
+            <input type="text" class="form-control" name="medidorRetirado" id="field_medidorRetirado"
+                [(ngModel)]="inspeccion.medidorRetirado" />
+        </div>   
+        <div class="form-group">
+            <label class="form-control-label" for="field_lecturaActual">Lectura Actual</label>
+            <input type="number" class="form-control" name="lecturaActual" id="field_lecturaActual"
+                [(ngModel)]="inspeccion.lecturaActual" />
+        </div>
 
-        <label jhiTranslate="frApp.inspeccion.anomaliaMedidor" for="field_anomaliaMedidor">Anomalia Medidor</label>
+        <label for="field_anomaliaMedidor">Anomalia Habitáculo o Medidor</label>
         
         <div><p-multiSelect id="field_anomaliaMedidor" name="anomaliaMedidor" defaultLabel="(Seleccionar)" filter="false" showHeader="false" maxSelectedLabels="6"
             [options]="getAnomalias()" [(ngModel)]="inspeccion.anomaliaMedidors"></p-multiSelect>    
@@ -123,26 +130,21 @@
         {{str(inspeccion.trabajos[0])}}
         {{str(inspeccion.trabajos[1])}}
         -->
-   
-        <div class="form-group">
-            <label class="form-control-label" for="field_medidorRetirado">Medidor Actual</label>
-            <input type="text" class="form-control" name="medidorRetirado" id="field_medidorRetirado"
-                [(ngModel)]="inspeccion.medidorRetirado" />
-        </div>
 
         <div *ngIf="usaMedidor()">
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.ultimaLectura" for="field_ultimaLectura">Ultima Lectura</label>
-            <input type="number" class="form-control" name="ultimaLectura" id="field_ultimaLectura"
-                [(ngModel)]="inspeccion.ultimaLectura" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorNuevo" for="field_medidorNuevo">Medidor Nuevo</label>
+            <label class="form-control-label" jhiTranslate="frApp.inspeccion.medidorNuevo" for="field_medidorNuevo">Medidor Nuevo (seleccionar)</label>
             <select class="form-control" id="field_medidorNuevo" name="medidorNuevo" [(ngModel)]="inspeccion.medidorNuevo">
                 <option [ngValue]="null"></option>
                 <option [ngValue]="medidorOption.id === inspeccion.medidorNuevo?.id ? inspeccion.medidorNuevo : medidorOption" *ngFor="let medidorOption of medidornuevos; trackBy: trackMedidorById">{{medidorOption.numero}}</option>
             </select>
+        </div>        
+        <div class="form-group">
+            <label class="form-control-label" for="field_medidorNuevoLibre">Medidor Nuevo (texto libre para UPC)</label>
+            <input type="text" class="form-control" name="medidorNuevoLibre" id="field_medidorNuevoLibre"
+                [(ngModel)]="inspeccion.medidorNuevoLibre" />
         </div>
+    
         <div class="form-group">
                 <label class="form-control-label" for="field_lecturaNuevo">Lectura inicial de medidor nuevo</label>
                 <input type="number" class="form-control" name="lecturaNuevo" id="field_lecturaNuevo"
@@ -159,12 +161,10 @@
         <div class="form-group">
                 <label class="form-control-label" for="field_foto">Foto</label>
                 <div>
-                    
-                    <img [src]="'data:' + inspeccion.fotoContentType + ';base64,' + inspeccion.foto" style="max-height: 100px;" *ngIf="inspeccion.foto" alt="inspeccion image"/>
                     <div *ngIf="inspeccion.foto" class="form-text text-danger clearfix">
-                        <a target="_blank" [href]="'data:' + inspeccion.fotoContentType + ';base64,' + inspeccion.foto" class="pull-left">
-                        {{inspeccion.fotoContentType}}, {{byteSize(inspeccion.foto)}}
-                         </a>
+                        <a (click)="openFile(inspeccion.fotoContentType, inspeccion.foto)">
+                            <img [src]="'data:' + inspeccion.fotoContentType + ';base64,' + inspeccion.foto" style="max-width: 100%;" alt="inspeccion image"/>
+                        </a>
                         <button type="button" (click)="clearInputImage('foto', 'fotoContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
                             <span class="fa fa-times"></span>
                         </button>

@@ -85,6 +85,22 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="estado_glm" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="lectura_actual" type="${floatType}">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="fecha_toma" type="date">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="medidor_nuevo_libre" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="inmueble_id" type="bigint">
                 <constraints nullable="true" />
             </column>

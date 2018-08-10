@@ -32,7 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -98,6 +100,18 @@ public class InspeccionResourceIntTest {
     private static final String DEFAULT_FOTO_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_FOTO_CONTENT_TYPE = "image/png";
 
+    private static final String DEFAULT_ESTADO_GLM = "AAAAAAAAAA";
+    private static final String UPDATED_ESTADO_GLM = "BBBBBBBBBB";
+
+    private static final Float DEFAULT_LECTURA_ACTUAL = 1F;
+    private static final Float UPDATED_LECTURA_ACTUAL = 2F;
+
+    private static final LocalDate DEFAULT_FECHA_TOMA = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_FECHA_TOMA = LocalDate.now(ZoneId.systemDefault());
+
+    private static final String DEFAULT_MEDIDOR_NUEVO_LIBRE = "AAAAAAAAAA";
+    private static final String UPDATED_MEDIDOR_NUEVO_LIBRE = "BBBBBBBBBB";
+
     @Autowired
     private InspeccionRepository inspeccionRepository;
 
@@ -157,7 +171,11 @@ public class InspeccionResourceIntTest {
             .mtsCable(DEFAULT_MTS_CABLE)
             .lecturaNuevo(DEFAULT_LECTURA_NUEVO)
             .foto(DEFAULT_FOTO)
-            .fotoContentType(DEFAULT_FOTO_CONTENT_TYPE);
+            .fotoContentType(DEFAULT_FOTO_CONTENT_TYPE)
+            .estadoGLM(DEFAULT_ESTADO_GLM)
+            .lecturaActual(DEFAULT_LECTURA_ACTUAL)
+            .fechaToma(DEFAULT_FECHA_TOMA)
+            .medidorNuevoLibre(DEFAULT_MEDIDOR_NUEVO_LIBRE);
         return inspeccion;
     }
 
@@ -197,6 +215,10 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getLecturaNuevo()).isEqualTo(DEFAULT_LECTURA_NUEVO);
         assertThat(testInspeccion.getFoto()).isEqualTo(DEFAULT_FOTO);
         assertThat(testInspeccion.getFotoContentType()).isEqualTo(DEFAULT_FOTO_CONTENT_TYPE);
+        assertThat(testInspeccion.getEstadoGLM()).isEqualTo(DEFAULT_ESTADO_GLM);
+        assertThat(testInspeccion.getLecturaActual()).isEqualTo(DEFAULT_LECTURA_ACTUAL);
+        assertThat(testInspeccion.getFechaToma()).isEqualTo(DEFAULT_FECHA_TOMA);
+        assertThat(testInspeccion.getMedidorNuevoLibre()).isEqualTo(DEFAULT_MEDIDOR_NUEVO_LIBRE);
     }
 
     @Test
@@ -244,7 +266,11 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].mtsCable").value(hasItem(DEFAULT_MTS_CABLE.doubleValue())))
             .andExpect(jsonPath("$.[*].lecturaNuevo").value(hasItem(DEFAULT_LECTURA_NUEVO.doubleValue())))
             .andExpect(jsonPath("$.[*].fotoContentType").value(hasItem(DEFAULT_FOTO_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].foto").value(hasItem(Base64Utils.encodeToString(DEFAULT_FOTO))));
+            .andExpect(jsonPath("$.[*].foto").value(hasItem(Base64Utils.encodeToString(DEFAULT_FOTO))))
+            .andExpect(jsonPath("$.[*].estadoGLM").value(hasItem(DEFAULT_ESTADO_GLM.toString())))
+            .andExpect(jsonPath("$.[*].lecturaActual").value(hasItem(DEFAULT_LECTURA_ACTUAL.doubleValue())))
+            .andExpect(jsonPath("$.[*].fechaToma").value(hasItem(DEFAULT_FECHA_TOMA.toString())))
+            .andExpect(jsonPath("$.[*].medidorNuevoLibre").value(hasItem(DEFAULT_MEDIDOR_NUEVO_LIBRE.toString())));
     }
 
     @Test
@@ -273,7 +299,11 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.mtsCable").value(DEFAULT_MTS_CABLE.doubleValue()))
             .andExpect(jsonPath("$.lecturaNuevo").value(DEFAULT_LECTURA_NUEVO.doubleValue()))
             .andExpect(jsonPath("$.fotoContentType").value(DEFAULT_FOTO_CONTENT_TYPE))
-            .andExpect(jsonPath("$.foto").value(Base64Utils.encodeToString(DEFAULT_FOTO)));
+            .andExpect(jsonPath("$.foto").value(Base64Utils.encodeToString(DEFAULT_FOTO)))
+            .andExpect(jsonPath("$.estadoGLM").value(DEFAULT_ESTADO_GLM.toString()))
+            .andExpect(jsonPath("$.lecturaActual").value(DEFAULT_LECTURA_ACTUAL.doubleValue()))
+            .andExpect(jsonPath("$.fechaToma").value(DEFAULT_FECHA_TOMA.toString()))
+            .andExpect(jsonPath("$.medidorNuevoLibre").value(DEFAULT_MEDIDOR_NUEVO_LIBRE.toString()));
     }
 
     @Test
@@ -905,6 +935,189 @@ public class InspeccionResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllInspeccionsByEstadoGLMIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where estadoGLM equals to DEFAULT_ESTADO_GLM
+        defaultInspeccionShouldBeFound("estadoGLM.equals=" + DEFAULT_ESTADO_GLM);
+
+        // Get all the inspeccionList where estadoGLM equals to UPDATED_ESTADO_GLM
+        defaultInspeccionShouldNotBeFound("estadoGLM.equals=" + UPDATED_ESTADO_GLM);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByEstadoGLMIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where estadoGLM in DEFAULT_ESTADO_GLM or UPDATED_ESTADO_GLM
+        defaultInspeccionShouldBeFound("estadoGLM.in=" + DEFAULT_ESTADO_GLM + "," + UPDATED_ESTADO_GLM);
+
+        // Get all the inspeccionList where estadoGLM equals to UPDATED_ESTADO_GLM
+        defaultInspeccionShouldNotBeFound("estadoGLM.in=" + UPDATED_ESTADO_GLM);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByEstadoGLMIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where estadoGLM is not null
+        defaultInspeccionShouldBeFound("estadoGLM.specified=true");
+
+        // Get all the inspeccionList where estadoGLM is null
+        defaultInspeccionShouldNotBeFound("estadoGLM.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByLecturaActualIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where lecturaActual equals to DEFAULT_LECTURA_ACTUAL
+        defaultInspeccionShouldBeFound("lecturaActual.equals=" + DEFAULT_LECTURA_ACTUAL);
+
+        // Get all the inspeccionList where lecturaActual equals to UPDATED_LECTURA_ACTUAL
+        defaultInspeccionShouldNotBeFound("lecturaActual.equals=" + UPDATED_LECTURA_ACTUAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByLecturaActualIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where lecturaActual in DEFAULT_LECTURA_ACTUAL or UPDATED_LECTURA_ACTUAL
+        defaultInspeccionShouldBeFound("lecturaActual.in=" + DEFAULT_LECTURA_ACTUAL + "," + UPDATED_LECTURA_ACTUAL);
+
+        // Get all the inspeccionList where lecturaActual equals to UPDATED_LECTURA_ACTUAL
+        defaultInspeccionShouldNotBeFound("lecturaActual.in=" + UPDATED_LECTURA_ACTUAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByLecturaActualIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where lecturaActual is not null
+        defaultInspeccionShouldBeFound("lecturaActual.specified=true");
+
+        // Get all the inspeccionList where lecturaActual is null
+        defaultInspeccionShouldNotBeFound("lecturaActual.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByFechaTomaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where fechaToma equals to DEFAULT_FECHA_TOMA
+        defaultInspeccionShouldBeFound("fechaToma.equals=" + DEFAULT_FECHA_TOMA);
+
+        // Get all the inspeccionList where fechaToma equals to UPDATED_FECHA_TOMA
+        defaultInspeccionShouldNotBeFound("fechaToma.equals=" + UPDATED_FECHA_TOMA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByFechaTomaIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where fechaToma in DEFAULT_FECHA_TOMA or UPDATED_FECHA_TOMA
+        defaultInspeccionShouldBeFound("fechaToma.in=" + DEFAULT_FECHA_TOMA + "," + UPDATED_FECHA_TOMA);
+
+        // Get all the inspeccionList where fechaToma equals to UPDATED_FECHA_TOMA
+        defaultInspeccionShouldNotBeFound("fechaToma.in=" + UPDATED_FECHA_TOMA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByFechaTomaIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where fechaToma is not null
+        defaultInspeccionShouldBeFound("fechaToma.specified=true");
+
+        // Get all the inspeccionList where fechaToma is null
+        defaultInspeccionShouldNotBeFound("fechaToma.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByFechaTomaIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where fechaToma greater than or equals to DEFAULT_FECHA_TOMA
+        defaultInspeccionShouldBeFound("fechaToma.greaterOrEqualThan=" + DEFAULT_FECHA_TOMA);
+
+        // Get all the inspeccionList where fechaToma greater than or equals to UPDATED_FECHA_TOMA
+        defaultInspeccionShouldNotBeFound("fechaToma.greaterOrEqualThan=" + UPDATED_FECHA_TOMA);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByFechaTomaIsLessThanSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where fechaToma less than or equals to DEFAULT_FECHA_TOMA
+        defaultInspeccionShouldNotBeFound("fechaToma.lessThan=" + DEFAULT_FECHA_TOMA);
+
+        // Get all the inspeccionList where fechaToma less than or equals to UPDATED_FECHA_TOMA
+        defaultInspeccionShouldBeFound("fechaToma.lessThan=" + UPDATED_FECHA_TOMA);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMedidorNuevoLibreIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where medidorNuevoLibre equals to DEFAULT_MEDIDOR_NUEVO_LIBRE
+        defaultInspeccionShouldBeFound("medidorNuevoLibre.equals=" + DEFAULT_MEDIDOR_NUEVO_LIBRE);
+
+        // Get all the inspeccionList where medidorNuevoLibre equals to UPDATED_MEDIDOR_NUEVO_LIBRE
+        defaultInspeccionShouldNotBeFound("medidorNuevoLibre.equals=" + UPDATED_MEDIDOR_NUEVO_LIBRE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMedidorNuevoLibreIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where medidorNuevoLibre in DEFAULT_MEDIDOR_NUEVO_LIBRE or UPDATED_MEDIDOR_NUEVO_LIBRE
+        defaultInspeccionShouldBeFound("medidorNuevoLibre.in=" + DEFAULT_MEDIDOR_NUEVO_LIBRE + "," + UPDATED_MEDIDOR_NUEVO_LIBRE);
+
+        // Get all the inspeccionList where medidorNuevoLibre equals to UPDATED_MEDIDOR_NUEVO_LIBRE
+        defaultInspeccionShouldNotBeFound("medidorNuevoLibre.in=" + UPDATED_MEDIDOR_NUEVO_LIBRE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMedidorNuevoLibreIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where medidorNuevoLibre is not null
+        defaultInspeccionShouldBeFound("medidorNuevoLibre.specified=true");
+
+        // Get all the inspeccionList where medidorNuevoLibre is null
+        defaultInspeccionShouldNotBeFound("medidorNuevoLibre.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllInspeccionsByAnomaliaMedidorIsEqualToSomething() throws Exception {
         // Initialize the database
         Anomalia anomaliaMedidor = AnomaliaResourceIntTest.createEntity(em);
@@ -1058,7 +1271,11 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].mtsCable").value(hasItem(DEFAULT_MTS_CABLE.doubleValue())))
             .andExpect(jsonPath("$.[*].lecturaNuevo").value(hasItem(DEFAULT_LECTURA_NUEVO.doubleValue())))
             .andExpect(jsonPath("$.[*].fotoContentType").value(hasItem(DEFAULT_FOTO_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].foto").value(hasItem(Base64Utils.encodeToString(DEFAULT_FOTO))));
+            .andExpect(jsonPath("$.[*].foto").value(hasItem(Base64Utils.encodeToString(DEFAULT_FOTO))))
+            .andExpect(jsonPath("$.[*].estadoGLM").value(hasItem(DEFAULT_ESTADO_GLM.toString())))
+            .andExpect(jsonPath("$.[*].lecturaActual").value(hasItem(DEFAULT_LECTURA_ACTUAL.doubleValue())))
+            .andExpect(jsonPath("$.[*].fechaToma").value(hasItem(DEFAULT_FECHA_TOMA.toString())))
+            .andExpect(jsonPath("$.[*].medidorNuevoLibre").value(hasItem(DEFAULT_MEDIDOR_NUEVO_LIBRE.toString())));
     }
 
     /**
@@ -1109,7 +1326,11 @@ public class InspeccionResourceIntTest {
             .mtsCable(UPDATED_MTS_CABLE)
             .lecturaNuevo(UPDATED_LECTURA_NUEVO)
             .foto(UPDATED_FOTO)
-            .fotoContentType(UPDATED_FOTO_CONTENT_TYPE);
+            .fotoContentType(UPDATED_FOTO_CONTENT_TYPE)
+            .estadoGLM(UPDATED_ESTADO_GLM)
+            .lecturaActual(UPDATED_LECTURA_ACTUAL)
+            .fechaToma(UPDATED_FECHA_TOMA)
+            .medidorNuevoLibre(UPDATED_MEDIDOR_NUEVO_LIBRE);
 
         restInspeccionMockMvc.perform(put("/api/inspeccions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -1136,6 +1357,10 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getLecturaNuevo()).isEqualTo(UPDATED_LECTURA_NUEVO);
         assertThat(testInspeccion.getFoto()).isEqualTo(UPDATED_FOTO);
         assertThat(testInspeccion.getFotoContentType()).isEqualTo(UPDATED_FOTO_CONTENT_TYPE);
+        assertThat(testInspeccion.getEstadoGLM()).isEqualTo(UPDATED_ESTADO_GLM);
+        assertThat(testInspeccion.getLecturaActual()).isEqualTo(UPDATED_LECTURA_ACTUAL);
+        assertThat(testInspeccion.getFechaToma()).isEqualTo(UPDATED_FECHA_TOMA);
+        assertThat(testInspeccion.getMedidorNuevoLibre()).isEqualTo(UPDATED_MEDIDOR_NUEVO_LIBRE);
     }
 
     @Test

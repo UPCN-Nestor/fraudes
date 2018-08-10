@@ -48,6 +48,7 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
 
 	currentAccount: any;
 
+    fechaTomaDp: any;
     constructor(
         public activeModal: NgbActiveModal,
         private jhiAlertService: JhiAlertService,
@@ -110,7 +111,18 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
                 }
             }, (res: HttpErrorResponse) => this.onError(res.message));
         this.estadoService.query()
-            .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { this.estados = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+            .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { 
+                this.estados = res.body; 
+              
+                // Las inspecciones ordenadas por el admin defaultean a estado Inicial, las editadas por los demás, a Finalizado
+                this.principal.hasAnyAuthority(['ROLE_ADMIN']).then(v => {
+                    if(v==true)
+                        this.inspeccion.estado = this.estados.filter(e=>e.descripcion.trim()=="Inicial")[0];
+                    else {
+                        this.inspeccion.estado = this.estados.filter(e=>e.descripcion.trim()=="Finalizado")[0];
+                    }
+                });                  
+            }, (res: HttpErrorResponse) => this.onError(res.message));
         this.tipoInmuebleService.query()
             .subscribe((res: HttpResponse<TipoInmuebleMySuffix[]>) => { this.tipoinmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.medidorService

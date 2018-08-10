@@ -9,6 +9,7 @@ import { InspeccionMySuffixService } from './inspeccion-my-suffix.service';
 import { ITEMS_PER_PAGE, Principal } from '../../shared';
 import { EtapaMySuffix } from '../etapa-my-suffix';
 import { EstadoMySuffix } from '../estado-my-suffix';
+import { Medidor } from '../medidor';
 import { DropdownModule } from 'primeng/dropdown';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import { SelectItem } from 'primeng/api';
@@ -42,6 +43,7 @@ currentAccount: any;
     etapaSeleccionada : number;
 
     ocultarFinalizadas : boolean = true;
+    filtroMedidor : string = "";
 
     constructor(
         private inspeccionService: InspeccionMySuffixService,
@@ -91,11 +93,17 @@ currentAccount: any;
         );
     }
 
+
+
     getInspeccionesMostradas() {
-      
+        
         //alert((<EstadoMySuffix>this.inspeccions[0].estado).descripcion);
         //return this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion != 'Finalizado' : true);
-        return this.ocultarFinalizadas ? this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion.trim() !== 'Finalizado' : true) : this.inspeccions;
+        let mostrar : InspeccionMySuffix[] = this.ocultarFinalizadas ? this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion.trim() !== 'Finalizado' : true) : this.inspeccions;
+        mostrar = this.filtroMedidor && this.filtroMedidor.length > 0 ? 
+            mostrar.filter(i => i.medidorInstalado && i.medidorInstalado.startsWith(this.filtroMedidor)) : mostrar;
+
+        return mostrar;
     }
 
     cambioEtapa() {

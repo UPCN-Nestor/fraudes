@@ -56,6 +56,35 @@
         <dd>
             <span>{{inspeccion.mtsCable}}</span>
         </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.lecturaNuevo">Lectura Nuevo</span></dt>
+        <dd>
+            <span>{{inspeccion.lecturaNuevo}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.foto">Foto</span></dt>
+        <dd>
+            <div *ngIf="inspeccion.foto">
+                <a (click)="openFile(inspeccion.fotoContentType, inspeccion.foto)">
+                    <img [src]="'data:' + inspeccion.fotoContentType + ';base64,' + inspeccion.foto" style="max-width: 100%;" alt="inspeccion image"/>
+                </a>
+                {{inspeccion.fotoContentType}}, {{byteSize(inspeccion.foto)}}
+            </div>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.estadoGLM">Estado GLM</span></dt>
+        <dd>
+            <span>{{inspeccion.estadoGLM}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.lecturaActual">Lectura Actual</span></dt>
+        <dd>
+            <span>{{inspeccion.lecturaActual}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.fechaToma">Fecha Toma</span></dt>
+        <dd>
+            <span>{{inspeccion.fechaToma | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.medidorNuevoLibre">Medidor Nuevo Libre</span></dt>
+        <dd>
+            <span>{{inspeccion.medidorNuevoLibre}}</span>
+        </dd>
         <dt><span jhiTranslate="frApp.inspeccion.anomaliaMedidor">Anomalia Medidor</span></dt>
         <dd>
             <span *ngFor="let anomaliaMedidor of inspeccion.anomaliaMedidors; let last = last">
