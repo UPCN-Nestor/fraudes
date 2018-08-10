@@ -32,7 +32,7 @@ export const inspeccionRoute: Routes = [
             'pagingParams': InspeccionMySuffixResolvePagingParams
         },
         data: {
-            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.inspeccion.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -40,7 +40,7 @@ export const inspeccionRoute: Routes = [
         path: 'inspeccion-my-suffix/:id',
         component: InspeccionMySuffixDetailComponent,
         data: {
-            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.inspeccion.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -52,18 +52,17 @@ export const inspeccionPopupRoute: Routes = [
         path: 'inspeccion-my-suffix-new',
         component: InspeccionMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.inspeccion.home.title'
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
     },
-    
     {
         path: 'inspeccion-my-suffix/:id/edit',
         component: InspeccionMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.inspeccion.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -73,7 +72,7 @@ export const inspeccionPopupRoute: Routes = [
         path: 'inspeccion-my-suffix/:id/delete',
         component: InspeccionMySuffixDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.inspeccion.home.title'
         },
         canActivate: [UserRouteAccessService],

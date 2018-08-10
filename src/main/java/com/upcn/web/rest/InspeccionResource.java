@@ -98,11 +98,6 @@ public class InspeccionResource {
     public ResponseEntity<List<Inspeccion>> getAllInspeccions(InspeccionCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Inspeccions by criteria: {}", criteria);
         Page<Inspeccion> page = inspeccionQueryService.findByCriteria(criteria, pageable);
-        
-        for(Inspeccion i : page.getContent()) {
-            i.setFoto(null);
-        }        
-
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/inspeccions");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

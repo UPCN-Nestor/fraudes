@@ -10,7 +10,7 @@ import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
 import io.github.jhipster.service.filter.InstantFilter;
-
+import io.github.jhipster.service.filter.LocalDateFilter;
 
 
 
@@ -55,6 +55,14 @@ public class InspeccionCriteria implements Serializable {
     private FloatFilter mtsCable;
 
     private FloatFilter lecturaNuevo;
+
+    private StringFilter estadoGLM;
+
+    private FloatFilter lecturaActual;
+
+    private LocalDateFilter fechaToma;
+
+    private StringFilter medidorNuevoLibre;
 
     private LongFilter anomaliaMedidorId;
 
@@ -193,6 +201,38 @@ public class InspeccionCriteria implements Serializable {
         this.lecturaNuevo = lecturaNuevo;
     }
 
+    public StringFilter getEstadoGLM() {
+        return estadoGLM;
+    }
+
+    public void setEstadoGLM(StringFilter estadoGLM) {
+        this.estadoGLM = estadoGLM;
+    }
+
+    public FloatFilter getLecturaActual() {
+        return lecturaActual;
+    }
+
+    public void setLecturaActual(FloatFilter lecturaActual) {
+        this.lecturaActual = lecturaActual;
+    }
+
+    public LocalDateFilter getFechaToma() {
+        return fechaToma;
+    }
+
+    public void setFechaToma(LocalDateFilter fechaToma) {
+        this.fechaToma = fechaToma;
+    }
+
+    public StringFilter getMedidorNuevoLibre() {
+        return medidorNuevoLibre;
+    }
+
+    public void setMedidorNuevoLibre(StringFilter medidorNuevoLibre) {
+        this.medidorNuevoLibre = medidorNuevoLibre;
+    }
+
     public LongFilter getAnomaliaMedidorId() {
         return anomaliaMedidorId;
     }
@@ -267,6 +307,10 @@ public class InspeccionCriteria implements Serializable {
                 (tarifa != null ? "tarifa=" + tarifa + ", " : "") +
                 (mtsCable != null ? "mtsCable=" + mtsCable + ", " : "") +
                 (lecturaNuevo != null ? "lecturaNuevo=" + lecturaNuevo + ", " : "") +
+                (estadoGLM != null ? "estadoGLM=" + estadoGLM + ", " : "") +
+                (lecturaActual != null ? "lecturaActual=" + lecturaActual + ", " : "") +
+                (fechaToma != null ? "fechaToma=" + fechaToma + ", " : "") +
+                (medidorNuevoLibre != null ? "medidorNuevoLibre=" + medidorNuevoLibre + ", " : "") +
                 (anomaliaMedidorId != null ? "anomaliaMedidorId=" + anomaliaMedidorId + ", " : "") +
                 (trabajoId != null ? "trabajoId=" + trabajoId + ", " : "") +
                 (inmuebleId != null ? "inmuebleId=" + inmuebleId + ", " : "") +

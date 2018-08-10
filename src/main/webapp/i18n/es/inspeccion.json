@@ -3,13 +3,13 @@
     "frApp": {
         "inspeccion" : {
             "home": {
-                "title": "Inspecciones",
-                "createLabel": "Crear nueva Inspeccion",
+                "title": "Inspeccions",
+                "createLabel": "Crear nuevo Inspeccion",
                 "createOrEditLabel": "Crear o editar Inspeccion"
             },
-            "created": "Una nueva Inspeccion ha sido creada con el identificador {{ param }}",
-            "updated": "Una Inspeccion ha sido actualizada con el identificador {{ param }}",
-            "deleted": "Una Inspeccion ha sido eliminada con el identificador {{ param }}",
+            "created": "Un nuevo Inspeccion ha sido creado con el identificador {{ param }}",
+            "updated": "Un Inspeccion ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un Inspeccion ha sido eliminado con el identificador {{ param }}",
             "delete": {
                 "question": "¿Seguro que quiere eliminar Inspeccion {{ id }}?"
             },
@@ -29,6 +29,12 @@
             "nombre": "Nombre",
             "tarifa": "Tarifa",
             "mtsCable": "Mts Cable",
+            "lecturaNuevo": "Lectura Nuevo",
+            "foto": "Foto",
+            "estadoGLM": "Estado GLM",
+            "lecturaActual": "Lectura Actual",
+            "fechaToma": "Fecha Toma",
+            "medidorNuevoLibre": "Medidor Nuevo Libre",
             "anomaliaMedidor": "Anomalia Medidor",
             "trabajo": "Trabajo",
             "inmueble": "Inmueble",

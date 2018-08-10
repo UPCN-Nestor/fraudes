@@ -111,6 +111,22 @@
             "fieldName": "foto",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "estadoGLM",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lecturaActual",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "fechaToma",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "medidorNuevoLibre",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20180618120049",

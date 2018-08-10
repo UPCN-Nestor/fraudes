@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -73,6 +74,18 @@ public class Inspeccion implements Serializable {
 
     @Column(name = "foto_content_type")
     private String fotoContentType;
+
+    @Column(name = "estado_glm")
+    private String estadoGLM;
+
+    @Column(name = "lectura_actual")
+    private Float lecturaActual;
+
+    @Column(name = "fecha_toma")
+    private LocalDate fechaToma;
+
+    @Column(name = "medidor_nuevo_libre")
+    private String medidorNuevoLibre;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -321,6 +334,58 @@ public class Inspeccion implements Serializable {
         this.fotoContentType = fotoContentType;
     }
 
+    public String getEstadoGLM() {
+        return estadoGLM;
+    }
+
+    public Inspeccion estadoGLM(String estadoGLM) {
+        this.estadoGLM = estadoGLM;
+        return this;
+    }
+
+    public void setEstadoGLM(String estadoGLM) {
+        this.estadoGLM = estadoGLM;
+    }
+
+    public Float getLecturaActual() {
+        return lecturaActual;
+    }
+
+    public Inspeccion lecturaActual(Float lecturaActual) {
+        this.lecturaActual = lecturaActual;
+        return this;
+    }
+
+    public void setLecturaActual(Float lecturaActual) {
+        this.lecturaActual = lecturaActual;
+    }
+
+    public LocalDate getFechaToma() {
+        return fechaToma;
+    }
+
+    public Inspeccion fechaToma(LocalDate fechaToma) {
+        this.fechaToma = fechaToma;
+        return this;
+    }
+
+    public void setFechaToma(LocalDate fechaToma) {
+        this.fechaToma = fechaToma;
+    }
+
+    public String getMedidorNuevoLibre() {
+        return medidorNuevoLibre;
+    }
+
+    public Inspeccion medidorNuevoLibre(String medidorNuevoLibre) {
+        this.medidorNuevoLibre = medidorNuevoLibre;
+        return this;
+    }
+
+    public void setMedidorNuevoLibre(String medidorNuevoLibre) {
+        this.medidorNuevoLibre = medidorNuevoLibre;
+    }
+
     public Set<Anomalia> getAnomaliaMedidors() {
         return anomaliaMedidors;
     }
@@ -477,6 +542,10 @@ public class Inspeccion implements Serializable {
             ", lecturaNuevo=" + getLecturaNuevo() +
             ", foto='" + getFoto() + "'" +
             ", fotoContentType='" + getFotoContentType() + "'" +
+            ", estadoGLM='" + getEstadoGLM() + "'" +
+            ", lecturaActual=" + getLecturaActual() +
+            ", fechaToma='" + getFechaToma() + "'" +
+            ", medidorNuevoLibre='" + getMedidorNuevoLibre() + "'" +
             "}";
     }
 }

@@ -17,12 +17,6 @@ import { EstadoMySuffix, EstadoMySuffixService } from '../estado-my-suffix';
 import { TipoInmuebleMySuffix, TipoInmuebleMySuffixService } from '../tipo-inmueble-my-suffix';
 import { Medidor, MedidorService } from '../medidor';
 
-import { Principal } from '../../shared';
-
-import {MultiSelectModule} from 'primeng/multiselect';
-import { SelectItem } from 'primeng/api';
-import {SelectButtonModule} from 'primeng/selectbutton';
-
 @Component({
     selector: 'jhi-inspeccion-my-suffix-dialog',
     templateUrl: './inspeccion-my-suffix-dialog.component.html'
@@ -45,11 +39,11 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
     tipoinmuebles: TipoInmuebleMySuffix[];
 
     medidornuevos: Medidor[];
-
-	currentAccount: any;
+    fechaTomaDp: any;
 
     constructor(
         public activeModal: NgbActiveModal,
+        private dataUtils: JhiDataUtils,
         private jhiAlertService: JhiAlertService,
         private inspeccionService: InspeccionMySuffixService,
         private anomaliaService: AnomaliaMySuffixService,
@@ -59,56 +53,21 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         private estadoService: EstadoMySuffixService,
         private tipoInmuebleService: TipoInmuebleMySuffixService,
         private medidorService: MedidorService,
-        private eventManager: JhiEventManager,
-        private dataUtils: JhiDataUtils,
-        private principal: Principal,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private eventManager: JhiEventManager
     ) {
-    }
- 
-    byteSize(field) {
-        return this.dataUtils.byteSize(field);
-    }
-
-    openFile(contentType, field) {
-        return this.dataUtils.openFile(contentType, field);
-    }
-
-    setFileData(event, entity, field, isImage) {
-        this.dataUtils.setFileData(event, entity, field, isImage);
-    }
-
-    clearInputImage(field: string, fieldContentType: string, idInput: string) {
-        this.dataUtils.clearInputImage(this.inspeccion, this.elementRef, field, fieldContentType, idInput);
     }
 
     ngOnInit() {
-        this.principal.identity().then((account) => {
-            this.currentAccount = account;
-            this.inspeccion.usuario = this.currentAccount.login;
-        });
-
-        //this.pruebas = [{label:'x', value:'xx'}, {label:'y', value: 'yy'}];
-        //this.prueba = ['xx'];
-
         this.isSaving = false;
         this.anomaliaService.query()
             .subscribe((res: HttpResponse<AnomaliaMySuffix[]>) => { this.anomalias = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-        this.trabajoService.query({sort: ['descripcion']})
-            .subscribe((res: HttpResponse<TrabajoMySuffix[]>) => { 
-                this.trabajos = res.body.sort((a,b)=>{return a.descripcion < b.descripcion ? -1 : 1});
-            }, (res: HttpErrorResponse) => this.onError(res.message));
+        this.trabajoService.query()
+            .subscribe((res: HttpResponse<TrabajoMySuffix[]>) => { this.trabajos = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.inmuebleService.query()
             .subscribe((res: HttpResponse<InmuebleMySuffix[]>) => { this.inmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.etapaService.query()
-            .subscribe((res: HttpResponse<EtapaMySuffix[]>) => { 
-                this.etapas = res.body; 
-                if(!this.inspeccion.id) {
-
-                    this.inspeccion.etapa = <EtapaMySuffix>(this.etapas.filter(x=>x.numero==0)[0]);
-                    //alert(this.etapas.filter(x=>x.numero==0).numero);
-                }
-            }, (res: HttpErrorResponse) => this.onError(res.message));
+            .subscribe((res: HttpResponse<EtapaMySuffix[]>) => { this.etapas = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.estadoService.query()
             .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { this.estados = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.tipoInmuebleService.query()
@@ -126,49 +85,22 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
                         }, (subRes: HttpErrorResponse) => this.onError(subRes.message));
                 }
             }, (res: HttpErrorResponse) => this.onError(res.message));
-
-	    var d = new Date(); 
-        d.setTime(d.getTime() - (3*60*60*1000)); 
-        var dd = d.toISOString();
-        this.inspeccion.fechahora = dd.substring(0,dd.length-5);
     }
 
-    getAnomalias() : SelectItem[] {
-        return this.anomalias ? this.anomalias.map(x=><SelectItem>{label:x.descripcion, value:x}) : [];
+    byteSize(field) {
+        return this.dataUtils.byteSize(field);
     }
 
-    getNombre() : string {
-        if(!this.inspeccion.etapa || !this.etapas)
-            return;
-
-        if(this.inspeccion.etapa.id==0)
-            return 'Excepcional';
-        else
-            return '' + this.etapas.filter(e=> e.id == this.inspeccion.etapa.id)[0].numero + '/' + this.inspeccion.orden;
+    openFile(contentType, field) {
+        return this.dataUtils.openFile(contentType, field);
     }
 
-    usaCable() : boolean {
-        let usa = false;
-        if(this.trabajos && this.inspeccion.trabajos && this.inspeccion.trabajos.filter(x=>this.trabajos.find(t=>t.id==x.id && t.usaCable)).length > 0)
-            usa = true;
-
-        if(usa)
-            this.inspeccion.mtsCable = 7;
-        else
-            this.inspeccion.mtsCable = 0;
-            
-        return usa;
+    setFileData(event, entity, field, isImage) {
+        this.dataUtils.setFileData(event, entity, field, isImage);
     }
 
-    usaMedidor() : boolean {
-        if(this.inspeccion.trabajos==null) 
-            return false;
-        return this.inspeccion.trabajos.filter(x=>this.trabajos.find(t=>t.id==x.id).usaMedidor==true).length > 0;
-    }
-
-
-    str(obj) {
-        return JSON.stringify(obj);
+    clearInputImage(field: string, fieldContentType: string, idInput: string) {
+        this.dataUtils.clearInputImage(this.inspeccion, this.elementRef, field, fieldContentType, idInput);
     }
 
     clear() {
