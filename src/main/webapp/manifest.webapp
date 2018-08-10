@@ -1,6 +1,6 @@
 {
-  "name": "Inspecciones Fraudes",
-  "short_name": "Fraudes",
+  "name": "Inspecciones Medidores",
+  "short_name": "Medidores",
   "icons": [
       {
           "src": "./content/images/lupa.png",
