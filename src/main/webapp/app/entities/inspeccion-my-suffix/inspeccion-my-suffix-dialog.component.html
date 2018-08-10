@@ -106,7 +106,7 @@
 
         <label jhiTranslate="frApp.inspeccion.anomaliaMedidor" for="field_anomaliaMedidor">Anomalia Medidor</label>
         
-        <div><p-multiSelect id="field_anomaliaMedidor" name="anomaliaMedidor" defaultLabel="(Seleccionar)" filter="false" showHeader="false"
+        <div><p-multiSelect id="field_anomaliaMedidor" name="anomaliaMedidor" defaultLabel="(Seleccionar)" filter="false" showHeader="false" maxSelectedLabels="6"
             [options]="getAnomalias()" [(ngModel)]="inspeccion.anomaliaMedidors"></p-multiSelect>    
         </div>
         
@@ -116,7 +116,7 @@
             [options]="trabajos" optionLabel="descripcion" [(ngModel)]="inspeccion.trabajos"></p-selectButton>
          -->
         <div>
-        <p-multiSelect id="field_trabajo" name="trabajo" defaultLabel="(Seleccionar)" filter="false" showHeader="false"
+        <p-multiSelect id="field_trabajo" name="trabajo" defaultLabel="(Seleccionar)" filter="false" showHeader="false"  maxSelectedLabels="6"
             [options]="trabajos" optionLabel="descripcion" [(ngModel)]="inspeccion.trabajos"></p-multiSelect>
         </div>
         <!--

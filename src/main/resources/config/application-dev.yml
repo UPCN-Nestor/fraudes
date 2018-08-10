@@ -21,8 +21,7 @@ logging:
 
 spring:
     profiles:
-        active: dev
-        include: swagger
+        active: dev,fast
     devtools:
         restart:
             enabled: true

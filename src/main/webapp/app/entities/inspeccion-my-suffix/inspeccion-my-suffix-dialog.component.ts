@@ -138,6 +138,9 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
     }
 
     getNombre() : string {
+        if(!this.inspeccion.etapa || !this.etapas)
+            return;
+
         if(this.inspeccion.etapa.id==0)
             return 'Excepcional';
         else
@@ -146,7 +149,7 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
 
     usaCable() : boolean {
         let usa = false;
-        if(this.trabajos && this.inspeccion.trabajos.filter(x=>this.trabajos.find(t=>t.id==x.id).usaCable==true).length > 0)
+        if(this.trabajos && this.inspeccion.trabajos && this.inspeccion.trabajos.filter(x=>this.trabajos.find(t=>t.id==x.id && t.usaCable)).length > 0)
             usa = true;
 
         if(usa)
