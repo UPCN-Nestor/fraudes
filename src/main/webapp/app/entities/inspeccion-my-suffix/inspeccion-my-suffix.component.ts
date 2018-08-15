@@ -43,7 +43,10 @@ currentAccount: any;
     etapaSeleccionada : number;
 
     ocultarFinalizadas : boolean = true;
-    filtroMedidor : string = "";
+    filtroMedidor : number;
+
+    estados: EstadoMySuffix[];
+
 
     constructor(
         private inspeccionService: InspeccionMySuffixService,
@@ -96,14 +99,15 @@ currentAccount: any;
 
 
     getInspeccionesMostradas() {
-        
+        return this.inspeccions;
+        /*
         //alert((<EstadoMySuffix>this.inspeccions[0].estado).descripcion);
         //return this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion != 'Finalizado' : true);
         let mostrar : InspeccionMySuffix[] = this.ocultarFinalizadas ? this.inspeccions.filter(x=>x.estado ? (<EstadoMySuffix>x.estado).descripcion.trim() !== 'Finalizado' : true) : this.inspeccions;
-        mostrar = this.filtroMedidor && this.filtroMedidor.length > 0 ? 
-            mostrar.filter(i => i.medidorInstalado && i.medidorInstalado.startsWith(this.filtroMedidor)) : mostrar;
+        mostrar = this.filtroMedidor && this.filtroMedidor > 0 ? 
+            mostrar.filter(i => i.medidorInstalado && i.medidorInstalado.lastIndexOf("" + this.filtroMedidor)>-1) : mostrar;
 
-        return mostrar;
+        return mostrar;*/
     }
 
     cambioEtapa() {
@@ -111,8 +115,15 @@ currentAccount: any;
     }
 
     loadByEtapa() {
+        let estadosMostrados = this.ocultarFinalizadas ? this.estados.filter(x=> (<EstadoMySuffix>x).descripcion.trim() !== 'Finalizado')
+            .map(x=>x.id + '')
+            .reduce((a,b)=>a + ', ' + b)
+                : this.estados.map(x=>x.id + '').reduce((a,b)=>a + ',' + b);
+
         this.inspeccionService.query({
             'etapaId.equals': this.etapaSeleccionada,
+            'estadoId.in': estadosMostrados,
+            'medidorInstalado.contains': this.filtroMedidor ? this.filtroMedidor + '' : '',
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}).subscribe(
@@ -149,12 +160,17 @@ currentAccount: any;
     }
     ngOnInit() {
         this.etapaSeleccionada = 1;
-
-        this.loadByEtapa();
+       
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
         this.registerChangeInInspeccions();
+
+        this.estadoService.query()
+            .subscribe((res: HttpResponse<EstadoMySuffix[]>) => { 
+                this.estados = res.body;     
+                this.loadByEtapa();              
+            }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     ngOnDestroy() {

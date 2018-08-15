@@ -67,6 +67,12 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
     ) {
     }
  
+    isMobile() { 
+        if(navigator.userAgent.match(/Android/i))
+            return true;
+        else return false;
+    }
+
     byteSize(field) {
         return this.dataUtils.byteSize(field);
     }
@@ -143,6 +149,9 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         d.setTime(d.getTime() - (3*60*60*1000)); 
         var dd = d.toISOString();
         this.inspeccion.fechahora = dd.substring(0,dd.length-5);
+
+        //this.inspeccion.fechaToma = this.inspeccion.fechaToma.year + "-" + this.inspeccion.fechaToma.month + "-" + this.inspeccion.fechaToma.day;
+        //alert(Object.keys(this.inspeccion.fechaToma));
     }
 
     getAnomalias() : SelectItem[] {

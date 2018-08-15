@@ -1,6 +1,6 @@
-<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+<div #desplegable></div>
 
-    
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">  
 
     <div class="modal-header">
         <h4 *jhiHasAnyAuthority="'ROLE_ADMIN'" class="modal-title" id="myInspeccionLabel">{{inspeccion.id ? "Inspección " + getNombre() : "Nueva inspección"}}</h4>
@@ -8,13 +8,14 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="clear()">&times;</button>
     </div>
-    <div class="modal-body">
+    <div #base class="modal-body">
         <jhi-alert-error></jhi-alert-error>
         <div class="form-group" *ngIf="this.inspeccion.id">
+        <div style="font-weight: bold;">{{inspeccion.nombre}} {{inspeccion.socio}}/{{inspeccion.suministro}} ({{inspeccion.tarifa}} {{inspeccion.estadoGLM}})</div>
         <div *ngIf="inspeccion.inmueble" style="font-weight: bold;">
             Calle {{inspeccion.inmueble.calle}} Nº{{inspeccion.inmueble.altura}} {{inspeccion.inmueble.depto}} {{inspeccion.inmueble.piso}} {{inspeccion.inmueble.anexo}}
         </div>
-        <div style="font-weight: bold;">Socio {{inspeccion.socio}}/{{inspeccion.suministro}} ({{inspeccion.tarifa}}) {{inspeccion.estadoGLM}}</div>
+        
         </div>
 
         <div style="color:red !important;" *jhiHasAnyAuthority="'ROLE_ADMIN'">
@@ -98,7 +99,7 @@
         </div>
         -->
         <div style="font-weight: bold;" class="form-group">
-                Medidor Instalado Nº {{inspeccion.medidorInstalado}}, última lectura: {{inspeccion.ultimaLectura}} ({{inspeccion.fechaToma}})
+                Medidor instalado Nº {{inspeccion.medidorInstalado}}, última lectura: {{inspeccion.ultimaLectura}} ({{inspeccion.fechaToma | date:'shortDate'}}) <!--Needs refactor-->
         </div>        
         <div class="form-group">
             <label class="form-control-label" for="field_medidorRetirado">Medidor Hallado (dejar vacío si coincide)</label>
@@ -113,16 +114,29 @@
 
         <label for="field_anomaliaMedidor">Anomalia Habitáculo o Medidor</label>
         
-        <div><p-multiSelect id="field_anomaliaMedidor" name="anomaliaMedidor" defaultLabel="(Seleccionar)" filter="false" showHeader="false" maxSelectedLabels="6"
-            [options]="getAnomalias()" [(ngModel)]="inspeccion.anomaliaMedidors"></p-multiSelect>    
+        <div *ngIf="isMobile()">
+            <div class="form-group">
+                <label jhiTranslate="frApp.inspeccion.anomaliaMedidor" for="field_anomaliaMedidor">Anomalia Medidor</label>
+                <select class="form-control" id="field_anomaliaMedidor" multiple name="anomaliaMedidor" [(ngModel)]="inspeccion.anomaliaMedidors">
+                    <option [ngValue]="getSelected(inspeccion.anomaliaMedidors, anomaliaOption)" *ngFor="let anomaliaOption of anomalias; trackBy: trackAnomaliaById">{{anomaliaOption.descripcion}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div *ngIf="!isMobile()">
+            <p-multiSelect id="field_anomaliaMedidor" name="anomaliaMedidor" defaultLabel="(Seleccionar)" filter="false" showHeader="true" maxSelectedLabels="6"
+                [options]="getAnomalias()" [(ngModel)]="inspeccion.anomaliaMedidors"></p-multiSelect>    
         </div>
         
         <label jhiTranslate="frApp.inspeccion.trabajo" for="field_trabajo">Trabajo</label>
-        <!--
-        <p-selectButton multiple="multiple" class="form-control" id="field_trabajo" name="trabajo" dataKey="id"
-            [options]="trabajos" optionLabel="descripcion" [(ngModel)]="inspeccion.trabajos"></p-selectButton>
-         -->
-        <div>
+
+        <div *ngIf="isMobile()">
+            <select class="form-control" id="field_trabajo" multiple name="trabajo" [(ngModel)]="inspeccion.trabajos">
+                <option [ngValue]="getSelected(inspeccion.trabajos, trabajoOption)" *ngFor="let trabajoOption of trabajos; trackBy: trackTrabajoById">{{trabajoOption.descripcion}}</option>
+            </select>
+        </div>
+
+        <div *ngIf="!isMobile()">
         <p-multiSelect id="field_trabajo" name="trabajo" defaultLabel="(Seleccionar)" filter="false" showHeader="false"  maxSelectedLabels="6"
             [options]="trabajos" optionLabel="descripcion" [(ngModel)]="inspeccion.trabajos"></p-multiSelect>
         </div>

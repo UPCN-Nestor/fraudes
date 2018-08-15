@@ -1,4 +1,4 @@
-LOAD DATA INFILE 'C:\\JH\\SQL\\Fr1a5.txt' INTO TABLE xls;
+LOAD DATA INFILE 'C:\\Fr\\SQL\\Fr1a5.txt' INTO TABLE xls;
 
 
 
@@ -35,3 +35,36 @@ from xls x join (select id, concat(calle, ' ', altura) as domicilio from inmuebl
 	cross join (select @rownum := 0) r
 where x.domicilio = i.domicilio
 	and x.etapa = e.numero
+	
+	
+*** Importar medidores y lecturas
+
+select socio, suministro from inspeccion where etapa_id = {x}
+
+- Exportar a csv. Luego, en SQLServer:
+
+CREATE TABLE #FraudesSocSumi (socio integer, suministro integer)
+
+BULK INSERT #FraudesSocSumi 
+FROM '\\SYS-NESTOR\Compartida\SQL\socsumi.txt'
+WITH ( FIRSTROW = 1, FIELDTERMINATOR = ',', ROWTERMINATOR = '\n', TABLOCK)
+
+select socio, suministro, Sum6Nromed as medidorInstalado, Sum6FecUlt as fechaToma, Sum6LecUni as ultimaLectura, Sum6Estado as estadoGLM
+from summed sm join #FraudesSocSumi f on (sm.Soc_numero = f.socio and sm.Sumi_numer = f.suministro)
+where SucCodigo = 1 and Sum2Servi = 1
+
+Exportar a medidores.csv
+
+- De nuevo en MySQL:
+
+LOAD DATA INFILE 'C:\\Fr\\SQL\\medidores.csv' 
+INTO TABLE medidores_import
+FIELDS TERMINATED BY ';'
+
+update inspeccion i
+join medidores_import m on i.socio = m.socio and i.suministro = m.suministro
+set i.medidor_instalado = m.medidorInstalado, i.ultima_lectura = m.ultimaLectura, i.fecha_toma = m.fechaToma, i.estado_glm = m.estadoGLM
+
+
+
+

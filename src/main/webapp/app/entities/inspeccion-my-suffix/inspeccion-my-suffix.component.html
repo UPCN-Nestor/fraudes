@@ -24,10 +24,10 @@
     </tr>
     <tr>
         <td>Filtro por medidor</td>
-        <td><input [(ngModel)]="filtroMedidor"></td>
+        <td><input [(ngModel)]="filtroMedidor" type="number" style="width: 10em;" (change)="loadByEtapa()"></td>
     </tr>
     <tr><td>Finalizadas</td>
-        <td><p-inputSwitch [(ngModel)]="ocultarFinalizadas" onLabel="Ocultar" offLabel="Mostrar" ></p-inputSwitch></td>
+        <td><p-inputSwitch [(ngModel)]="ocultarFinalizadas" onLabel="Ocultar" offLabel="Mostrar" (onChange)="loadByEtapa()"></p-inputSwitch></td>
     </tr>
     </table>
 

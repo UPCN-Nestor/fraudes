@@ -33,13 +33,13 @@ export class InspeccionMySuffixPopupService {
                         const inspeccion: InspeccionMySuffix = inspeccionResponse.body;
                         inspeccion.fechahora = this.datePipe
                             .transform(inspeccion.fechahora, 'yyyy-MM-ddTHH:mm:ss');
-                        if (inspeccion.fechaToma) {
+                        /*if (inspeccion.fechaToma) {
                             inspeccion.fechaToma = {
                                 year: inspeccion.fechaToma.getFullYear(),
                                 month: inspeccion.fechaToma.getMonth() + 1,
                                 day: inspeccion.fechaToma.getDate()
                             };
-                        }
+                        }*/
                         this.ngbModalRef = this.inspeccionModalRef(component, inspeccion);
                         resolve(this.ngbModalRef);
                     });
