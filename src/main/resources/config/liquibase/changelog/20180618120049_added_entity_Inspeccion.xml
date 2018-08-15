@@ -101,6 +101,18 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="ultimo_consumo" type="${floatType}">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="promedio_consumo" type="${floatType}">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="mono_trif" type="bit">
+                <constraints nullable="true" />
+            </column>
+
             <column name="inmueble_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -117,6 +129,10 @@
                 <constraints nullable="true" />
             </column>
             <column name="medidor_nuevo_id" type="bigint">
+                <constraints unique="true" nullable="true" />
+            </column>            <column name="precinto_bornera_id" type="bigint">
+                <constraints unique="true" nullable="true" />
+            </column>            <column name="precinto_habitaculo_id" type="bigint">
                 <constraints unique="true" nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->

@@ -54,6 +54,9 @@ public class TrabajoResourceIntTest {
     private static final Boolean DEFAULT_USA_CABLE = false;
     private static final Boolean UPDATED_USA_CABLE = true;
 
+    private static final Float DEFAULT_COSTO_TRIF = 1F;
+    private static final Float UPDATED_COSTO_TRIF = 2F;
+
     @Autowired
     private TrabajoRepository trabajoRepository;
 
@@ -101,7 +104,8 @@ public class TrabajoResourceIntTest {
             .descripcion(DEFAULT_DESCRIPCION)
             .costo(DEFAULT_COSTO)
             .usaMedidor(DEFAULT_USA_MEDIDOR)
-            .usaCable(DEFAULT_USA_CABLE);
+            .usaCable(DEFAULT_USA_CABLE)
+            .costoTrif(DEFAULT_COSTO_TRIF);
         return trabajo;
     }
 
@@ -129,6 +133,7 @@ public class TrabajoResourceIntTest {
         assertThat(testTrabajo.getCosto()).isEqualTo(DEFAULT_COSTO);
         assertThat(testTrabajo.isUsaMedidor()).isEqualTo(DEFAULT_USA_MEDIDOR);
         assertThat(testTrabajo.isUsaCable()).isEqualTo(DEFAULT_USA_CABLE);
+        assertThat(testTrabajo.getCostoTrif()).isEqualTo(DEFAULT_COSTO_TRIF);
     }
 
     @Test
@@ -164,7 +169,8 @@ public class TrabajoResourceIntTest {
             .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())))
             .andExpect(jsonPath("$.[*].costo").value(hasItem(DEFAULT_COSTO.doubleValue())))
             .andExpect(jsonPath("$.[*].usaMedidor").value(hasItem(DEFAULT_USA_MEDIDOR.booleanValue())))
-            .andExpect(jsonPath("$.[*].usaCable").value(hasItem(DEFAULT_USA_CABLE.booleanValue())));
+            .andExpect(jsonPath("$.[*].usaCable").value(hasItem(DEFAULT_USA_CABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].costoTrif").value(hasItem(DEFAULT_COSTO_TRIF.doubleValue())));
     }
 
     @Test
@@ -181,7 +187,8 @@ public class TrabajoResourceIntTest {
             .andExpect(jsonPath("$.descripcion").value(DEFAULT_DESCRIPCION.toString()))
             .andExpect(jsonPath("$.costo").value(DEFAULT_COSTO.doubleValue()))
             .andExpect(jsonPath("$.usaMedidor").value(DEFAULT_USA_MEDIDOR.booleanValue()))
-            .andExpect(jsonPath("$.usaCable").value(DEFAULT_USA_CABLE.booleanValue()));
+            .andExpect(jsonPath("$.usaCable").value(DEFAULT_USA_CABLE.booleanValue()))
+            .andExpect(jsonPath("$.costoTrif").value(DEFAULT_COSTO_TRIF.doubleValue()));
     }
 
     @Test
@@ -342,6 +349,45 @@ public class TrabajoResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllTrabajosByCostoTrifIsEqualToSomething() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where costoTrif equals to DEFAULT_COSTO_TRIF
+        defaultTrabajoShouldBeFound("costoTrif.equals=" + DEFAULT_COSTO_TRIF);
+
+        // Get all the trabajoList where costoTrif equals to UPDATED_COSTO_TRIF
+        defaultTrabajoShouldNotBeFound("costoTrif.equals=" + UPDATED_COSTO_TRIF);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByCostoTrifIsInShouldWork() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where costoTrif in DEFAULT_COSTO_TRIF or UPDATED_COSTO_TRIF
+        defaultTrabajoShouldBeFound("costoTrif.in=" + DEFAULT_COSTO_TRIF + "," + UPDATED_COSTO_TRIF);
+
+        // Get all the trabajoList where costoTrif equals to UPDATED_COSTO_TRIF
+        defaultTrabajoShouldNotBeFound("costoTrif.in=" + UPDATED_COSTO_TRIF);
+    }
+
+    @Test
+    @Transactional
+    public void getAllTrabajosByCostoTrifIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        trabajoRepository.saveAndFlush(trabajo);
+
+        // Get all the trabajoList where costoTrif is not null
+        defaultTrabajoShouldBeFound("costoTrif.specified=true");
+
+        // Get all the trabajoList where costoTrif is null
+        defaultTrabajoShouldNotBeFound("costoTrif.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllTrabajosByInspeccionIsEqualToSomething() throws Exception {
         // Initialize the database
         Inspeccion inspeccion = InspeccionResourceIntTest.createEntity(em);
@@ -369,7 +415,8 @@ public class TrabajoResourceIntTest {
             .andExpect(jsonPath("$.[*].descripcion").value(hasItem(DEFAULT_DESCRIPCION.toString())))
             .andExpect(jsonPath("$.[*].costo").value(hasItem(DEFAULT_COSTO.doubleValue())))
             .andExpect(jsonPath("$.[*].usaMedidor").value(hasItem(DEFAULT_USA_MEDIDOR.booleanValue())))
-            .andExpect(jsonPath("$.[*].usaCable").value(hasItem(DEFAULT_USA_CABLE.booleanValue())));
+            .andExpect(jsonPath("$.[*].usaCable").value(hasItem(DEFAULT_USA_CABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].costoTrif").value(hasItem(DEFAULT_COSTO_TRIF.doubleValue())));
     }
 
     /**
@@ -408,7 +455,8 @@ public class TrabajoResourceIntTest {
             .descripcion(UPDATED_DESCRIPCION)
             .costo(UPDATED_COSTO)
             .usaMedidor(UPDATED_USA_MEDIDOR)
-            .usaCable(UPDATED_USA_CABLE);
+            .usaCable(UPDATED_USA_CABLE)
+            .costoTrif(UPDATED_COSTO_TRIF);
 
         restTrabajoMockMvc.perform(put("/api/trabajos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -423,6 +471,7 @@ public class TrabajoResourceIntTest {
         assertThat(testTrabajo.getCosto()).isEqualTo(UPDATED_COSTO);
         assertThat(testTrabajo.isUsaMedidor()).isEqualTo(UPDATED_USA_MEDIDOR);
         assertThat(testTrabajo.isUsaCable()).isEqualTo(UPDATED_USA_CABLE);
+        assertThat(testTrabajo.getCostoTrif()).isEqualTo(UPDATED_COSTO_TRIF);
     }
 
     @Test

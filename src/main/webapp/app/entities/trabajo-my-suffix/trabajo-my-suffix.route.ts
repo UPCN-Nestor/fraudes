@@ -11,7 +11,7 @@ export const trabajoRoute: Routes = [
         path: 'trabajo-my-suffix',
         component: TrabajoMySuffixComponent,
         data: {
-            authorities: ['ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.trabajo.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const trabajoRoute: Routes = [
         path: 'trabajo-my-suffix/:id',
         component: TrabajoMySuffixDetailComponent,
         data: {
-            authorities: ['ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.trabajo.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -31,7 +31,7 @@ export const trabajoPopupRoute: Routes = [
         path: 'trabajo-my-suffix-new',
         component: TrabajoMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.trabajo.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -41,7 +41,7 @@ export const trabajoPopupRoute: Routes = [
         path: 'trabajo-my-suffix/:id/edit',
         component: TrabajoMySuffixPopupComponent,
         data: {
-            authorities: ['ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.trabajo.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const trabajoPopupRoute: Routes = [
         path: 'trabajo-my-suffix/:id/delete',
         component: TrabajoMySuffixDeletePopupComponent,
         data: {
-            authorities: ['ROLE_ADMIN'],
+            authorities: ['ROLE_USER'],
             pageTitle: 'frApp.trabajo.home.title'
         },
         canActivate: [UserRouteAccessService],

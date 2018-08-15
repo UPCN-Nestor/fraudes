@@ -85,6 +85,18 @@
         <dd>
             <span>{{inspeccion.medidorNuevoLibre}}</span>
         </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.ultimoConsumo">Ultimo Consumo</span></dt>
+        <dd>
+            <span>{{inspeccion.ultimoConsumo}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.promedioConsumo">Promedio Consumo</span></dt>
+        <dd>
+            <span>{{inspeccion.promedioConsumo}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.monoTrif">Mono Trif</span></dt>
+        <dd>
+            <span>{{inspeccion.monoTrif}}</span>
+        </dd>
         <dt><span jhiTranslate="frApp.inspeccion.anomaliaMedidor">Anomalia Medidor</span></dt>
         <dd>
             <span *ngFor="let anomaliaMedidor of inspeccion.anomaliaMedidors; let last = last">
@@ -125,6 +137,18 @@
         <dd>
             <div *ngIf="inspeccion.medidorNuevo">
                 <a [routerLink]="['/medidor', inspeccion.medidorNuevo?.id]">{{inspeccion.medidorNuevo?.numero}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.precintoBornera">Precinto Bornera</span></dt>
+        <dd>
+            <div *ngIf="inspeccion.precintoBornera">
+                <a [routerLink]="['/precinto', inspeccion.precintoBornera?.id]">{{inspeccion.precintoBornera?.numero}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="frApp.inspeccion.precintoHabitaculo">Precinto Habitaculo</span></dt>
+        <dd>
+            <div *ngIf="inspeccion.precintoHabitaculo">
+                <a [routerLink]="['/precinto', inspeccion.precintoHabitaculo?.id]">{{inspeccion.precintoHabitaculo?.numero}}</a>
             </div>
         </dd>
     </dl>

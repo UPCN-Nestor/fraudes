@@ -10,6 +10,8 @@ import com.upcn.domain.Etapa;
 import com.upcn.domain.Estado;
 import com.upcn.domain.TipoInmueble;
 import com.upcn.domain.Medidor;
+import com.upcn.domain.Precinto;
+import com.upcn.domain.Precinto;
 import com.upcn.repository.InspeccionRepository;
 import com.upcn.service.InspeccionService;
 import com.upcn.web.rest.errors.ExceptionTranslator;
@@ -112,6 +114,15 @@ public class InspeccionResourceIntTest {
     private static final String DEFAULT_MEDIDOR_NUEVO_LIBRE = "AAAAAAAAAA";
     private static final String UPDATED_MEDIDOR_NUEVO_LIBRE = "BBBBBBBBBB";
 
+    private static final Float DEFAULT_ULTIMO_CONSUMO = 1F;
+    private static final Float UPDATED_ULTIMO_CONSUMO = 2F;
+
+    private static final Float DEFAULT_PROMEDIO_CONSUMO = 1F;
+    private static final Float UPDATED_PROMEDIO_CONSUMO = 2F;
+
+    private static final Boolean DEFAULT_MONO_TRIF = false;
+    private static final Boolean UPDATED_MONO_TRIF = true;
+
     @Autowired
     private InspeccionRepository inspeccionRepository;
 
@@ -175,7 +186,10 @@ public class InspeccionResourceIntTest {
             .estadoGLM(DEFAULT_ESTADO_GLM)
             .lecturaActual(DEFAULT_LECTURA_ACTUAL)
             .fechaToma(DEFAULT_FECHA_TOMA)
-            .medidorNuevoLibre(DEFAULT_MEDIDOR_NUEVO_LIBRE);
+            .medidorNuevoLibre(DEFAULT_MEDIDOR_NUEVO_LIBRE)
+            .ultimoConsumo(DEFAULT_ULTIMO_CONSUMO)
+            .promedioConsumo(DEFAULT_PROMEDIO_CONSUMO)
+            .monoTrif(DEFAULT_MONO_TRIF);
         return inspeccion;
     }
 
@@ -219,6 +233,9 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getLecturaActual()).isEqualTo(DEFAULT_LECTURA_ACTUAL);
         assertThat(testInspeccion.getFechaToma()).isEqualTo(DEFAULT_FECHA_TOMA);
         assertThat(testInspeccion.getMedidorNuevoLibre()).isEqualTo(DEFAULT_MEDIDOR_NUEVO_LIBRE);
+        assertThat(testInspeccion.getUltimoConsumo()).isEqualTo(DEFAULT_ULTIMO_CONSUMO);
+        assertThat(testInspeccion.getPromedioConsumo()).isEqualTo(DEFAULT_PROMEDIO_CONSUMO);
+        assertThat(testInspeccion.isMonoTrif()).isEqualTo(DEFAULT_MONO_TRIF);
     }
 
     @Test
@@ -270,7 +287,10 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].estadoGLM").value(hasItem(DEFAULT_ESTADO_GLM.toString())))
             .andExpect(jsonPath("$.[*].lecturaActual").value(hasItem(DEFAULT_LECTURA_ACTUAL.doubleValue())))
             .andExpect(jsonPath("$.[*].fechaToma").value(hasItem(DEFAULT_FECHA_TOMA.toString())))
-            .andExpect(jsonPath("$.[*].medidorNuevoLibre").value(hasItem(DEFAULT_MEDIDOR_NUEVO_LIBRE.toString())));
+            .andExpect(jsonPath("$.[*].medidorNuevoLibre").value(hasItem(DEFAULT_MEDIDOR_NUEVO_LIBRE.toString())))
+            .andExpect(jsonPath("$.[*].ultimoConsumo").value(hasItem(DEFAULT_ULTIMO_CONSUMO.doubleValue())))
+            .andExpect(jsonPath("$.[*].promedioConsumo").value(hasItem(DEFAULT_PROMEDIO_CONSUMO.doubleValue())))
+            .andExpect(jsonPath("$.[*].monoTrif").value(hasItem(DEFAULT_MONO_TRIF.booleanValue())));
     }
 
     @Test
@@ -303,7 +323,10 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.estadoGLM").value(DEFAULT_ESTADO_GLM.toString()))
             .andExpect(jsonPath("$.lecturaActual").value(DEFAULT_LECTURA_ACTUAL.doubleValue()))
             .andExpect(jsonPath("$.fechaToma").value(DEFAULT_FECHA_TOMA.toString()))
-            .andExpect(jsonPath("$.medidorNuevoLibre").value(DEFAULT_MEDIDOR_NUEVO_LIBRE.toString()));
+            .andExpect(jsonPath("$.medidorNuevoLibre").value(DEFAULT_MEDIDOR_NUEVO_LIBRE.toString()))
+            .andExpect(jsonPath("$.ultimoConsumo").value(DEFAULT_ULTIMO_CONSUMO.doubleValue()))
+            .andExpect(jsonPath("$.promedioConsumo").value(DEFAULT_PROMEDIO_CONSUMO.doubleValue()))
+            .andExpect(jsonPath("$.monoTrif").value(DEFAULT_MONO_TRIF.booleanValue()));
     }
 
     @Test
@@ -1118,6 +1141,123 @@ public class InspeccionResourceIntTest {
 
     @Test
     @Transactional
+    public void getAllInspeccionsByUltimoConsumoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where ultimoConsumo equals to DEFAULT_ULTIMO_CONSUMO
+        defaultInspeccionShouldBeFound("ultimoConsumo.equals=" + DEFAULT_ULTIMO_CONSUMO);
+
+        // Get all the inspeccionList where ultimoConsumo equals to UPDATED_ULTIMO_CONSUMO
+        defaultInspeccionShouldNotBeFound("ultimoConsumo.equals=" + UPDATED_ULTIMO_CONSUMO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByUltimoConsumoIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where ultimoConsumo in DEFAULT_ULTIMO_CONSUMO or UPDATED_ULTIMO_CONSUMO
+        defaultInspeccionShouldBeFound("ultimoConsumo.in=" + DEFAULT_ULTIMO_CONSUMO + "," + UPDATED_ULTIMO_CONSUMO);
+
+        // Get all the inspeccionList where ultimoConsumo equals to UPDATED_ULTIMO_CONSUMO
+        defaultInspeccionShouldNotBeFound("ultimoConsumo.in=" + UPDATED_ULTIMO_CONSUMO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByUltimoConsumoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where ultimoConsumo is not null
+        defaultInspeccionShouldBeFound("ultimoConsumo.specified=true");
+
+        // Get all the inspeccionList where ultimoConsumo is null
+        defaultInspeccionShouldNotBeFound("ultimoConsumo.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByPromedioConsumoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where promedioConsumo equals to DEFAULT_PROMEDIO_CONSUMO
+        defaultInspeccionShouldBeFound("promedioConsumo.equals=" + DEFAULT_PROMEDIO_CONSUMO);
+
+        // Get all the inspeccionList where promedioConsumo equals to UPDATED_PROMEDIO_CONSUMO
+        defaultInspeccionShouldNotBeFound("promedioConsumo.equals=" + UPDATED_PROMEDIO_CONSUMO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByPromedioConsumoIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where promedioConsumo in DEFAULT_PROMEDIO_CONSUMO or UPDATED_PROMEDIO_CONSUMO
+        defaultInspeccionShouldBeFound("promedioConsumo.in=" + DEFAULT_PROMEDIO_CONSUMO + "," + UPDATED_PROMEDIO_CONSUMO);
+
+        // Get all the inspeccionList where promedioConsumo equals to UPDATED_PROMEDIO_CONSUMO
+        defaultInspeccionShouldNotBeFound("promedioConsumo.in=" + UPDATED_PROMEDIO_CONSUMO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByPromedioConsumoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where promedioConsumo is not null
+        defaultInspeccionShouldBeFound("promedioConsumo.specified=true");
+
+        // Get all the inspeccionList where promedioConsumo is null
+        defaultInspeccionShouldNotBeFound("promedioConsumo.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMonoTrifIsEqualToSomething() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where monoTrif equals to DEFAULT_MONO_TRIF
+        defaultInspeccionShouldBeFound("monoTrif.equals=" + DEFAULT_MONO_TRIF);
+
+        // Get all the inspeccionList where monoTrif equals to UPDATED_MONO_TRIF
+        defaultInspeccionShouldNotBeFound("monoTrif.equals=" + UPDATED_MONO_TRIF);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMonoTrifIsInShouldWork() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where monoTrif in DEFAULT_MONO_TRIF or UPDATED_MONO_TRIF
+        defaultInspeccionShouldBeFound("monoTrif.in=" + DEFAULT_MONO_TRIF + "," + UPDATED_MONO_TRIF);
+
+        // Get all the inspeccionList where monoTrif equals to UPDATED_MONO_TRIF
+        defaultInspeccionShouldNotBeFound("monoTrif.in=" + UPDATED_MONO_TRIF);
+    }
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByMonoTrifIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        inspeccionRepository.saveAndFlush(inspeccion);
+
+        // Get all the inspeccionList where monoTrif is not null
+        defaultInspeccionShouldBeFound("monoTrif.specified=true");
+
+        // Get all the inspeccionList where monoTrif is null
+        defaultInspeccionShouldNotBeFound("monoTrif.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllInspeccionsByAnomaliaMedidorIsEqualToSomething() throws Exception {
         // Initialize the database
         Anomalia anomaliaMedidor = AnomaliaResourceIntTest.createEntity(em);
@@ -1248,6 +1388,44 @@ public class InspeccionResourceIntTest {
         defaultInspeccionShouldNotBeFound("medidorNuevoId.equals=" + (medidorNuevoId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByPrecintoBorneraIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Precinto precintoBornera = PrecintoResourceIntTest.createEntity(em);
+        em.persist(precintoBornera);
+        em.flush();
+        inspeccion.setPrecintoBornera(precintoBornera);
+        inspeccionRepository.saveAndFlush(inspeccion);
+        Long precintoBorneraId = precintoBornera.getId();
+
+        // Get all the inspeccionList where precintoBornera equals to precintoBorneraId
+        defaultInspeccionShouldBeFound("precintoBorneraId.equals=" + precintoBorneraId);
+
+        // Get all the inspeccionList where precintoBornera equals to precintoBorneraId + 1
+        defaultInspeccionShouldNotBeFound("precintoBorneraId.equals=" + (precintoBorneraId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllInspeccionsByPrecintoHabitaculoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Precinto precintoHabitaculo = PrecintoResourceIntTest.createEntity(em);
+        em.persist(precintoHabitaculo);
+        em.flush();
+        inspeccion.setPrecintoHabitaculo(precintoHabitaculo);
+        inspeccionRepository.saveAndFlush(inspeccion);
+        Long precintoHabitaculoId = precintoHabitaculo.getId();
+
+        // Get all the inspeccionList where precintoHabitaculo equals to precintoHabitaculoId
+        defaultInspeccionShouldBeFound("precintoHabitaculoId.equals=" + precintoHabitaculoId);
+
+        // Get all the inspeccionList where precintoHabitaculo equals to precintoHabitaculoId + 1
+        defaultInspeccionShouldNotBeFound("precintoHabitaculoId.equals=" + (precintoHabitaculoId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned
      */
@@ -1275,7 +1453,10 @@ public class InspeccionResourceIntTest {
             .andExpect(jsonPath("$.[*].estadoGLM").value(hasItem(DEFAULT_ESTADO_GLM.toString())))
             .andExpect(jsonPath("$.[*].lecturaActual").value(hasItem(DEFAULT_LECTURA_ACTUAL.doubleValue())))
             .andExpect(jsonPath("$.[*].fechaToma").value(hasItem(DEFAULT_FECHA_TOMA.toString())))
-            .andExpect(jsonPath("$.[*].medidorNuevoLibre").value(hasItem(DEFAULT_MEDIDOR_NUEVO_LIBRE.toString())));
+            .andExpect(jsonPath("$.[*].medidorNuevoLibre").value(hasItem(DEFAULT_MEDIDOR_NUEVO_LIBRE.toString())))
+            .andExpect(jsonPath("$.[*].ultimoConsumo").value(hasItem(DEFAULT_ULTIMO_CONSUMO.doubleValue())))
+            .andExpect(jsonPath("$.[*].promedioConsumo").value(hasItem(DEFAULT_PROMEDIO_CONSUMO.doubleValue())))
+            .andExpect(jsonPath("$.[*].monoTrif").value(hasItem(DEFAULT_MONO_TRIF.booleanValue())));
     }
 
     /**
@@ -1330,7 +1511,10 @@ public class InspeccionResourceIntTest {
             .estadoGLM(UPDATED_ESTADO_GLM)
             .lecturaActual(UPDATED_LECTURA_ACTUAL)
             .fechaToma(UPDATED_FECHA_TOMA)
-            .medidorNuevoLibre(UPDATED_MEDIDOR_NUEVO_LIBRE);
+            .medidorNuevoLibre(UPDATED_MEDIDOR_NUEVO_LIBRE)
+            .ultimoConsumo(UPDATED_ULTIMO_CONSUMO)
+            .promedioConsumo(UPDATED_PROMEDIO_CONSUMO)
+            .monoTrif(UPDATED_MONO_TRIF);
 
         restInspeccionMockMvc.perform(put("/api/inspeccions")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -1361,6 +1545,9 @@ public class InspeccionResourceIntTest {
         assertThat(testInspeccion.getLecturaActual()).isEqualTo(UPDATED_LECTURA_ACTUAL);
         assertThat(testInspeccion.getFechaToma()).isEqualTo(UPDATED_FECHA_TOMA);
         assertThat(testInspeccion.getMedidorNuevoLibre()).isEqualTo(UPDATED_MEDIDOR_NUEVO_LIBRE);
+        assertThat(testInspeccion.getUltimoConsumo()).isEqualTo(UPDATED_ULTIMO_CONSUMO);
+        assertThat(testInspeccion.getPromedioConsumo()).isEqualTo(UPDATED_PROMEDIO_CONSUMO);
+        assertThat(testInspeccion.isMonoTrif()).isEqualTo(UPDATED_MONO_TRIF);
     }
 
     @Test

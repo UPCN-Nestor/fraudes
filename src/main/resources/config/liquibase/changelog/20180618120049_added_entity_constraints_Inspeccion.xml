@@ -60,5 +60,17 @@
                                  referencedColumnNames="id"
                                  referencedTableName="medidor"/>
 
+        <addForeignKeyConstraint baseColumnNames="precinto_bornera_id"
+                                 baseTableName="inspeccion"
+                                 constraintName="fk_inspeccion_precinto_bornera_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="precinto"/>
+
+        <addForeignKeyConstraint baseColumnNames="precinto_habitaculo_id"
+                                 baseTableName="inspeccion"
+                                 constraintName="fk_inspeccion_precinto_habitaculo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="precinto"/>
+
     </changeSet>
 </databaseChangeLog>

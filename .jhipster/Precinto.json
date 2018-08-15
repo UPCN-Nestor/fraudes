@@ -1,0 +1,20 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "numero",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "color",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180815114656",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "precinto",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

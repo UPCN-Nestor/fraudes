@@ -87,6 +87,15 @@ public class Inspeccion implements Serializable {
     @Column(name = "medidor_nuevo_libre")
     private String medidorNuevoLibre;
 
+    @Column(name = "ultimo_consumo")
+    private Float ultimoConsumo;
+
+    @Column(name = "promedio_consumo")
+    private Float promedioConsumo;
+
+    @Column(name = "mono_trif")
+    private Boolean monoTrif;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "inspeccion_anomalia_medidor",
@@ -116,6 +125,14 @@ public class Inspeccion implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private Medidor medidorNuevo;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Precinto precintoBornera;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Precinto precintoHabitaculo;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -386,6 +403,45 @@ public class Inspeccion implements Serializable {
         this.medidorNuevoLibre = medidorNuevoLibre;
     }
 
+    public Float getUltimoConsumo() {
+        return ultimoConsumo;
+    }
+
+    public Inspeccion ultimoConsumo(Float ultimoConsumo) {
+        this.ultimoConsumo = ultimoConsumo;
+        return this;
+    }
+
+    public void setUltimoConsumo(Float ultimoConsumo) {
+        this.ultimoConsumo = ultimoConsumo;
+    }
+
+    public Float getPromedioConsumo() {
+        return promedioConsumo;
+    }
+
+    public Inspeccion promedioConsumo(Float promedioConsumo) {
+        this.promedioConsumo = promedioConsumo;
+        return this;
+    }
+
+    public void setPromedioConsumo(Float promedioConsumo) {
+        this.promedioConsumo = promedioConsumo;
+    }
+
+    public Boolean isMonoTrif() {
+        return monoTrif;
+    }
+
+    public Inspeccion monoTrif(Boolean monoTrif) {
+        this.monoTrif = monoTrif;
+        return this;
+    }
+
+    public void setMonoTrif(Boolean monoTrif) {
+        this.monoTrif = monoTrif;
+    }
+
     public Set<Anomalia> getAnomaliaMedidors() {
         return anomaliaMedidors;
     }
@@ -500,6 +556,32 @@ public class Inspeccion implements Serializable {
     public void setMedidorNuevo(Medidor medidor) {
         this.medidorNuevo = medidor;
     }
+
+    public Precinto getPrecintoBornera() {
+        return precintoBornera;
+    }
+
+    public Inspeccion precintoBornera(Precinto precinto) {
+        this.precintoBornera = precinto;
+        return this;
+    }
+
+    public void setPrecintoBornera(Precinto precinto) {
+        this.precintoBornera = precinto;
+    }
+
+    public Precinto getPrecintoHabitaculo() {
+        return precintoHabitaculo;
+    }
+
+    public Inspeccion precintoHabitaculo(Precinto precinto) {
+        this.precintoHabitaculo = precinto;
+        return this;
+    }
+
+    public void setPrecintoHabitaculo(Precinto precinto) {
+        this.precintoHabitaculo = precinto;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -546,6 +628,9 @@ public class Inspeccion implements Serializable {
             ", lecturaActual=" + getLecturaActual() +
             ", fechaToma='" + getFechaToma() + "'" +
             ", medidorNuevoLibre='" + getMedidorNuevoLibre() + "'" +
+            ", ultimoConsumo=" + getUltimoConsumo() +
+            ", promedioConsumo=" + getPromedioConsumo() +
+            ", monoTrif='" + isMonoTrif() + "'" +
             "}";
     }
 }

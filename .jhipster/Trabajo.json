@@ -25,6 +25,10 @@
         {
             "fieldName": "usaCable",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "costoTrif",
+            "fieldType": "Float"
         }
     ],
     "changelogDate": "20180618141326",

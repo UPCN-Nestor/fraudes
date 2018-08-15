@@ -23,6 +23,9 @@ export class InspeccionMySuffix implements BaseEntity {
         public lecturaActual?: number,
         public fechaToma?: any,
         public medidorNuevoLibre?: string,
+        public ultimoConsumo?: number,
+        public promedioConsumo?: number,
+        public monoTrif?: boolean,
         public anomaliaMedidors?: BaseEntity[],
         public trabajos?: BaseEntity[],
         public inmueble?: BaseEntity,
@@ -30,7 +33,10 @@ export class InspeccionMySuffix implements BaseEntity {
         public estado?: BaseEntity,
         public tipoInmueble?: BaseEntity,
         public medidorNuevo?: BaseEntity,
+        public precintoBornera?: BaseEntity,
+        public precintoHabitaculo?: BaseEntity,
     ) {
         this.deshabitada = false;
+        this.monoTrif = false;
     }
 }

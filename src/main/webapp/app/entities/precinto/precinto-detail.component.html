@@ -1,0 +1,30 @@
+
+<div *ngIf="precinto">
+    <h2><span jhiTranslate="frApp.precinto.detail.title">Precinto</span> {{precinto.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="frApp.precinto.numero">Numero</span></dt>
+        <dd>
+            <span>{{precinto.numero}}</span>
+        </dd>
+        <dt><span jhiTranslate="frApp.precinto.color">Color</span></dt>
+        <dd>
+            <span>{{precinto.color}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'precinto/'+ precinto.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

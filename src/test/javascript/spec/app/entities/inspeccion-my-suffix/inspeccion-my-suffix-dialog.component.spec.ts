@@ -16,6 +16,7 @@ import { EtapaMySuffixService } from '../../../../../../main/webapp/app/entities
 import { EstadoMySuffixService } from '../../../../../../main/webapp/app/entities/estado-my-suffix';
 import { TipoInmuebleMySuffixService } from '../../../../../../main/webapp/app/entities/tipo-inmueble-my-suffix';
 import { MedidorService } from '../../../../../../main/webapp/app/entities/medidor';
+import { PrecintoService } from '../../../../../../main/webapp/app/entities/precinto';
 
 describe('Component Tests', () => {
 
@@ -38,6 +39,7 @@ describe('Component Tests', () => {
                     EstadoMySuffixService,
                     TipoInmuebleMySuffixService,
                     MedidorService,
+                    PrecintoService,
                     InspeccionMySuffixService
                 ]
             })

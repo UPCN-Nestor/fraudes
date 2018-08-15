@@ -16,6 +16,7 @@ import { EtapaMySuffix, EtapaMySuffixService } from '../etapa-my-suffix';
 import { EstadoMySuffix, EstadoMySuffixService } from '../estado-my-suffix';
 import { TipoInmuebleMySuffix, TipoInmuebleMySuffixService } from '../tipo-inmueble-my-suffix';
 import { Medidor, MedidorService } from '../medidor';
+import { Precinto, PrecintoService } from '../precinto';
 
 import { Principal } from '../../shared';
 
@@ -46,6 +47,8 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
 
     medidornuevos: Medidor[];
 
+    precintos: Precinto[];
+
 	currentAccount: any;
 
     fechaTomaDp: any;
@@ -53,6 +56,7 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
         public activeModal: NgbActiveModal,
         private jhiAlertService: JhiAlertService,
         private inspeccionService: InspeccionMySuffixService,
+        private precintoService: PrecintoService,
         private anomaliaService: AnomaliaMySuffixService,
         private trabajoService: TrabajoMySuffixService,
         private inmuebleService: InmuebleMySuffixService,
@@ -107,6 +111,8 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
             }, (res: HttpErrorResponse) => this.onError(res.message));
         this.inmuebleService.query()
             .subscribe((res: HttpResponse<InmuebleMySuffix[]>) => { this.inmuebles = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        this.precintoService.query()
+            .subscribe((res: HttpResponse<Precinto[]>) => { this.precintos = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.etapaService.query()
             .subscribe((res: HttpResponse<EtapaMySuffix[]>) => { 
                 this.etapas = res.body; 

@@ -63,6 +63,7 @@ public class CacheConfiguration {
             cm.createCache(com.upcn.domain.Material.class.getName() + ".trabajos", jcacheConfiguration);
             cm.createCache(com.upcn.domain.Insumo.class.getName(), jcacheConfiguration);
             cm.createCache(com.upcn.domain.Medidor.class.getName(), jcacheConfiguration);
+            cm.createCache(com.upcn.domain.Precinto.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -173,6 +173,14 @@
         </div>
 
         <div class="form-group">
+            <label class="form-control-label" for="field_precintoB">Precinto tapa bornera</label>
+            <select class="form-control" id="field_etapa" name="etapa" [(ngModel)]="inspeccion.precintoBornera" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="precintoOption.id === inspeccion.precintoBornera?.id ? inspeccion.precintoBornera : precintoOption" *ngFor="let precintoOption of precintos; trackBy: trackPrecintoById">{{precintoOption.numero}} - {{precintoOption.color}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
                 <label class="form-control-label" for="field_foto">Foto</label>
                 <div>
                     <div *ngIf="inspeccion.foto" class="form-text text-danger clearfix">

@@ -64,6 +64,12 @@ public class InspeccionCriteria implements Serializable {
 
     private StringFilter medidorNuevoLibre;
 
+    private FloatFilter ultimoConsumo;
+
+    private FloatFilter promedioConsumo;
+
+    private BooleanFilter monoTrif;
+
     private LongFilter anomaliaMedidorId;
 
     private LongFilter trabajoId;
@@ -77,6 +83,10 @@ public class InspeccionCriteria implements Serializable {
     private LongFilter tipoInmuebleId;
 
     private LongFilter medidorNuevoId;
+
+    private LongFilter precintoBorneraId;
+
+    private LongFilter precintoHabitaculoId;
 
     public InspeccionCriteria() {
     }
@@ -233,6 +243,30 @@ public class InspeccionCriteria implements Serializable {
         this.medidorNuevoLibre = medidorNuevoLibre;
     }
 
+    public FloatFilter getUltimoConsumo() {
+        return ultimoConsumo;
+    }
+
+    public void setUltimoConsumo(FloatFilter ultimoConsumo) {
+        this.ultimoConsumo = ultimoConsumo;
+    }
+
+    public FloatFilter getPromedioConsumo() {
+        return promedioConsumo;
+    }
+
+    public void setPromedioConsumo(FloatFilter promedioConsumo) {
+        this.promedioConsumo = promedioConsumo;
+    }
+
+    public BooleanFilter getMonoTrif() {
+        return monoTrif;
+    }
+
+    public void setMonoTrif(BooleanFilter monoTrif) {
+        this.monoTrif = monoTrif;
+    }
+
     public LongFilter getAnomaliaMedidorId() {
         return anomaliaMedidorId;
     }
@@ -289,6 +323,22 @@ public class InspeccionCriteria implements Serializable {
         this.medidorNuevoId = medidorNuevoId;
     }
 
+    public LongFilter getPrecintoBorneraId() {
+        return precintoBorneraId;
+    }
+
+    public void setPrecintoBorneraId(LongFilter precintoBorneraId) {
+        this.precintoBorneraId = precintoBorneraId;
+    }
+
+    public LongFilter getPrecintoHabitaculoId() {
+        return precintoHabitaculoId;
+    }
+
+    public void setPrecintoHabitaculoId(LongFilter precintoHabitaculoId) {
+        this.precintoHabitaculoId = precintoHabitaculoId;
+    }
+
     @Override
     public String toString() {
         return "InspeccionCriteria{" +
@@ -311,6 +361,9 @@ public class InspeccionCriteria implements Serializable {
                 (lecturaActual != null ? "lecturaActual=" + lecturaActual + ", " : "") +
                 (fechaToma != null ? "fechaToma=" + fechaToma + ", " : "") +
                 (medidorNuevoLibre != null ? "medidorNuevoLibre=" + medidorNuevoLibre + ", " : "") +
+                (ultimoConsumo != null ? "ultimoConsumo=" + ultimoConsumo + ", " : "") +
+                (promedioConsumo != null ? "promedioConsumo=" + promedioConsumo + ", " : "") +
+                (monoTrif != null ? "monoTrif=" + monoTrif + ", " : "") +
                 (anomaliaMedidorId != null ? "anomaliaMedidorId=" + anomaliaMedidorId + ", " : "") +
                 (trabajoId != null ? "trabajoId=" + trabajoId + ", " : "") +
                 (inmuebleId != null ? "inmuebleId=" + inmuebleId + ", " : "") +
@@ -318,6 +371,8 @@ public class InspeccionCriteria implements Serializable {
                 (estadoId != null ? "estadoId=" + estadoId + ", " : "") +
                 (tipoInmuebleId != null ? "tipoInmuebleId=" + tipoInmuebleId + ", " : "") +
                 (medidorNuevoId != null ? "medidorNuevoId=" + medidorNuevoId + ", " : "") +
+                (precintoBorneraId != null ? "precintoBorneraId=" + precintoBorneraId + ", " : "") +
+                (precintoHabitaculoId != null ? "precintoHabitaculoId=" + precintoHabitaculoId + ", " : "") +
             "}";
     }
 

@@ -18,6 +18,7 @@
                 "materialMySuffix": "Material",
                 "insumo": "Insumo",
                 "medidor": "Medidor",
+                "precinto": "Precinto",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

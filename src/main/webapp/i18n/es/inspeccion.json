@@ -29,13 +29,24 @@
             "nombre": "Nombre",
             "tarifa": "Tarifa",
             "mtsCable": "Mts Cable",
+            "lecturaNuevo": "Lectura Nuevo",
+            "foto": "Foto",
+            "estadoGLM": "Estado GLM",
+            "lecturaActual": "Lectura Actual",
+            "fechaToma": "Fecha Toma",
+            "medidorNuevoLibre": "Medidor Nuevo Libre",
+            "ultimoConsumo": "Ultimo Consumo",
+            "promedioConsumo": "Promedio Consumo",
+            "monoTrif": "Mono Trif",
             "anomaliaMedidor": "Anomalia Medidor",
             "trabajo": "Trabajo",
             "inmueble": "Inmueble",
             "etapa": "Etapa",
             "estado": "Estado",
             "tipoInmueble": "Tipo Inmueble",
-            "medidorNuevo": "Medidor Nuevo"
+            "medidorNuevo": "Medidor Nuevo",
+            "precintoBornera": "Precinto Bornera",
+            "precintoHabitaculo": "Precinto Habitaculo"
         }
     }
 }

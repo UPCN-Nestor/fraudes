@@ -126,6 +126,15 @@ public class InspeccionQueryService extends QueryService<Inspeccion> {
             if (criteria.getMedidorNuevoLibre() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getMedidorNuevoLibre(), Inspeccion_.medidorNuevoLibre));
             }
+            if (criteria.getUltimoConsumo() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getUltimoConsumo(), Inspeccion_.ultimoConsumo));
+            }
+            if (criteria.getPromedioConsumo() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPromedioConsumo(), Inspeccion_.promedioConsumo));
+            }
+            if (criteria.getMonoTrif() != null) {
+                specification = specification.and(buildSpecification(criteria.getMonoTrif(), Inspeccion_.monoTrif));
+            }
             if (criteria.getAnomaliaMedidorId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getAnomaliaMedidorId(), Inspeccion_.anomaliaMedidors, Anomalia_.id));
             }
@@ -146,6 +155,12 @@ public class InspeccionQueryService extends QueryService<Inspeccion> {
             }
             if (criteria.getMedidorNuevoId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getMedidorNuevoId(), Inspeccion_.medidorNuevo, Medidor_.id));
+            }
+            if (criteria.getPrecintoBorneraId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getPrecintoBorneraId(), Inspeccion_.precintoBornera, Precinto_.id));
+            }
+            if (criteria.getPrecintoHabitaculoId() != null) {
+                specification = specification.and(buildReferringEntitySpecification(criteria.getPrecintoHabitaculoId(), Inspeccion_.precintoHabitaculo, Precinto_.id));
             }
         }
         return specification;

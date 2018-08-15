@@ -48,6 +48,22 @@
             "otherEntityField": "numero",
             "ownerSide": true,
             "otherEntityRelationshipName": "inspeccion"
+        },
+        {
+            "relationshipName": "precintoBornera",
+            "otherEntityName": "precinto",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "numero",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "inspeccion"
+        },
+        {
+            "relationshipName": "precintoHabitaculo",
+            "otherEntityName": "precinto",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "numero",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "inspeccion"
         }
     ],
     "fields": [
@@ -127,6 +143,18 @@
         {
             "fieldName": "medidorNuevoLibre",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "ultimoConsumo",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "promedioConsumo",
+            "fieldType": "Float"
+        },
+        {
+            "fieldName": "monoTrif",
+            "fieldType": "Boolean"
         }
     ],
     "changelogDate": "20180618120049",
