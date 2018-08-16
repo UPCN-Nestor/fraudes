@@ -189,7 +189,7 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
 
     usaMedidor() : boolean {
         if(this.inspeccion.trabajos==null) 
-            return false;
+            return false; 
         return this.inspeccion.trabajos.filter(x=>this.trabajos.find(t=>t.id==x.id).usaMedidor==true).length > 0;
     }
 
@@ -257,6 +257,10 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
     }
 
     trackMedidorById(index: number, item: Medidor) {
+        return item.id;
+    }
+
+    trackPrecintoById(index: number, item: Precinto) {
         return item.id;
     }
 

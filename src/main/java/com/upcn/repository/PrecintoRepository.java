@@ -13,4 +13,6 @@ import org.springframework.data.jpa.repository.*;
 @Repository
 public interface PrecintoRepository extends JpaRepository<Precinto, Long> {
 
+
+
 }

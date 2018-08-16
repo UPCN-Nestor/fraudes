@@ -17,7 +17,9 @@
                 "title": "Precinto"
             },
             "numero": "Numero",
-            "color": "Color"
+            "color": "Color",
+            "inspeccion": "Inspeccion",
+            "inspeccionBornera": "Inspeccion Bornera"
         }
     }
 }

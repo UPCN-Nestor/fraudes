@@ -15,9 +15,9 @@ export class PrecintoService {
 
     constructor(private http: HttpClient) { }
 
-    create(precinto: Precinto): Observable<EntityResponseType> {
+    create(precinto: Precinto, desde: number, hasta: number): Observable<EntityResponseType> {
         const copy = this.convert(precinto);
-        return this.http.post<Precinto>(this.resourceUrl, copy, { observe: 'response' })
+        return this.http.post<Precinto>(`${this.resourceUrl}/bulk/${desde}/${hasta}`, copy, { observe: 'response' })
             .map((res: EntityResponseType) => this.convertResponse(res));
     }
 

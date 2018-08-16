@@ -13,7 +13,6 @@
     <include file="config/liquibase/changelog/20180808103958_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180810115625_changelog.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180815114246_changelog.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20180815114656_added_entity_Precinto.xml" relativeToChangelogFile="false"/>
-
+    <include file="config/liquibase/changelog/20180815120051_changelog.xml" relativeToChangelogFile="false"/>
     
 </databaseChangeLog>

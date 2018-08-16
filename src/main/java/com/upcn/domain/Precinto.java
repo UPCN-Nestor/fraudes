@@ -1,5 +1,6 @@
 package com.upcn.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -27,6 +28,14 @@ public class Precinto implements Serializable {
 
     @Column(name = "color")
     private String color;
+
+    @OneToOne(mappedBy = "precintoHabitaculo")
+    @JsonIgnore
+    private Inspeccion inspeccion;
+
+    @OneToOne(mappedBy = "precintoBornera")
+    @JsonIgnore
+    private Inspeccion inspeccionBornera;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -61,6 +70,32 @@ public class Precinto implements Serializable {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Inspeccion getInspeccion() {
+        return inspeccion;
+    }
+
+    public Precinto inspeccion(Inspeccion inspeccion) {
+        this.inspeccion = inspeccion;
+        return this;
+    }
+
+    public void setInspeccion(Inspeccion inspeccion) {
+        this.inspeccion = inspeccion;
+    }
+
+    public Inspeccion getInspeccionBornera() {
+        return inspeccionBornera;
+    }
+
+    public Precinto inspeccionBornera(Inspeccion inspeccion) {
+        this.inspeccionBornera = inspeccion;
+        return this;
+    }
+
+    public void setInspeccionBornera(Inspeccion inspeccion) {
+        this.inspeccionBornera = inspeccion;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

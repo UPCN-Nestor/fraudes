@@ -16,7 +16,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * REST controller for managing Precinto.
@@ -55,6 +58,25 @@ public class PrecintoResource {
             .body(result);
     }
 
+    @PostMapping("/precintos/bulk/{desde}/{hasta}")
+    @Timed
+    public ResponseEntity<Void> createBulkPrecinto(@RequestBody Precinto precinto, @PathVariable Long desde, @PathVariable Long hasta) throws URISyntaxException {
+        log.debug("REST request to save Precinto : {}", precinto);
+        if (precinto.getId() != null) {
+            throw new BadRequestAlertException("A new precinto cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+
+        List<Precinto> toSave = new LinkedList<Precinto>();
+        for(long i = desde; i <= hasta; i++) {
+            Precinto n = new Precinto();
+            n.setColor(precinto.getColor());
+            n.setNumero(i + "");
+            toSave.add(n);
+        }
+        precintoRepository.save(toSave);
+        return ResponseEntity.ok().build();
+    }
+
     /**
      * PUT  /precintos : Updates an existing precinto.
      *
@@ -80,14 +102,22 @@ public class PrecintoResource {
     /**
      * GET  /precintos : get all the precintos.
      *
+     * @param filter the filter of the request
      * @return the ResponseEntity with status 200 (OK) and the list of precintos in body
      */
     @GetMapping("/precintos")
     @Timed
-    public List<Precinto> getAllPrecintos() {
-        log.debug("REST request to get all Precintos");
-        return precintoRepository.findAll();
-        }
+    public List<Precinto> getAllPrecintos(@RequestParam(required = false) String filter) {
+ 
+        log.debug("REST request to get all Precintos where inspeccionBornera and inspeccion are null");
+
+        return StreamSupport
+            .stream(precintoRepository.findAll().spliterator(), false)
+            .filter(precinto -> precinto.getInspeccion() == null)
+            .filter(precinto -> precinto.getInspeccionBornera() == null)
+            .collect(Collectors.toList());
+
+    }
 
     /**
      * GET  /precintos/:id : get the "id" precinto.

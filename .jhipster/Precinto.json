@@ -1,6 +1,21 @@
 {
     "fluentMethods": true,
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipName": "inspeccion",
+            "otherEntityName": "inspeccion",
+            "relationshipType": "one-to-one",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "precintoHabitaculo"
+        },
+        {
+            "relationshipName": "inspeccionBornera",
+            "otherEntityName": "inspeccion",
+            "relationshipType": "one-to-one",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "precintoBornera"
+        }
+    ],
     "fields": [
         {
             "fieldName": "numero",

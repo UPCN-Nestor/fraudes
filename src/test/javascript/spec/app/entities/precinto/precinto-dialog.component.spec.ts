@@ -9,6 +9,7 @@ import { FrTestModule } from '../../../test.module';
 import { PrecintoDialogComponent } from '../../../../../../main/webapp/app/entities/precinto/precinto-dialog.component';
 import { PrecintoService } from '../../../../../../main/webapp/app/entities/precinto/precinto.service';
 import { Precinto } from '../../../../../../main/webapp/app/entities/precinto/precinto.model';
+import { InspeccionMySuffixService } from '../../../../../../main/webapp/app/entities/inspeccion-my-suffix';
 
 describe('Component Tests', () => {
 
@@ -24,6 +25,7 @@ describe('Component Tests', () => {
                 imports: [FrTestModule],
                 declarations: [PrecintoDialogComponent],
                 providers: [
+                    InspeccionMySuffixService,
                     PrecintoService
                 ]
             })

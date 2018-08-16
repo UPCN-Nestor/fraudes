@@ -4,11 +4,12 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { Precinto } from './precinto.model';
 import { PrecintoPopupService } from './precinto-popup.service';
 import { PrecintoService } from './precinto.service';
+import { InspeccionMySuffix, InspeccionMySuffixService } from '../inspeccion-my-suffix';
 
 @Component({
     selector: 'jhi-precinto-dialog',
@@ -19,15 +20,24 @@ export class PrecintoDialogComponent implements OnInit {
     precinto: Precinto;
     isSaving: boolean;
 
+    desde: number;
+    hasta: number;
+
+    inspeccions: InspeccionMySuffix[];
+
     constructor(
         public activeModal: NgbActiveModal,
+        private jhiAlertService: JhiAlertService,
         private precintoService: PrecintoService,
+        private inspeccionService: InspeccionMySuffixService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
+        this.inspeccionService.query()
+            .subscribe((res: HttpResponse<InspeccionMySuffix[]>) => { this.inspeccions = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
     }
 
     clear() {
@@ -41,7 +51,7 @@ export class PrecintoDialogComponent implements OnInit {
                 this.precintoService.update(this.precinto));
         } else {
             this.subscribeToSaveResponse(
-                this.precintoService.create(this.precinto));
+                this.precintoService.create(this.precinto, this.desde, this.hasta));
         }
     }
 
@@ -58,6 +68,14 @@ export class PrecintoDialogComponent implements OnInit {
 
     private onSaveError() {
         this.isSaving = false;
+    }
+
+    private onError(error: any) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+
+    trackInspeccionById(index: number, item: InspeccionMySuffix) {
+        return item.id;
     }
 }
 

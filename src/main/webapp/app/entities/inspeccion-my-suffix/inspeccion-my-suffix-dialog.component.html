@@ -100,15 +100,24 @@
         -->
         <div style="font-weight: bold;" class="form-group">
                 Medidor instalado Nº {{inspeccion.medidorInstalado}}, última lectura: {{inspeccion.ultimaLectura}} ({{inspeccion.fechaToma | date:'shortDate'}}) <!--Needs refactor-->
-        </div>        
+        </div>
+        <div style="font-weight: bold;" class="form-group">       
+                Último consumo: {{inspeccion.ultimoConsumo ? inspeccion.ultimoConsumo : "(no disponible)"}}, promedio últimos 6 meses: {{inspeccion.promedioConsumo ? inspeccion.promedioConsumo : "(no disponible)"}}
+        </div>
         <div class="form-group">
             <label class="form-control-label" for="field_medidorRetirado">Medidor Hallado (dejar vacío si coincide)</label>
             <input type="text" class="form-control" name="medidorRetirado" id="field_medidorRetirado"
                 [(ngModel)]="inspeccion.medidorRetirado" />
         </div>   
+
+        <div style="text-align: left;">
+            <p-inputSwitch  name="monotrif" id="field_monotrif" 
+                [(ngModel)]="inspeccion.monoTrif" onLabel="Trifásico" offLabel="Monofásico" ></p-inputSwitch>    
+        </div>
+
         <div class="form-group">
             <label class="form-control-label" for="field_lecturaActual">Lectura Actual</label>
-            <input type="number" class="form-control" name="lecturaActual" id="field_lecturaActual"
+            <input required  type="number" class="form-control" name="lecturaActual" id="field_lecturaActual"
                 [(ngModel)]="inspeccion.lecturaActual" />
         </div>
 
@@ -174,9 +183,15 @@
 
         <div class="form-group">
             <label class="form-control-label" for="field_precintoB">Precinto tapa bornera</label>
-            <select class="form-control" id="field_etapa" name="etapa" [(ngModel)]="inspeccion.precintoBornera" >
+            <select class="form-control" id="field_precintoB" name="precintoB" [(ngModel)]="inspeccion.precintoBornera" >
                 <option [ngValue]="null"></option>
                 <option [ngValue]="precintoOption.id === inspeccion.precintoBornera?.id ? inspeccion.precintoBornera : precintoOption" *ngFor="let precintoOption of precintos; trackBy: trackPrecintoById">{{precintoOption.numero}} - {{precintoOption.color}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_precintoH">Precinto habitáculo</label>
+            <select class="form-control" id="field_precintoH" name="precintoH" [(ngModel)]="inspeccion.precintoHabitaculo" >
+                <option [ngValue]="precintoOption.id === inspeccion.precintoHabitaculo?.id ? inspeccion.precintoHabitaculo : precintoOption" *ngFor="let precintoOption of precintos; trackBy: trackPrecintoById">{{precintoOption.numero}} - {{precintoOption.color}}</option>
             </select>
         </div>
 
