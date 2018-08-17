@@ -78,7 +78,7 @@ export class InspeccionMySuffixService {
         copy.fechahora = this.dateUtils.toDate(inspeccion.fechahora);
         //copy.fechaToma = null;
         
-        copy.fechaToma = (<String>inspeccion.fechaToma).substr(1,10);
+        copy.fechaToma = inspeccion.fechaToma ? (<String>inspeccion.fechaToma).substr(1,10) : null;
         return copy;
     }
 }

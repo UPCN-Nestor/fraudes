@@ -98,10 +98,10 @@
                 [(ngModel)]="inspeccion.usuario" readonly />
         </div>
         -->
-        <div style="font-weight: bold;" class="form-group">
+        <div *ngIf="this.inspeccion.id" style="font-weight: bold;" class="form-group">
                 Medidor instalado Nº {{inspeccion.medidorInstalado}}, última lectura: {{inspeccion.ultimaLectura}} ({{inspeccion.fechaToma | date:'shortDate'}}) <!--Needs refactor-->
         </div>
-        <div style="font-weight: bold;" class="form-group">       
+        <div *ngIf="this.inspeccion.id" style="font-weight: bold;" class="form-group">       
                 Último consumo: {{inspeccion.ultimoConsumo ? inspeccion.ultimoConsumo : "(no disponible)"}}, promedio últimos 6 meses: {{inspeccion.promedioConsumo ? inspeccion.promedioConsumo : "(no disponible)"}}
         </div>
         <div class="form-group">
