@@ -20,7 +20,7 @@ export class InspeccionMySuffixPopupService {
         this.ngbModalRef = null;
     }
 
-    open(component: Component, id?: number | any): Promise<NgbModalRef> {
+    open(component: Component, id?: number | any, etapa?: number | any): Promise<NgbModalRef> {
         return new Promise<NgbModalRef>((resolve, reject) => {
             const isOpen = this.ngbModalRef !== null;
             if (isOpen) {
@@ -46,7 +46,9 @@ export class InspeccionMySuffixPopupService {
             } else {
                 // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
                 setTimeout(() => {
-                    this.ngbModalRef = this.inspeccionModalRef(component, new InspeccionMySuffix());
+                    let n = new InspeccionMySuffix();
+                    n["etapa_activa_id"] = etapa;
+                    this.ngbModalRef = this.inspeccionModalRef(component, n);
                     resolve(this.ngbModalRef);
                 }, 0);
             }

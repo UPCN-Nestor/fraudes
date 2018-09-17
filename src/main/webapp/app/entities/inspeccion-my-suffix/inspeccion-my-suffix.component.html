@@ -3,7 +3,7 @@
     
     <h4>
         <span>Inspecciones</span>
-        <button class="btn btn-primary float-right jh-create-entity create-inspeccion-my-suffix" [routerLink]="['/', { outlets: { popup: ['inspeccion-my-suffix-new'] } }]">
+        <button class="btn btn-primary float-right jh-create-entity create-inspeccion-my-suffix" [routerLink]="['/', { outlets: { popup: 'inspeccion-my-suffix-new/' + etapaSeleccionada + '/et' } }]">
             <span class="fa fa-plus"></span>
             <span *jhiHasAnyAuthority="'ROLE_USER'">Excepcional
             </span>
@@ -11,12 +11,7 @@
             </span>
         </button>
     </h4>
-    <!--
-    <button pButton type="button" label="Prueba servicio" (click)="prueba()"></button>
-    <br/><br/>
-    <button pButton type="button" label="Prueba imprimir" (click)="print()"></button>
-    <br/><br/>
-    -->
+
     <table cellpadding="5"><tr><td>Etapa</td>
         <td *jhiHasAnyAuthority="'ROLE_USER'"><p-dropdown  [options]="etapas" [(ngModel)]="etapaSeleccionada" (onChange)="cambioEtapa()"></p-dropdown></td> 
         <!--disabled="true"-->
@@ -24,10 +19,14 @@
     </tr>
     <tr>
         <td>Filtro por medidor</td>
-        <td><input [(ngModel)]="filtroMedidor" type="number" style="width: 10em;" (change)="loadByEtapa()"></td>
+        <td><input [(ngModel)]="filtroMedidor" type="number" style="width: 10em;" (change)="cambioEtapa()"></td>
+    </tr>
+    <tr *ngIf="!isMobile()">
+        <td>Filtro por socio</td>
+        <td><input [(ngModel)]="filtroSocio" type="number" style="width: 10em;" (change)="cambioEtapa()"></td>
     </tr>
     <tr><td>Finalizadas</td>
-        <td><p-inputSwitch [(ngModel)]="ocultarFinalizadas" onLabel="Ocultar" offLabel="Mostrar" (onChange)="loadByEtapa()"></p-inputSwitch></td>
+        <td><p-inputSwitch [(ngModel)]="ocultarFinalizadas" onLabel="Ocultar" offLabel="Mostrar" (onChange)="cambioEtapa()"></p-inputSwitch></td>
     </tr>
     </table>
 
@@ -40,6 +39,7 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="inmueble.calle,inmueble.altura"><span jhiTranslate="frApp.inspeccion.inmueble">Inmueble</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="medidorInstalado"><span>Medidor</span> <span class="fa fa-sort"></span></th> 
+            <th *ngIf="!isMobile()" jhiSortBy="socio"><span>Socio</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="estado.descripcion"><span jhiTranslate="frApp.inspeccion.estado">Estado</span> <span class="fa fa-sort"></span></th>
 			<th jhiSortBy="fechahora"><span>Fecha</span> <span class="fa fa-sort"></span></th>                
             </tr>
@@ -55,6 +55,11 @@
                 <td>
                     <div *ngIf="inspeccion.medidorInstalado">
                         {{inspeccion.medidorInstalado}}
+                    </div>
+                </td>
+                <td *ngIf="!isMobile()">
+                    <div>
+                        {{inspeccion.socio}}
                     </div>
                 </td>
                 <td>

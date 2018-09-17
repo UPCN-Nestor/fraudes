@@ -3,6 +3,9 @@ package com.upcn.service;
 import com.upcn.domain.Inspeccion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.Dictionary;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Service Interface for managing Inspeccion.
@@ -24,6 +27,14 @@ public interface InspeccionService {
      * @return the list of entities
      */
     Page<Inspeccion> findAll(Pageable pageable);
+    Iterable<Inspeccion> findAll();
+
+    Map<String, List<Object[]>> byTipoTrabajo(Long etapa_id);
+    
+    Map<String, List<Object[]>> byAnomalia(Long etapa_id);
+    
+    Map<String, List<Object[]>> byFecha(Long etapa_id);
+    
 
     /**
      * Get the "id" inspeccion.

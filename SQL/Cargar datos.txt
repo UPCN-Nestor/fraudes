@@ -52,18 +52,23 @@ WITH ( FIRSTROW = 1, FIELDTERMINATOR = ',', ROWTERMINATOR = '\n', TABLOCK)
 select socio, suministro, Sum6Nromed as medidorInstalado, Sum6FecUlt as fechaToma, Sum6LecUni as ultimaLectura, Sum6Estado as estadoGLM
 from summed sm join #FraudesSocSumi f on (sm.Soc_numero = f.socio and sm.Sumi_numer = f.suministro)
 where SucCodigo = 1 and Sum2Servi = 1
+order by fechaToma desc
 
 Exportar a medidores.csv
+Para llevarlo al servidor: pscp C:\Fr\SQL\medidores.csv bitnami@192.168.0.3:/home/bitnami/medidores.csv
 
 - De nuevo en MySQL:
 
-LOAD DATA INFILE 'C:\\Fr\\SQL\\medidores.csv' 
+Usar import de adminer.php, o:
+LOAD DATA INFILE '/home/bitnami/medidores.csv' 
 INTO TABLE medidores_import
 FIELDS TERMINATED BY ';'
 
 update inspeccion i
 join medidores_import m on i.socio = m.socio and i.suministro = m.suministro
-set i.medidor_instalado = m.medidorInstalado, i.ultima_lectura = m.ultimaLectura, i.fecha_toma = m.fechaToma, i.estado_glm = m.estadoGLM
+set i.medidor_instalado = m.medidorInstalado, i.ultima_lectura = m.ultimaLectura, i.fecha_toma = m.fechaToma, i.estado_glm = 
+	case m.estadoGLM when 0 then 'Conectado' when 1 then 'Cortado' when 2 then 'Desconectado' when 3 then 'Dado de baja' end
+
 
 
 

@@ -44,6 +44,7 @@ currentAccount: any;
 
     ocultarFinalizadas : boolean = true;
     filtroMedidor : number;
+    filtroSocio : number;
 
     estados: EstadoMySuffix[];
 
@@ -110,7 +111,15 @@ currentAccount: any;
         return mostrar;*/
     }
 
+     
+    isMobile() { 
+        if(navigator.userAgent.match(/Android/i))
+            return true;
+        else return false;
+    }
+
     cambioEtapa() {
+        this.page = 1;
         this.loadByEtapa();        
     }
 
@@ -120,13 +129,16 @@ currentAccount: any;
             .reduce((a,b)=>a + ', ' + b)
                 : this.estados.map(x=>x.id + '').reduce((a,b)=>a + ',' + b);
 
-        this.inspeccionService.query({
+        var med = this.filtroMedidor ? { 'medidorInstalado.contains': this.filtroMedidor } : null;
+        var soc = this.filtroSocio ? { 'socio.equals': this.filtroSocio } : null;
+
+        this.inspeccionService.query({ ...{
             'etapaId.equals': this.etapaSeleccionada,
             'estadoId.in': estadosMostrados,
-            'medidorInstalado.contains': this.filtroMedidor ? this.filtroMedidor + '' : '',
+            med, soc,
             page: this.page - 1,
             size: this.itemsPerPage,
-            sort: this.sort()}).subscribe(
+            sort: this.sort()}, ...med, ...soc}).subscribe(
                 (res: HttpResponse<InspeccionMySuffix[]>) => this.onSuccess(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
         );

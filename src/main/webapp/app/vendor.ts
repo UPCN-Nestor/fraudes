@@ -6,5 +6,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/throw';
 
-import 'print-js/dist/print.js'
+import 'print-js/dist/print.js';
+import '../../../../node_modules/chart.js/dist/Chart.js'
+
 // jhipster-needle-add-element-to-vendor - JHipster will add new menu items here

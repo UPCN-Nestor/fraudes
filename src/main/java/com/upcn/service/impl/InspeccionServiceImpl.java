@@ -1,15 +1,25 @@
 package com.upcn.service.impl;
 
+import com.upcn.service.EtapaService;
 import com.upcn.service.InspeccionService;
+import com.upcn.domain.Etapa;
 import com.upcn.domain.Inspeccion;
 import com.upcn.repository.InspeccionRepository;
+import com.upcn.repository.TrabajoRepository;
 import com.upcn.repository.EstadoRepository;
+import com.upcn.domain.Trabajo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Dictionary;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 
 
 /**
@@ -23,10 +33,18 @@ public class InspeccionServiceImpl implements InspeccionService {
 
     private final InspeccionRepository inspeccionRepository;
     private final EstadoRepository estadoRepository;
+    private final TrabajoRepository trabajoRepository;
 
-    public InspeccionServiceImpl(InspeccionRepository inspeccionRepository, EstadoRepository estadoRepository) {
+    private List<Etapa> etapas;
+    private List<Trabajo> trabajos;
+
+    public InspeccionServiceImpl(InspeccionRepository inspeccionRepository, EstadoRepository estadoRepository, TrabajoRepository tr, EtapaService es) {
         this.inspeccionRepository = inspeccionRepository;
         this.estadoRepository = estadoRepository;
+        this.trabajoRepository = tr;
+
+        etapas = es.findAll();
+        this.trabajos = this.trabajoRepository.findAll();
     }
 
     /**
@@ -64,6 +82,50 @@ public class InspeccionServiceImpl implements InspeccionService {
         log.debug("Request to get all Inspeccions");
         return inspeccionRepository.findAll(pageable);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Iterable<Inspeccion> findAll() {
+        log.debug("Request to get all Inspeccions");
+        return inspeccionRepository.findAll();
+    }
+    
+    @Transactional(readOnly = true)
+    public Map<String, List<Object[]>> byTipoTrabajo(Long etapa_id) {
+
+        Map<String, List<Object[]>> toRet = new HashMap<String, List<Object[]>>();
+
+        etapas.forEach(e -> {
+            toRet.put(e.getDescripcionCorta(), inspeccionRepository.findAllByTrabajo(e.getId())); 
+        });;
+
+        return toRet;
+    }
+    
+    @Transactional(readOnly = true)
+    public Map<String, List<Object[]>> byAnomalia(Long etapa_id) {
+
+        Map<String, List<Object[]>> toRet = new HashMap<String, List<Object[]>>();
+
+        etapas.forEach(e -> {
+            toRet.put(e.getDescripcionCorta(), inspeccionRepository.findAllByAnomalia(e.getId())); 
+        });;
+
+        return toRet;
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, List<Object[]>> byFecha(Long etapa_id) {
+
+        Map<String, List<Object[]>> toRet = new HashMap<String, List<Object[]>>();
+
+        etapas.forEach(e -> {
+            toRet.put(e.getDescripcionCorta(), inspeccionRepository.findAllByFecha(e.getId())); 
+        });;
+
+        return toRet;
+    }
+
 
     /**
      * Get one inspeccion by id.

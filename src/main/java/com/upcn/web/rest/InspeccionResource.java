@@ -22,7 +22,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * REST controller for managing Inspeccion.
@@ -105,6 +108,39 @@ public class InspeccionResource {
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/inspeccions");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/inspeccions/bytipotrabajo/{etapa_id}")
+    @Timed
+    public ResponseEntity<Map<String,List<Object[]>>> getByTipoTrabajo(@PathVariable Long etapa_id) {
+
+        Map<String, List<Object[]>> f = new HashMap<String,List<Object[]>>();
+        f = inspeccionService.byTipoTrabajo(etapa_id);
+
+        HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Map<String,List<Object[]>>>(f, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/inspeccions/byanomalia/{etapa_id}")
+    @Timed
+    public ResponseEntity<Map<String,List<Object[]>>> getByAnomalia(@PathVariable Long etapa_id) {
+
+        Map<String, List<Object[]>> f = new HashMap<String,List<Object[]>>();
+        f = inspeccionService.byAnomalia(etapa_id);
+
+        HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Map<String,List<Object[]>>>(f, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/inspeccions/byfecha/{etapa_id}")
+    @Timed
+    public ResponseEntity<Map<String,List<Object[]>>> getByFecha(@PathVariable Long etapa_id) {
+
+        Map<String, List<Object[]>> f = new HashMap<String,List<Object[]>>();
+        f = inspeccionService.byFecha(etapa_id);
+
+        HttpHeaders headers = new HttpHeaders();
+        return new ResponseEntity<Map<String,List<Object[]>>>(f, headers, HttpStatus.OK);
     }
 
     /**

@@ -118,7 +118,7 @@ export class InspeccionMySuffixDialogComponent implements OnInit {
                 this.etapas = res.body; 
                 if(!this.inspeccion.id) {
 
-                    this.inspeccion.etapa = <EtapaMySuffix>(this.etapas.filter(x=>x.numero==0)[0]);
+                    this.inspeccion.etapa = <EtapaMySuffix>(this.etapas.filter(x=>x.numero==this.inspeccion["etapa_activa_id"])[0]);
                     //alert(this.etapas.filter(x=>x.numero==0).numero);
                 }
             }, (res: HttpErrorResponse) => this.onError(res.message));
@@ -293,10 +293,10 @@ export class InspeccionMySuffixPopupComponent implements OnInit, OnDestroy {
         this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.inspeccionPopupService
-                    .open(InspeccionMySuffixDialogComponent as Component, params['id']);
+                    .open(InspeccionMySuffixDialogComponent as Component, params['id'], 0);
             } else {
                 this.inspeccionPopupService
-                    .open(InspeccionMySuffixDialogComponent as Component);
+                    .open(InspeccionMySuffixDialogComponent as Component, 0, params['etapa']);
             }
         });
     }

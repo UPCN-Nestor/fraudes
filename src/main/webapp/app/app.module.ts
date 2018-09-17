@@ -18,7 +18,7 @@ import { FrAdminModule } from './admin/admin.module';
 import { FrAccountModule } from './account/account.module';
 import { FrEntityModule } from './entities/entity.module';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
-
+import { ReporteModule } from './reporte/reporte.module';
 
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 import {
@@ -31,6 +31,7 @@ import {
     ErrorComponent
 } from './layouts';
 
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -40,7 +41,8 @@ import {
         FrHomeModule,
         FrAdminModule,
         FrAccountModule,
-        FrEntityModule
+        FrEntityModule,
+        ReporteModule
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [

@@ -8,6 +8,7 @@ import { InspeccionMySuffixDetailComponent } from './inspeccion-my-suffix-detail
 import { InspeccionMySuffixPopupComponent } from './inspeccion-my-suffix-dialog.component';
 import { InspeccionMySuffixDeletePopupComponent } from './inspeccion-my-suffix-delete-dialog.component';
 
+
 @Injectable()
 export class InspeccionMySuffixResolvePagingParams implements Resolve<any> {
 
@@ -49,7 +50,7 @@ export const inspeccionRoute: Routes = [
 
 export const inspeccionPopupRoute: Routes = [
     {
-        path: 'inspeccion-my-suffix-new',
+        path: 'inspeccion-my-suffix-new/:etapa/et',
         component: InspeccionMySuffixPopupComponent,
         data: {
             authorities: ['ROLE_USER', 'ROLE_ADMIN'],

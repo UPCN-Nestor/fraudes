@@ -23,7 +23,10 @@
             "content/css/global.css"
         ],
         "scripts": [
-            "./node_modules/print-js/dist/print.js"
+            "./node_modules/moment/moment.js",
+            "./node_modules/chart.js/dist/Chart.bundle.min.js",
+            "./node_modules/print-js/dist/print.js"           
+            
         ]
     }],
     "lint": [{
