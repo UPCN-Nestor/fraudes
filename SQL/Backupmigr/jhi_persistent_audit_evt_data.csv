@@ -1,0 +1,2 @@
+﻿8,message,Bad credentials
+8,type,org.springframework.security.authentication.BadCredentialsException

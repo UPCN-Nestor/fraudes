@@ -8,6 +8,10 @@ import { GraficosService } from './graficos/graficos.service';
 import { EtapaMySuffixService } from '../entities/etapa-my-suffix/etapa-my-suffix.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms'; import { ReactiveFormsModule } from '@angular/forms';
+import {TableModule} from 'primeng/table';
+import {AccordionModule} from 'primeng/accordion';
+
+import {CalendarModule} from 'primeng/calendar';
 
 @NgModule({
   imports: [
@@ -16,6 +20,9 @@ import { FormsModule } from '@angular/forms'; import { ReactiveFormsModule } fro
     FormsModule,
     ReactiveFormsModule,
     DropdownModule,
+    TableModule,
+    AccordionModule,
+    CalendarModule,
     RouterModule.forChild(
       [
         {

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
 
 /**
  * Service Interface for managing Inspeccion.
@@ -35,6 +36,9 @@ public interface InspeccionService {
     
     Map<String, List<Object[]>> byFecha(Long etapa_id);
     
+    List<Object[]> byEtapaDesdeHasta(Long etapa_id, String desde, String hasta);
+    
+    List<Object[]> materialesByEtapaDesdeHasta(Long etapa_id, String desde, String hasta);
 
     /**
      * Get the "id" inspeccion.

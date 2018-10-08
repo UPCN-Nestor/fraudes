@@ -1,0 +1,7 @@
+select descr, sum(cant) from (
+select case when descripcion='37-Normalización fraude' then 'Fraude' 
+when descripcion='46-Corte conexión directa' then 'Conexión directa' else 'Inspección' end as descr, count(i.id) as cant
+from inspeccion i join inspeccion_trabajo it join trabajo t 
+where i.id = it.inspeccions_id and it.trabajos_id = t.id 
+group by descripcion
+) x group by descrç

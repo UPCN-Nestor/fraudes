@@ -1,0 +1,73 @@
+-- Inspecciones por etapa y fecha
+
+select etapa, fecha, count(*) as cantidad_inspecciones,  from
+(select i.*, date(i.fechahora) as fecha, e.descripcion_corta as etapa from inspeccion i join etapa e on i.etapa_id = e.id where estado_id > 1) x
+group by etapa, fecha
+
+
+-- Anomalías por etapa
+
+SELECT anomalia
+     , SUM(CASE WHEN etapa = 1 THEN cantidad END) NU_0096_A
+     , SUM(CASE WHEN etapa = 2 THEN cantidad END) NU_0265_A
+     , SUM(CASE WHEN etapa = 3 THEN cantidad END) 43y62
+     , SUM(CASE WHEN etapa = 4 THEN cantidad END) 39y94
+     , SUM(CASE WHEN etapa = 5 THEN cantidad END) 546y575
+     , SUM(CASE WHEN etapa = 0 THEN cantidad END) Excepcional
+FROM (
+     SELECT e.numero as etapa, a.descripcion as anomalia, count(*) as cantidad
+     FROM anomalia a JOIN inspeccion_anomalia_medidor ia ON (ia.anomalia_medidors_id = a.id) 
+           JOIN inspeccion i ON (ia.inspeccions_id = i.id) 
+           JOIN etapa e ON (i.etapa_id = e.id)
+     GROUP BY e.descripcion_corta, a.descripcion
+) x
+GROUP BY anomalia
+
+
+-- Trabajos por etapa
+
+SELECT trabajo
+     , SUM(CASE WHEN etapa = 1 THEN cantidad END) NU_0096_A
+     , SUM(CASE WHEN etapa = 2 THEN cantidad END) NU_0265_A
+     , SUM(CASE WHEN etapa = 3 THEN cantidad END) 43y62
+     , SUM(CASE WHEN etapa = 4 THEN cantidad END) 39y94
+     , SUM(CASE WHEN etapa = 5 THEN cantidad END) 546y575
+     , SUM(CASE WHEN etapa = 0 THEN cantidad END) Excepcional
+FROM (
+     SELECT e.numero as etapa, t.descripcion as trabajo, count(*) as cantidad
+     FROM trabajo t JOIN inspeccion_trabajo it ON (it.trabajos_id = t.id) 
+           JOIN inspeccion i ON (it.inspeccions_id = i.id) 
+           JOIN etapa e ON (i.etapa_id = e.id)
+     GROUP BY e.descripcion_corta, t.descripcion
+) x
+GROUP BY trabajo
+
+
+
+
+
+-- Anomalias pivot dinámico
+
+SET @@group_concat_max_len = 5000;
+
+SET @sql = NULL;
+
+SELECT
+  GROUP_CONCAT(DISTINCT
+    CONCAT(
+      'MAX(IF(a.descripcion=''',
+      a.descripcion,
+      ''',1,0)) AS ''',
+      substring(a.descripcion, 4), ''''
+    )
+  ) INTO @sql
+FROM (select descripcion from anomalia union select descripcion from trabajo) a;
+
+SET @sql = CONCAT('SELECT e.descripcion_corta as etapa, date(i.fechahora) fecha, i.tarifa, ', @sql, ' FROM inspeccion i JOIN etapa e ON i.etapa_id = e.id JOIN (SELECT inspeccions_id, descripcion from inspeccion_trabajo it JOIN trabajo t ON t.id = it.trabajos_id UNION SELECT inspeccions_id, descripcion from inspeccion_anomalia_medidor ia JOIN anomalia a ON a.id = ia.anomalia_medidors_id) a ON i.id = a.inspeccions_id GROUP BY i.id order by e.descripcion_corta, i.fechahora;');
+
+select @sql;
+
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+

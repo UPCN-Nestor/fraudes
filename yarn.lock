@@ -6629,8 +6629,8 @@ pretty-error@^2.0.2:
     utila "~0.4"
 
 primeng@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/primeng/-/primeng-6.0.0.tgz#73a3523098f2b95da0f18d3705d86cf66f6f0d0e"
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/primeng/-/primeng-6.1.4.tgz#c4b92c1c9f8ba6cf717b122ed87c3701a5e1cf20"
 
 print-js@^1.0.47:
   version "1.0.47"

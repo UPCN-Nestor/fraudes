@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Date;
 
 /**
  * REST controller for managing Inspeccion.
@@ -141,6 +142,28 @@ public class InspeccionResource {
 
         HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<Map<String,List<Object[]>>>(f, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/inspeccions/byetapadesdehasta/{etapa_id}/{desde}/{hasta}")
+    @Timed
+    public ResponseEntity<List<Object[]>> getByEtapaDesdeHasta(@PathVariable Long etapa_id, @PathVariable String desde, @PathVariable String hasta) {
+
+        List<Object[]> f = new LinkedList<Object[]>();
+        f = inspeccionService.byEtapaDesdeHasta(etapa_id, desde, hasta );
+
+        HttpHeaders headers = new HttpHeaders();   
+        return new ResponseEntity<List<Object[]>>(f, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/inspeccions/matbyetapadesdehasta/{etapa_id}/{desde}/{hasta}")
+    @Timed
+    public ResponseEntity<List<Object[]>> materialesByEtapaDesdeHasta(@PathVariable Long etapa_id, @PathVariable String desde, @PathVariable String hasta) {
+
+        List<Object[]> f = new LinkedList<Object[]>();
+        f = inspeccionService.materialesByEtapaDesdeHasta(etapa_id, desde, hasta );
+
+        HttpHeaders headers = new HttpHeaders();   
+        return new ResponseEntity<List<Object[]>>(f, headers, HttpStatus.OK);
     }
 
     /**

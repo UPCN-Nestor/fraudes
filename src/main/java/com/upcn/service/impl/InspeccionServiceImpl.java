@@ -2,12 +2,14 @@ package com.upcn.service.impl;
 
 import com.upcn.service.EtapaService;
 import com.upcn.service.InspeccionService;
+import com.upcn.service.AnomaliaService;
 import com.upcn.domain.Etapa;
 import com.upcn.domain.Inspeccion;
 import com.upcn.repository.InspeccionRepository;
 import com.upcn.repository.TrabajoRepository;
 import com.upcn.repository.EstadoRepository;
 import com.upcn.domain.Trabajo;
+import com.upcn.domain.Anomalia;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Dictionary;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Date;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 
@@ -37,13 +41,17 @@ public class InspeccionServiceImpl implements InspeccionService {
 
     private List<Etapa> etapas;
     private List<Trabajo> trabajos;
+    private List<Anomalia> anomalias;
 
-    public InspeccionServiceImpl(InspeccionRepository inspeccionRepository, EstadoRepository estadoRepository, TrabajoRepository tr, EtapaService es) {
+    public InspeccionServiceImpl(InspeccionRepository inspeccionRepository, EstadoRepository estadoRepository, TrabajoRepository tr, EtapaService es, AnomaliaService an) {
         this.inspeccionRepository = inspeccionRepository;
         this.estadoRepository = estadoRepository;
         this.trabajoRepository = tr;
 
         etapas = es.findAll();
+        trabajos = tr.findAll();
+        anomalias = an.findAll();
+
         this.trabajos = this.trabajoRepository.findAll();
     }
 
@@ -95,8 +103,8 @@ public class InspeccionServiceImpl implements InspeccionService {
 
         Map<String, List<Object[]>> toRet = new HashMap<String, List<Object[]>>();
 
-        etapas.forEach(e -> {
-            toRet.put(e.getDescripcionCorta(), inspeccionRepository.findAllByTrabajo(e.getId())); 
+        trabajos.forEach(e -> {
+            toRet.put(e.getDescripcion(), inspeccionRepository.findAllByTrabajo(e.getId())); 
         });;
 
         return toRet;
@@ -107,8 +115,8 @@ public class InspeccionServiceImpl implements InspeccionService {
 
         Map<String, List<Object[]>> toRet = new HashMap<String, List<Object[]>>();
 
-        etapas.forEach(e -> {
-            toRet.put(e.getDescripcionCorta(), inspeccionRepository.findAllByAnomalia(e.getId())); 
+        anomalias.forEach(e -> {
+            toRet.put(e.getDescripcion(), inspeccionRepository.findAllByAnomalia(e.getId())); 
         });;
 
         return toRet;
@@ -125,6 +133,26 @@ public class InspeccionServiceImpl implements InspeccionService {
 
         return toRet;
     }
+
+
+    @Transactional(readOnly = true)
+    public List<Object[]> byEtapaDesdeHasta(Long etapa_id, String desde, String hasta) {
+
+        List<Object[]> toRet = new LinkedList<Object[]>();
+
+        toRet = inspeccionRepository.findAllByEtapaDesdeHasta(etapa_id, desde, hasta);
+        return toRet;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Object[]> materialesByEtapaDesdeHasta(Long etapa_id, String desde, String hasta) {
+
+        List<Object[]> toRet = new LinkedList<Object[]>();
+
+        toRet = inspeccionRepository.findMaterialesByEtapaDesdeHasta(etapa_id, desde, hasta);
+        return toRet;
+    }
+
 
 
     /**

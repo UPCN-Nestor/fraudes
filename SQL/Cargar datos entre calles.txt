@@ -1,0 +1,51 @@
+
+SELECT I.*, SU.SumiNomPos AS nombre, SU.Soc_numero AS socio, SU.Sumi_numer as suministro
+    , CASE WHEN SS.Sum2Estad=0 THEN 'Alta' WHEN SS.Sum2Estad=1 THEN 'Conectado' WHEN SS.Sum2Estad=2 THEN 'Aviso corte' WHEN SS.Sum2Estad=3 THEN 'Cortado' END as estadoGLM
+	, SM.Sum6NroMed as medidorInstalado, Sum6FecUlt as fechaToma, SM.Sum6LecUni as ultimaLectura 
+	FROM
+(SELECT DomiId AS id_glm, DomiCalle AS calle, DomiNrocal AS altura, DomiPiso AS piso, DomiDepto AS depto, DomiAnexo AS anexo
+FROM INMUEB IM 
+WHERE DomiSuc = 1 AND
+      ((DomiCgocal = 75 AND DomiCgosca = '' AND DomiNrocal BETWEEN 2601 AND 3399 AND DomiNrocal % 2 = 1) OR
+      (DomiCgocal BETWEEN 77 AND 89 AND DomiCgosca = '' AND DomiNrocal BETWEEN 2601 AND 3399) OR
+      (DomiCgocal = 91 AND DomiCgosca = '' AND DomiNrocal BETWEEN 2601 AND 3399 AND DomiNrocal % 2 = 0) OR
+      (DomiCgocal = 58 AND DomiCgosca = '' AND DomiNrocal BETWEEN 3401 AND 3799 AND DomiNrocal % 2 = 0) OR
+      (DomiCgocal BETWEEN 60 AND 72 AND DomiCgosca = '' AND DomiNrocal BETWEEN 3401 AND 3799) OR
+      (DomiCgocal = 74 AND DomiCgosca = '' AND DomiNrocal BETWEEN 3401 AND 3799 AND DomiNrocal % 2 = 1))
+) I
+LEFT JOIN (SELECT * FROM SUMINI SU WHERE SU.SucCodigo = 1 AND SU.Sumi_fecba = '1753-01-01') AS SU ON (SU.SumiDomiID = I.id_glm)
+JOIN (SELECT * FROM SUMSER SS WHERE SS.Sum2Servi = 1 AND SS.Sum2Estad < 4) SS ON (SU.SucCodigo = SS.SucCodigo AND SU.Soc_numero = SS.Soc_numero AND SU.Sumi_numer = SS.Sumi_numer)
+JOIN SUMMED SM ON (SM.SucCodigo = SS.SucCodigo AND SM.Soc_numero = SS.Soc_numero AND SM.Sumi_numer = SS.Sumi_numer AND SM.Sum2Servi = SS.Sum2Servi)
+WHERE SM.Sum6FecBaj = '1753-01-01' 
+
+UNION
+
+SELECT I.*, SU.SumiNomPos AS nombre, SU.Soc_numero AS socio, SU.Sumi_numer as suministro, null as estadoGLM, null as medidorInstalado, null as fechaToma, null as ultimaLectura FROM
+(SELECT DomiId AS id_glm, DomiCalle AS calle, DomiNrocal AS altura, DomiPiso AS piso, DomiDepto AS depto, DomiAnexo AS anexo
+FROM INMUEB IM 
+WHERE DomiSuc = 1 AND
+      ((DomiCgocal = 75 AND DomiCgosca = '' AND DomiNrocal BETWEEN 2601 AND 3399 AND DomiNrocal % 2 = 1) OR
+      (DomiCgocal BETWEEN 77 AND 89 AND DomiCgosca = '' AND DomiNrocal BETWEEN 2601 AND 3399) OR
+      (DomiCgocal = 91 AND DomiCgosca = '' AND DomiNrocal BETWEEN 2601 AND 3399 AND DomiNrocal % 2 = 0) OR
+      (DomiCgocal = 58 AND DomiCgosca = '' AND DomiNrocal BETWEEN 3401 AND 3799 AND DomiNrocal % 2 = 0) OR
+      (DomiCgocal BETWEEN 60 AND 72 AND DomiCgosca = '' AND DomiNrocal BETWEEN 3401 AND 3799) OR
+      (DomiCgocal = 74 AND DomiCgosca = '' AND DomiNrocal BETWEEN 3401 AND 3799 AND DomiNrocal % 2 = 1))
+) I
+LEFT JOIN (SELECT * FROM SUMINI SU WHERE SU.SucCodigo = 1 AND SU.Sumi_fecba = '1753-01-01' ) AS SU ON (SU.SumiDomiID = I.id_glm)
+WHERE SU.SucCodigo is NULL
+
+ORDER BY calle, altura, piso, depto, anexo
+
+
+
+
+
+insert into inspeccion(etapa_id, orden, nombre, socio, suministro, tarifa, estado_id, inmueble_id, estado_glm, ultima_lectura, fecha_toma, medidor_instalado)
+select e.id as etapa_id, e.id * 10000 + (@rownum := @rownum + 1) as orden, razon_social, socio, suministro, '' as tarifa, 1, i.id as inmueble_id, estadoGLM, ultimaLectura, date(fechaToma), medidorInstalado
+from xls x join inmueble i
+	join etapa e
+	cross join (select @rownum := 0) r
+where x.id_glm = i.id_glm
+	and e.numero = 7
+	
+	

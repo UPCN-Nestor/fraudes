@@ -20,13 +20,14 @@
         "mobile": false,
         "styles": [
             "content/css/vendor.css",
-            "content/css/global.css"
+            "content/css/global.css",
+            "node_modules/primeng/resources/themes/nova-light/theme.css",
+            "node_modules/primeng/resources/primeng.min.css"
         ],
         "scripts": [
             "./node_modules/moment/moment.js",
             "./node_modules/chart.js/dist/Chart.bundle.min.js",
-            "./node_modules/print-js/dist/print.js"           
-            
+            "./node_modules/print-js/dist/print.js"                       
         ]
     }],
     "lint": [{

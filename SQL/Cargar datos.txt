@@ -1,5 +1,11 @@
 LOAD DATA INFILE 'C:\\Fr\\SQL\\Fr1a5.txt' INTO TABLE xls;
 
+LOAD DATA LOCAL INFILE 'abc.csv' INTO TABLE abc
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(col1, col2, col3, col4, col5...);
 
 
 *** Split strings
@@ -25,7 +31,7 @@ SELECT SPLIT_STR('a|bb|ccc|dd', '|', 3) as third;
 insert into inmueble(calle, altura) 
 SELECT distinct SPLIT_STR(`domicilio`, ' ', 1) as calle, SPLIT_STR(`domicilio`, ' ', 2) as altura from xls	   
 
-
+	
 *** Importar inspecciones
 
 insert into inspeccion(etapa_id, orden, nombre, socio, suministro, tarifa, estado_id, inmueble_id)
@@ -35,6 +41,15 @@ from xls x join (select id, concat(calle, ' ', altura) as domicilio from inmuebl
 	cross join (select @rownum := 0) r
 where x.domicilio = i.domicilio
 	and x.etapa = e.numero
+	
+insert into inspeccion(etapa_id, orden, nombre, socio, suministro, tarifa, estado_id, inmueble_id, estado_glm, ultima_lectura, fecha_toma, medidor_instalado)
+select e.id as etapa_id, e.id * 10000 + (@rownum := @rownum + 1) as orden, razon_social, socio, suministro, '' as tarifa, 1, i.id as inmueble_id, estadoGLM, ultimaLectura, fechaToma, medidorInstalado
+from xls x join inmueble i
+	join etapa e
+	cross join (select @rownum := 0) r
+where x.id_glm = i.id_glm
+	and e.numero = 7
+	
 	
 	
 *** Importar medidores y lecturas
